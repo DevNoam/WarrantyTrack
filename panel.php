@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("location: https://localhost/");
+    header("location: https://localhost/warrantytrack/front");
     exit;
 }
 
@@ -32,6 +32,7 @@ foreach($cases as $case)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WarrantyTrack - Management panel</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="bulma.js"></script>
 </head>
 
 <body>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-    header("location: https://localhost/");
+    header("location: https://localhost/warrantytrack/front");
     exit;
 }
 
@@ -27,6 +27,7 @@ $row = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WarrantyTrack - New case</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="bulma.js"></script>
 </head>
 
 <body>

@@ -30,7 +30,7 @@ if ($mysqli->query($sql) === TRUE) {
   } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
   }
-  header("Location: http://localhost/caseinspect.php?caseID=$mysqli->insert_id");
+  header("Location: http://localhost/WarrantyTrack/front/caseinspect.php?caseID=$mysqli->insert_id");
   $mysqli->close();
   exit();
 ?>

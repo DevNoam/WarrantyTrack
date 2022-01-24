@@ -2,6 +2,6 @@
 
 session_start();
 session_destroy();
-header("Location: /WarrantyTrack/index.php");
+header("Location: /WarrantyTrack/front/index.php");
 
 ?>
