@@ -1,6 +1,6 @@
 # WarrantyTrack
 
-PHP solution for buisness owners to track customers inquiries.
+PHP solution for buisness owners to track their customers inquiries.
 
 
 
