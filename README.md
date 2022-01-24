@@ -21,12 +21,11 @@ Login:
   1q2w3e4r
 ```
 
-##TODO:
+## TODO:
 - Search cases
 - admin panel
- - Manage users
- - Auto installer
+  - Manage users
+  -  Auto installer
 - Redesign UI
- - Mobile support
-
+  - Mobile support
 
