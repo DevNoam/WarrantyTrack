@@ -16,7 +16,7 @@ Users will be the users who can login to the panel and cases will be the table f
 You  can test the project [here](https://example.com/):
 
 Login:
-```http
+```
   admin
   1q2w3e4r
 ```
