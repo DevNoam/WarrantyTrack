@@ -17,8 +17,8 @@ You  can test the project [here](http://api.noamsapir.me/Experiments/WarrantyTra
 
 Login:
 ```
-  admin
-  1q2w3e4r
+  worldwideweb
+  1234
 ```
 
 ## TODO:
