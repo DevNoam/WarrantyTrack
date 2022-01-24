@@ -13,10 +13,20 @@ Users will be the users who can login to the panel and cases will be the table f
 
 ## Demo
 
-You  can test the project [here](https://example.com/):
+You  can test the project [here](http://api.noamsapir.me/Experiments/WarrantyTrack/):
 
 Login:
 ```
   admin
   1q2w3e4r
 ```
+
+##TODO:
+- Search cases
+- admin panel
+ - Manage users
+ - Auto installer
+- Redesign UI
+ - Mobile support
+
+
