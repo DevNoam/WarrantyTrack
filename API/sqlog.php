@@ -1,7 +1,5 @@
 <?php
- $host = "localhost";
-
- $mysqli = new mysqli("localhost", "root", "", "warrantytrack");
+ $mysqli = new mysqli("localhost", "user", "pass", "warrantytrack");
  
  // Check connection
  if($mysqli === false){

@@ -1,15 +1,12 @@
 <?php
 session_start();
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-    header("location: https://localhost/warrantytrack/front");
+    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
     exit;
 }
 
 $username = $_SESSION['username'];
 require_once("API/sqlog.php");
-//$nextID = mysqli_query($mysqli, "SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'cases';");
-//$row = $nextID->fetch_assoc();
-//echo $row['Auto_increment'];
 
 $sql = "SHOW TABLE STATUS LIKE 'cases'";
 $result=$mysqli->query($sql);
@@ -72,7 +69,7 @@ $row = $result->fetch_assoc();
                     <div class="container" style="width: 500px;">
 
                         <p class="has-text-left has-text-white"> Case ID:</p>
-                        <input class="input" id="Casenumber" name="Casenumber" disabled type="text">
+                        <input class="input" id="Casenumber" name="Casenumber" readonly type="text">
 
                         <div class="block"></div>
                         <p class="has-text-left has-text-white"> Date creation:</p>

@@ -26,6 +26,7 @@ else
 $sql = "UPDATE `cases` SET `clientName` = '$clientName', `Status` = '$Status', `Fixed` = '$FixStatus', `Fixed Description` = '$FixDescription', `phoneNumber` = '$phoneNumber', `Supplier` = '$Supplier'  WHERE `cases`.`Casenumber` = $id";
 if ($mysqli->query($sql) === TRUE) {
     echo "Case has been updated.";
+    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
   } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
   }
@@ -34,7 +35,6 @@ if ($mysqli->query($sql) === TRUE) {
 }
 
   $mysqli->close();
-  header("Location: http://localhost/WarrantyTrack/front/");
   exit();
 ?>
 

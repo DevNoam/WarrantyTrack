@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("location: https://localhost/warrantytrack/front");
+    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
     exit;
 }
 

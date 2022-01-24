@@ -4,7 +4,7 @@ session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("location: https://localhost/warrantytrack/front");
+    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
     exit;
 }
 require_once('API/sqlog.php');
@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
 $row = $result->fetch_assoc();
 }else
 {
-    header("Location: index.php");
+    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
 }
 ?>
 

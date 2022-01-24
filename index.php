@@ -6,7 +6,7 @@ session_start();
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     $username = $_SESSION['username'];
     echo "Welcome $username";
-    header('Location: panel.php');
+    header('Location: http://api.noamsapir.me/Experiments/WarrantyTrack/panel.php');
     exit;
 }
 
@@ -67,7 +67,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["username"] = $username;                            
                             
                             // Redirect user to welcome page
-                            header('Location: panel.php');
+                            header('Location: http://api.noamsapir.me/Experiments/WarrantyTrack/panel.php');
                         } else{
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";

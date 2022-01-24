@@ -2,6 +2,6 @@
 
 session_start();
 session_destroy();
-header("Location: /WarrantyTrack/front/index.php");
+header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
 
 ?>
