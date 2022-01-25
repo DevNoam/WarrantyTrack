@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+- phpMyAdmin XML Dump
+- version 5.1.1
+- https://www.phpmyadmin.net
+-
+- Host: 127.0.0.1
+- Generation Time: ינואר 25, 2022 בזמן 01:04 AM
+- גרסת שרת: 10.4.21-MariaDB
+- PHP Version: 8.0.12
+-->
+
+<pma_xml_export version="1.0" xmlns:pma="https://www.phpmyadmin.net/some_doc_url/">
+    <!--
+    - Structure schemas
+    -->
+    <pma:structure_schemas>
+        <pma:database name="warrantytrack" collation="utf8mb4_general_ci" charset="utf8mb4">
+            <pma:table name="cases">
+                CREATE TABLE `cases` (
+                  `Casenumber` int(16) NOT NULL AUTO_INCREMENT COMMENT 'The case number that has been created.',
+                  `clientName` varchar(256) NOT NULL,
+                  `phoneNumber` varchar(11) NOT NULL,
+                  `Address` varchar(256) NOT NULL,
+                  `ReciptNumber` varchar(256) NOT NULL COMMENT 'The receipt of the defected product',
+                  `ProductSKU` varchar(256) DEFAULT NULL,
+                  `ProductSerial` varchar(256) DEFAULT NULL,
+                  `ProductName` varchar(256) NOT NULL,
+                  `CaseDescription` text NOT NULL COMMENT 'Why client gave the product for checkup, describe the problem.',
+                  `CreatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
+                  `OrderDate` date NOT NULL COMMENT 'When the product has been bought',
+                  `Status` set('OPEN','CLOSED','Waiting for supplier','Picked by supplier','Returning from supplier','Waiting for customer','Shipped to supplier','Being checked') NOT NULL DEFAULT 'OPEN' COMMENT 'Status of the case, is the case open, resolved.',
+                  `Fixed` enum('Fixed','Supplied new product','Unfixable','Unsolved','Closed by customer','Product is working') DEFAULT NULL COMMENT 'Choose from the following when the product has been returned or case has been closed.',
+                  `Fixed Description` text DEFAULT NULL COMMENT 'Tell what was the problem and if the case has been resolved.',
+                  `Createdby` varchar(256) NOT NULL DEFAULT 'General' COMMENT 'Which agent created the case',
+                  `Supplier` varchar(256) DEFAULT 'UNKOWN' COMMENT 'Who is the supplier of the product. Warranty will be covered by the supplier.',
+                  PRIMARY KEY (`Casenumber`) USING BTREE,
+                  UNIQUE KEY `Casenumber` (`Casenumber`) USING BTREE KEY_BLOCK_SIZE=8,
+                  UNIQUE KEY `Casenumber_2` (`Casenumber`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4;
+            </pma:table>
+            <pma:table name="users">
+                CREATE TABLE `users` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `username` varchar(50) NOT NULL,
+                  `password` varchar(255) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  UNIQUE KEY `username` (`username`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+            </pma:table>
+        </pma:database>
+    </pma:structure_schemas>
+
+    <!--
+    - Database: 'warrantytrack'
+    -->
+    <database name="warrantytrack">
+        <!-- טבלה cases -->
+        <table name="cases">
+            <column name="Casenumber">69</column>
+            <column name="clientName">er</column>
+            <column name="phoneNumber">0522622010</column>
+            <column name="Address">Test</column>
+            <column name="ReciptNumber">23232323</column>
+            <column name="ProductSKU">232323</column>
+            <column name="ProductSerial">df</column>
+            <column name="ProductName">fd</column>
+            <column name="CaseDescription">df</column>
+            <column name="CreatedAt">2022-01-25 01:21:52</column>
+            <column name="OrderDate">2022-01-06</column>
+            <column name="Status">OPEN</column>
+            <column name="Fixed">NULL</column>
+            <column name="Fixed Description">NULL</column>
+            <column name="Createdby">admin</column>
+            <column name="Supplier">UNKOWN</column>
+        </table>
+        <!-- טבלה users -->
+        <table name="users">
+            <column name="id">2</column>
+            <column name="username">admin</column>
+            <column name="password">1q2w3e4r</column>
+        </table>
+        <table name="users">
+            <column name="id">3</column>
+            <column name="username">Noam</column>
+            <column name="password">1q2w3e4r</column>
+        </table>
+    </database>
+</pma_xml_export>

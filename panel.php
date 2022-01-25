@@ -39,7 +39,7 @@ foreach($cases as $case)
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="#">
+            <a class="navbar-item" href="panel.php">
                 <h1 class="title">WarrantyTrack</h1>
             </a>
 
@@ -69,6 +69,7 @@ foreach($cases as $case)
 
 
     <h1 class="subtitle pl-4"><?php echo "Hello  $username, there are $openCases open cases." ?></h1>
+    <h2 class="subtitle has-text-danger	has-text-weight-bold pl-4">DO NOT ENTER SENSITIVE DATA!</h2>
     <section class="section">
         <div class="table-container">
             <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -136,7 +137,7 @@ foreach($cases as $case)
 
 <footer class="footer has-text-centered py-1 has-background-dark">
   <div class="content has-text-link-light">
-      WarrantyTrack. For Admin control <a href="#">Click here</a>.
+      WarrantyTrack - Made by <a href="https://noamsapir.me">Noam Sapir</a>.
   </div>
 </footer>
 
