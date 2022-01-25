@@ -20,6 +20,7 @@ $row = $result->fetch_assoc();
 {
     header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
 }
+
 ?>
 
 
@@ -68,7 +69,8 @@ $row = $result->fetch_assoc();
     </nav>
 
     <div class="container">
-        <button class="button has-background-info is-info" onclick="printDiv('print-content')" type="button">Print</button>
+        <button class="button has-background-info is-info" onclick="printDiv('print-content')"
+            type="button">Print</button>
     </div>
 
     <form action="API/UpdateCaseAPI.php" method="POST" name="newform">
@@ -127,15 +129,16 @@ $row = $result->fetch_assoc();
                             <textarea class="textarea" id="FixDescription" name="FixDescription"
                                 placeholder=""></textarea>
                             <div class="block">&nbsp;</div>
-
-                            <p class="has-text-left has-text-white"> Delete case?</p>
-                            <span class="select is-pulled-left">
-                                <select id="deleteCase" name="deleteCase">
-                                    <option selected> </option>
-                                    <option>NO</option>
-                                    <option>YES</option>
-                                </select>
-                            </span>
+                            <div id="deleteCasediv">
+                                <p class="has-text-left has-text-white"> Delete case?</p>
+                                <span class="select is-pulled-left">
+                                    <select id="deleteCase" name="deleteCase">
+                                        <option selected> </option>
+                                        <option>NO</option>
+                                        <option>YES</option>
+                                    </select>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -198,11 +201,21 @@ $row = $result->fetch_assoc();
         </div>
         </div>
     </form>
+    <footer class="footer has-text-centered py-1 has-background-dark">
+        <div class="content has-text-link-light">
+            WarrantyTrack - Made by <a href="https://noamsapir.me">Noam Sapir</a>.
+        </div>
+    </footer>
 
 
 
     <!--JAVASCRIP-->
     <script type="text/javascript">
+        var username = "<?php echo $_SESSION['username']; ?>";
+        if(username != "admin" && document.getElementById("Createdby").value == 'admin')
+        {
+            document.getElementById('deleteCasediv').remove();
+        }
         const StatusField = document.getElementById("Status");
         const FixStatusField = document.getElementById("FixStatus");
         const FixDescriptionField = document.getElementById("FixDescription");
@@ -227,15 +240,15 @@ $row = $result->fetch_assoc();
                 }
                 document.getElementById("deleteCase").style.pointerEvents = "all";
             }
-            if(StatusField.value == "Waiting for customer" || StatusField.value == "Returning from supplier")
+            if (StatusField.value == "Waiting for customer" || StatusField.value == "Returning from supplier")
                 FixStatusField.style.pointerEvents = "all";
 
         }
 
         document.getElementById("deleteCase").addEventListener('change', (event) => {
             if (event.target.value == "YES") {
-                
-            } else if(event.target.value == "NO") {
+
+            } else if (event.target.value == "NO") {
                 var f = document.forms['newform'];
                 for (var i = 0, fLen = f.length; i < fLen; i++) {
                     f.elements[i].readOnly = false; //As @oldergod noted, the "O" must be upper case
@@ -261,14 +274,14 @@ $row = $result->fetch_assoc();
 
 
 
-//PRINT PAGE:
+        //PRINT PAGE:
         function printDiv(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
-        w=window.open();
-        w.document.write(printContents);
-        w.print();
-        w.close();
-    }
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
     </script>
 </body>
 
