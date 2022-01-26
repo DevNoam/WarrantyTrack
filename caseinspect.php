@@ -130,8 +130,8 @@ $row = $result->fetch_assoc();
                                 placeholder=""></textarea>
                             <div class="block">&nbsp;</div>
                             <div id="deleteCasediv">
-                                <p class="has-text-left has-text-white"> Delete case?</p>
-                                <span class="select is-pulled-left">
+                                <p class="has-text-left has-text-white" title="Available for pre-closed cases only"> Delete case?</p>
+                                <span class="select is-pulled-left" title="Available for pre-closed cases only">
                                     <select id="deleteCase" name="deleteCase">
                                         <option selected> </option>
                                         <option>NO</option>
