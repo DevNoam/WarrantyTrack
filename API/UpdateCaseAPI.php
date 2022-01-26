@@ -10,7 +10,11 @@ $phoneNumber = $_POST['phoneNumber'];
 $Supplier = $_POST['Supplier'];
 $deleteCase = $_POST['deleteCase'];
 
-
+if($FixStatus == null || $FixStatus == '')
+{  
+  $FixStatus = NULL;
+  $FixDescription = NULL;
+}
 
 if($deleteCase == "YES")
 {
