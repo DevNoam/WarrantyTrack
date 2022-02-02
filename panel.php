@@ -9,7 +9,7 @@ $username = $_SESSION['username'];
 
 //SQL Data pulling.
 require_once('API/sqlog.php');
-$sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD (status, 1, 2, 3),  CreatedAt asc, Supplier';
+$sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD (status, 1, 2, 3), CreatedAt asc, Supplier, clientName';
 $result = mysqli_query($mysqli, $sqlData);
 $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
@@ -56,9 +56,9 @@ foreach($cases as $case)
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-medium is-rounded is-info" href="createcase.php">
+                        <!--<a class="button is-medium is-rounded is-info" href="createcase.php">
                             <strong>+</strong>
-                        </a>
+                        </a>-->
                         <a href="API/logout.php" class="button is-rounded ml-2 is-small is-danger">Logout</a>
                     </div>
                 </div>
@@ -141,6 +141,22 @@ foreach($cases as $case)
   </div>
 </footer>
 
+<a href="createcase.php">
+    <button class="sumbit button is-success is-rounded" type="button" value="+">+</button>
+</a>
+
 </body>
+<style>
+    .sumbit {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 100;
+        height: 75px;
+        width: 75px;
+        box-shadow: 2px 2px 10px 1px rgba(0, 0, 0, 0.58);
+        font-size: 20px;
+    }
+</style>
 
 </html>
