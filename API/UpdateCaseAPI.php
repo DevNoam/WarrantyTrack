@@ -10,34 +10,57 @@ $phoneNumber = $_POST['phoneNumber'];
 $Supplier = $_POST['Supplier'];
 $deleteCase = $_POST['deleteCase'];
 
+
 if($FixStatus == null || $FixStatus == '')
 {  
   $FixStatus = NULL;
   $FixDescription = NULL;
 }
 
-if($deleteCase == "YES")
+$isCaseClosed = false;
+$result = $mysqli->query("SELECT `Status`, `CaseClosedAt` FROM `cases` WHERE Casenumber = $id");
+$row = $result->fetch_assoc();
+if($row['Status'] == "CLOSED")
+{
+    $isCaseClosed = true;
+}
+
+
+if($deleteCase == "YES" && $isCaseClosed == true)
 {
   $sql = "DELETE FROM cases WHERE Casenumber=$id";
 if ($mysqli->query($sql) === TRUE) {
     echo "Case has been deleted.";
+    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    exit();
   } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
   }
 }
 else
 {
-$sql = "UPDATE `cases` SET `clientName` = '$clientName', `Status` = '$Status', `Fixed` = '$FixStatus', `Fixed Description` = '$FixDescription', `phoneNumber` = '$phoneNumber', `Supplier` = '$Supplier'  WHERE `cases`.`Casenumber` = $id";
+$sql = "UPDATE `cases` SET `clientName` = '$clientName', `Status` = '$Status', `Fixed` = '$FixStatus', `Fixed Description` = '$FixDescription', `phoneNumber` = '$phoneNumber', `Supplier` = '$Supplier' WHERE `cases`.`Casenumber` = $id";
+
 if ($mysqli->query($sql) === TRUE) {
     echo "Case has been updated.";
-    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
   } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
   }
-
-  //Send sms if case has been resolved.
 }
 
+if($Status == 'CLOSED' && $isCaseClosed = false)
+{
+  $sql = "UPDATE cases SET CaseClosedAt = CURRENT_DATE WHERE Casenumber = $id";
+  if ($mysqli->query($sql) === TRUE) {
+    echo "Case has been closed.";
+  } else {
+    echo "Error: " . $sql . "<br>" . $mysqli->error;
+  }
+}
+
+//Send sms if case has been resolved.
+
+  header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
   $mysqli->close();
   exit();
 ?>

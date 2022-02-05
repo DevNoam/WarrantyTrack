@@ -20,7 +20,6 @@ $row = $result->fetch_assoc();
 {
     header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
 }
-
 ?>
 
 
@@ -68,10 +67,8 @@ $row = $result->fetch_assoc();
         </div>
     </nav>
 
-    <div class="container">
-        <button class="button has-background-info is-info" onclick="printDiv('print-content')"
-            type="button">Print</button>
-    </div>
+    <button class="button has-background-info is-info" onclick="printDiv('print-content')"
+        type="button">Print</button>
 
     <form action="API/UpdateCaseAPI.php" method="POST" name="newform">
         <div class="section has-text-centered hero has-background-grey is-fullheight" id="print-content">
@@ -87,6 +84,18 @@ $row = $result->fetch_assoc();
                             disabled type="text">
 
                         <div class="block"></div>
+
+                        <?php 
+                            if($row['CaseClosedAt'] != null)
+                            {
+                                echo ("<p class='has-text-left has-text-white'>Case closed at:</p>");
+                                echo ("<input class='input' id='CreatedAt' value='$row[CaseClosedAt]' name='CreatedAt'
+                                disabled type='text'>");
+                                echo ("<div class='block'></div>");
+
+                            }
+                        ?>
+
                         <p class="has-text-left has-text-white"> Created by:</p>
                         <span class="select is-pulled-left">
                             <select id="Createdby" disabled name="Createdby">
@@ -240,15 +249,15 @@ $row = $result->fetch_assoc();
                 }
                 document.getElementById("deleteCase").style.pointerEvents = "all";
             }
-            if (StatusField.value == "Waiting for customer" || StatusField.value == "Returning from supplier")
+            if(StatusField.value == "Waiting for customer" || StatusField.value == "Returning from supplier")
                 FixStatusField.style.pointerEvents = "all";
 
         }
 
         document.getElementById("deleteCase").addEventListener('change', (event) => {
             if (event.target.value == "YES") {
-
-            } else if (event.target.value == "NO") {
+                
+            } else if(event.target.value == "NO") {
                 var f = document.forms['newform'];
                 for (var i = 0, fLen = f.length; i < fLen; i++) {
                     f.elements[i].readOnly = false; //As @oldergod noted, the "O" must be upper case
@@ -274,8 +283,8 @@ $row = $result->fetch_assoc();
 
 
 
-        //PRINT PAGE:
-        function printDiv(divName) {
+//PRINT PAGE:
+function printDiv(divName) {
             var printContents = document.getElementById(divName).innerHTML;
             w = window.open();
             w.document.write(printContents);
