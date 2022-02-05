@@ -48,7 +48,7 @@ if ($mysqli->query($sql) === TRUE) {
   }
 }
 
-if($Status == 'CLOSED' && $isCaseClosed = false)
+if($Status == 'CLOSED' && $isCaseClosed == false)
 {
   $sql = "UPDATE cases SET CaseClosedAt = CURRENT_DATE WHERE Casenumber = $id";
   if ($mysqli->query($sql) === TRUE) {
