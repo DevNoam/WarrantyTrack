@@ -27,7 +27,7 @@ $sql = "INSERT INTO `cases` (`Casenumber`, `clientName`, `phoneNumber`, `Address
 
 if ($mysqli->query($sql) === TRUE) {
     echo "New record created successfully";
-    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/caseinspect.php?caseID=$mysqli->insert_id");
+    header("Location: $domain/caseinspect.php?caseID=$mysqli->insert_id");
   } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
   }

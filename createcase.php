@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    header("Location: $domain");
     exit;
 }
 
@@ -24,7 +24,7 @@ $row = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WarrantyTrack - New case</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="bulma.js"></script>
+    <script src="js/bulma.js"></script>
 </head>
 
 <body>

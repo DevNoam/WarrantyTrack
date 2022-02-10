@@ -1,7 +1,19 @@
+///////////
+
+Deprecating panel, migrating to a new one
+
+////////////
+
 <?php
 session_start();
 if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    if($_SESSION['domain'] == null){
+        header("Location: index.php");
+        exit;
+    }else
+    {
+    header("Location: $domain");
+    }
     exit;
 }
 
@@ -9,16 +21,24 @@ $username = $_SESSION['username'];
 
 //SQL Data pulling.
 require_once('API/sqlog.php');
-$sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD (status, 1, 2, 3), CreatedAt asc, Supplier, clientName';
+$sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
 $result = mysqli_query($mysqli, $sqlData);
 $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
 $openCases = 0;
 
-foreach($cases as $case)
-{
+foreach($cases as $case) {
     if($case['Status'] != "CLOSED")
     {$openCases++;}
+    else if($case['Status'] == "CLOSED" && $timeTodeletecase != "NEVER" && $case['CaseClosedAt'] < date('Y-m-d', strtotime("-$timeTodeletecase days")))
+    {
+        $sql = "DELETE FROM cases WHERE Casenumber = $case[CaseNumber]";
+        if ($mysqli->query($sql) === TRUE) {
+            //echo "Case has been deleted.";
+        } else {
+            echo "Error: " . $sql . "<br>" . $mysqli->error;
+        }
+    }
 }
 ?>
 
@@ -32,7 +52,7 @@ foreach($cases as $case)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WarrantyTrack - Management panel</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="bulma.js"></script>
+    <script src="js/bulma.js"></script>
 </head>
 
 <body>
@@ -69,7 +89,7 @@ foreach($cases as $case)
 
 
     <h1 class="subtitle pl-4"><?php echo "Hello  $username, there are $openCases open cases." ?></h1>
-    <h2 class="subtitle has-text-danger	has-text-weight-bold pl-4">DO NOT ENTER SENSITIVE DATA!</h2>
+    <!--<h2 class="subtitle has-text-danger	has-text-weight-bold pl-4">DO NOT ENTER SENSITIVE DATA!</h2>-->
     <section class="section">
         <div class="table-container">
             <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -135,11 +155,7 @@ foreach($cases as $case)
 
 
 
-<footer class="footer has-text-centered py-1 has-background-dark">
-  <div class="content has-text-link-light">
-      WarrantyTrack - Made by <a href="https://noamsapir.me">Noam Sapir</a>.
-  </div>
-</footer>
+<?php include("footer.php"); ?>
 
 <a href="createcase.php">
     <button class="sumbit button is-success is-rounded" type="button" value="+">+</button>

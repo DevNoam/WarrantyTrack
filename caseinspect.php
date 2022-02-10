@@ -4,7 +4,7 @@ session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    header("Location: $domain");
     exit;
 }
 require_once('API/sqlog.php');
@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
 $row = $result->fetch_assoc();
 }else
 {
-    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    header("Location: $domain");
 }
 ?>
 
@@ -33,7 +33,7 @@ $row = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WarrantyTrack - Case inspect: <?php echo $case ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="bulma.js"></script>
+    <script src="js/bulma.js"></script>
 </head>
 
 <body>
@@ -137,7 +137,9 @@ $row = $result->fetch_assoc();
                             <p class="has-text-left has-text-white">Fix description:</p>
                             <textarea class="textarea" id="FixDescription" name="FixDescription"
                                 placeholder=""></textarea>
-                            <div class="block">&nbsp;</div>
+                                <div class="block">&nbsp;</div>
+                            <?php if($_SESSION['username'] == "admin")
+                            { ?>
                             <div id="deleteCasediv">
                                 <p class="has-text-left has-text-white" title="Available for pre-closed cases only"> Delete case?</p>
                                 <span class="select is-pulled-left" title="Available for pre-closed cases only">
@@ -148,7 +150,9 @@ $row = $result->fetch_assoc();
                                     </select>
                                 </span>
                             </div>
+                            <?php }else {} ?>
                         </div>
+
                     </div>
                 </div>
 
@@ -221,10 +225,7 @@ $row = $result->fetch_assoc();
     <!--JAVASCRIP-->
     <script type="text/javascript">
         var username = "<?php echo $_SESSION['username']; ?>";
-        if(username != "admin" && document.getElementById("Createdby").value == 'admin')
-        {
-            document.getElementById('deleteCasediv').remove();
-        }
+
         const StatusField = document.getElementById("Status");
         const FixStatusField = document.getElementById("FixStatus");
         const FixDescriptionField = document.getElementById("FixDescription");

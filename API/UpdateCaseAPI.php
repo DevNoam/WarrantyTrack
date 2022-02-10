@@ -31,7 +31,7 @@ if($deleteCase == "YES" && $isCaseClosed == true)
   $sql = "DELETE FROM cases WHERE Casenumber=$id";
 if ($mysqli->query($sql) === TRUE) {
     echo "Case has been deleted.";
-    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    header("Location: $domain");
     exit();
   } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
@@ -60,8 +60,8 @@ if($Status == 'CLOSED' && $isCaseClosed == false)
 
 //Send sms if case has been resolved.
 
-  header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
-  $mysqli->close();
+header("Location: $domain/panel.php");
+$mysqli->close();
   exit();
 ?>
 
