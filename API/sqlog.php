@@ -1,41 +1,41 @@
 <?php
     $mysqli = new mysqli("localhost", "root", "", "warrantytrack");
     $domain = getURL($mysqli); //Main website domain. Can be inclouded sub folders if program hosted inside. localhost/subfolder
-    if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { $timeTodeletecase = getDeleteCases($mysqli); }
+    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+        $timeTodeletecase = getDeleteCases($mysqli);
+    }
 
     // Check connection
-    if($mysqli === false){
+    if ($mysqli === false) {
         die("ERROR: Could not connect. " . $mysqli->connect_error);
         exit();
     }
     //fetch data from sql database into $domain
-    function getURL($mysqli) {
+    function getURL($mysqli)
+    {
         $domain = null;
         //check if there coockie named domain
-        if(!isset($_COOKIE['domain']) || $_COOKIE['domain'] == null)
-        {
+        if (!isset($_COOKIE['domain']) || $_COOKIE['domain'] == null) {
             $sql = "SELECT `Domain` FROM `settings` WHERE 1";
             $result = $mysqli->query($sql);
             $row = $result->fetch_assoc();
             $domain = $row['Domain'];
             //set coockie with experation time of 7 days
             setcookie('domain', $domain, time() + (86400 * 7), "/");
-        }
-        else
-        {
+        } else {
             $domain = $_COOKIE['domain'];
         }
         return $domain;
     }
 
-    function getDeleteCases($mysqli) {
+    function getDeleteCases($mysqli)
+    {
         //start session
         $days = null;
         //check if there coockie named domain
         //if there is session named days
 
-        if(!isset($_SESSION['deleteCases']))
-        {
+        if (!isset($_SESSION['deleteCases'])) {
             $sql = "SELECT `deleteCases` FROM `settings` WHERE 1";
             $result = $mysqli->query($sql);
             $row = $result->fetch_assoc();
@@ -43,9 +43,7 @@
             //set coockie with experation time of 7 days
             //set session deleteCases
             $_SESSION["deleteCases"] = $days;
-        }
-        else
-        {
+        } else {
             $days = $_SESSION['deleteCases'];
         }
         return $days;

@@ -62,8 +62,10 @@
     <p class="menu-label">General</p>
     <ul class="menu-list">
       <li>
-        <a href="newpanel.php"
-          class="<?php if(basename($_SERVER['PHP_SELF'], '.php') == "newpanel") { echo "is-active router-link-active"; } ?> has-icon">
+        <a href="panel.php"
+          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "newpanel") {
+    echo "is-active router-link-active";
+} ?> has-icon">
           <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
           <span class="menu-item-label">Dashboard</span>
         </a>
@@ -73,14 +75,18 @@
     <ul class="menu-list">
       <li>
         <a href="cases.php"
-          class="<?php if(basename($_SERVER['PHP_SELF'], '.php') == "cases") { echo "is-active router-link-active"; } ?> has-icon">
+          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "cases") {
+    echo "is-active router-link-active";
+} ?> has-icon">
           <span class="icon has-update-mark"><i class="mdi mdi-table"></i></span>
           <span class="menu-item-label">Cases</span>
         </a>
       </li>
       <li>
         <a href="reports.php"
-          class="<?php if(basename($_SERVER['PHP_SELF'], '.php') == "reports") { echo "is-active router-link-active"; } ?> has-icon">
+          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "reports") {
+    echo "is-active router-link-active";
+} ?> has-icon">
           <span class="icon"><i class="mdi mdi-chart-arc"></i></span>
           <span class="menu-item-label">Reports</span>
         </a>
@@ -91,7 +97,9 @@
     <ul class="menu-list">
       <li>
         <a href="profile.php"
-          class="<?php if(basename($_SERVER['PHP_SELF'], '.php') == "profile") { echo "is-active router-link-active"; } ?> has-icon">
+          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "profile") {
+    echo "is-active router-link-active";
+} ?> has-icon">
           <span class="icon"><i class="mdi mdi-account-circle"></i></span>
           <span class="menu-item-label">Profile</span>
         </a>

@@ -79,7 +79,8 @@ $row = $result->fetch_assoc();
                         <p class="has-text-left has-text-white"> Created by:</p>
                         <span class="select is-pulled-left">
                             <select id="Createdby" name="Createdby">
-                                <option selected><?php echo $username ?></option>
+                                <option selected><?php echo $username ?>
+                                </option>
                                 <option>GENERAL</option>
                             </select>
                         </span>
@@ -191,15 +192,16 @@ $row = $result->fetch_assoc();
         document.getElementById('CreatedAt').valueAsDate = new Date();
 
 
-        window.onload = function () {
+        window.onload = function() {
             clearForm();
-            document.getElementById("Casenumber").value = "<?php echo $row['Auto_increment']; ?>";
+            document.getElementById("Casenumber").value =
+                "<?php echo $row['Auto_increment']; ?>";
 
             var a = document.getElementById("customerinfoButton");
             var b = document.getElementById("orderdetailsButton");
             var c = document.getElementById("casedescriptionButton");
 
-            a.onclick = function () {
+            a.onclick = function() {
                 document.getElementById("customerInfo").style.display = "block";
                 document.getElementById("OrderInfo").style.display = "none";
                 document.getElementById("CaseDescription").style.display = "none";
@@ -209,7 +211,7 @@ $row = $result->fetch_assoc();
 
                 return false;
             }
-            b.onclick = function () {
+            b.onclick = function() {
                 document.getElementById("customerInfo").style.display = "none";
                 document.getElementById("OrderInfo").style.display = "block";
                 document.getElementById("CaseDescription").style.display = "none";
@@ -220,7 +222,7 @@ $row = $result->fetch_assoc();
 
                 return false;
             }
-            c.onclick = function () {
+            c.onclick = function() {
                 document.getElementById("customerInfo").style.display = "none";
                 document.getElementById("OrderInfo").style.display = "none";
                 document.getElementById("CaseDescription").style.display = "block";
@@ -232,20 +234,20 @@ $row = $result->fetch_assoc();
             }
         }
 
-        function clearForm(){
-            document.getElementById('phoneNumber').value ='';
-            document.getElementById('clientName').value ='';
-            document.getElementById('Address').value ='';
-            document.getElementById('ReciptNumber').value ='';
-            document.getElementById('OrderDate').value ='';
-            document.getElementById('ProductSKU').value ='';
-            document.getElementById('ProductName').value ='';
-            document.getElementById('ProductSerial').value ='';
-            document.getElementById('Supplier').value ='';
-            document.getElementById('ProductSerial').value ='';
-            document.getElementById('CaseDescription').value ='';
-            document.getElementById('ProductSerial').value ='';
-            document.getElementById('Status').value ='OPEN';
+        function clearForm() {
+            document.getElementById('phoneNumber').value = '';
+            document.getElementById('clientName').value = '';
+            document.getElementById('Address').value = '';
+            document.getElementById('ReciptNumber').value = '';
+            document.getElementById('OrderDate').value = '';
+            document.getElementById('ProductSKU').value = '';
+            document.getElementById('ProductName').value = '';
+            document.getElementById('ProductSerial').value = '';
+            document.getElementById('Supplier').value = '';
+            document.getElementById('ProductSerial').value = '';
+            document.getElementById('CaseDescription').value = '';
+            document.getElementById('ProductSerial').value = '';
+            document.getElementById('Status').value = 'OPEN';
         }
 
         //

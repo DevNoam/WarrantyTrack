@@ -1,9 +1,9 @@
-<?php 
+<?php
 
   require_once('API/sqlog.php');
   session_start();
-  if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("Location: $domain");
+  if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
+      header("Location: $domain");
       exit;
   }
   $username = $_SESSION['username'];
@@ -16,75 +16,65 @@
   $password_err = $form_err = null;
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $password = $password_confirmation = null;
-    $newusername = $personalName = $role = null;
+      $password = $password_confirmation = null;
+      $newusername = $personalName = $role = null;
 
-    if(!empty($_POST['password']) && !empty($_POST['password_confirmation'])){
-        if($_POST['password'] == $_POST['password_confirmation'])
-        {
-        $password = $_POST["password"];
-        if(empty($password_err) && $password != null) {
-          $sql = "UPDATE users SET password = '$password' WHERE username = '$username'";
-          //check if query was successful
-          if ($mysqli->query($sql) === TRUE) {
-          //logout user
-          session_destroy();
-          //move to login page
-          header("Location: $domain/?message=Password has been updated, please login again.");
-          } else {
-              echo "Error: " . $sql . "<br>" . $mysqli->error;
-              $password_err = "SQL ERROR..";
-          }
-
-        }
-      }
-      else {
-        $password_err = "Passwords fields not match.";
-      }
-    } 
-    else {
-      if($userRole == "Admin")
-      {
-        $personalName = $_POST['personalNameField'];
-        $roles = $_POST['rolesField'];
-        $newUsername = $_POST['usernameField'];
-        $sql = "UPDATE users SET Name = '$personalName', role = '$roles' WHERE username = '$username'";
-        if ($mysqli->query($sql) === TRUE) {
-            $form_err = "Updated.";
-            if($username != $newUsername)
-            {
-              $sql = "UPDATE users SET username = '$newUsername' WHERE username = '$username'";
-              if ($mysqli->query($sql) === TRUE) {
-                  if($username == $_SESSION['username'])
-                  {
-                    $_SESSION['username'] = $newUsername;
-                    header("Refresh:0");
+      if (!empty($_POST['password']) && !empty($_POST['password_confirmation'])) {
+          if ($_POST['password'] == $_POST['password_confirmation']) {
+              $password = $_POST["password"];
+              if (empty($password_err) && $password != null) {
+                  $sql = "UPDATE users SET password = '$password' WHERE username = '$username'";
+                  //check if query was successful
+                  if ($mysqli->query($sql) === true) {
+                      //logout user
+                      session_destroy();
+                      //move to login page
+                      header("Location: $domain/?message=Password has been updated, please login again.");
+                  } else {
+                      echo "Error: " . $sql . "<br>" . $mysqli->error;
+                      $password_err = "SQL ERROR..";
                   }
-                $form_err = "Updated.";
+              }
+          } else {
+              $password_err = "Passwords fields not match.";
+          }
+      } else {
+          if ($userRole == "Admin") {
+              $personalName = $_POST['personalNameField'];
+              $roles = $_POST['rolesField'];
+              $newUsername = $_POST['usernameField'];
+              $sql = "UPDATE users SET Name = '$personalName', role = '$roles' WHERE username = '$username'";
+              if ($mysqli->query($sql) === true) {
+                  $form_err = "Updated.";
+                  if ($username != $newUsername) {
+                      $sql = "UPDATE users SET username = '$newUsername' WHERE username = '$username'";
+                      if ($mysqli->query($sql) === true) {
+                          if ($username == $_SESSION['username']) {
+                              $_SESSION['username'] = $newUsername;
+                              header("Refresh:0");
+                          }
+                          $form_err = "Updated.";
+                      } else {
+                          $form_err =  "There is already a user with this username!.";
+                      }
+                  } else {
+                      header("Refresh:0");
+                  }
               } else {
-              $form_err =  "There is already a user with this username!.";
-              } 
-            }else
-            {
-              header("Refresh:0"); 
-            }
-        } else {
-            $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
-        }
+                  $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
+              }
+          } else {
+              $personalName = $_POST['personalNameField'];
+              $sql = "UPDATE users SET Name = '$personalName' WHERE username = '$username'";
+              if ($mysqli->query($sql) === true) {
+                  //$form_err = "personal name has been updated.";
+              } else {
+                  $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
+              }
+              //reload
+              header("Refresh:0");
+          }
       }
-      else
-      {
-        $personalName = $_POST['personalNameField'];
-        $sql = "UPDATE users SET Name = '$personalName' WHERE username = '$username'";
-        if ($mysqli->query($sql) === TRUE) {
-            //$form_err = "personal name has been updated.";
-        } else {
-            $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
-        }
-        //reload
-        header("Refresh:0");
-      }
-    }
   }
 ?>
 
@@ -153,7 +143,8 @@
               </p>
             </header>
             <div class="card-content">
-              <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+              <form method="post"
+                action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <div class="field is-horizontal">
                   <div class="field-label is-normal">
                     <label class="label">Personal Name</label>
@@ -162,22 +153,24 @@
                     <div class="field">
                       <div class="control">
                         <input type="input" autocomplete="on" id="personalNameField" name="personalNameField"
-                          value="<?php echo $row['Name']; ?>" placeholder="example" class="input" required>
+                          value="<?php echo $row['Name']; ?>"
+                          placeholder="example" class="input" required>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="field is-horizontal" <?php if($userRole != "Admin") { ?>
+                <div class="field is-horizontal" <?php if ($userRole != "Admin") { ?>
                   title="Can be changed by adminstrator only." <?php } ?>>
                   <div class="field-label is-normal">
                     <label class="label">Username</label>
                   </div>
-                  <?php if($userRole != "Admin") { ?>
+                  <?php if ($userRole != "Admin") { ?>
                   <div class="field-body">
                     <div class="field">
                       <div class="control">
-                        <input type="input" readonly value="<?php echo $username ?>" name="usernameField"
-                          class="input">
+                        <input type="input" readonly
+                          value="<?php echo $username ?>"
+                          name="usernameField" class="input">
                       </div>
                     </div>
                   </div>
@@ -185,7 +178,8 @@
                   <div class="field-body">
                     <div class="field">
                       <div class="control">
-                        <input type="input" autocomplete="on" name="usernameField" value="<?php echo $username ?>"
+                        <input type="input" autocomplete="on" name="usernameField"
+                          value="<?php echo $username ?>"
                           class="input" required>
                       </div>
                     </div>
@@ -193,37 +187,45 @@
                   <?php } ?>
                 </div>
 
-                <div class="field is-horizontal" <?php if($userRole != "Admin") { ?>
+                <div class="field is-horizontal" <?php if ($userRole != "Admin") { ?>
                   title="Can be changed by adminstrator only." <?php } ?>>
                   <div class="field-label is-normal">
                     <label class="label">Role</label>
                   </div>
-                  <?php if($userRole != "Admin") { ?>
+                  <?php if ($userRole != "Admin") { ?>
                   <div class="dropdown field-body" id="dropdown-menu">
                     <select class="dropdown-content field" name="rolesField" id="rolesField">
-                      <option selected="selected" class="dropdown-item" value="<?php echo $userRole; ?>">
-                        <?php echo $userRole; ?></option>
+                      <option selected="selected" class="dropdown-item"
+                        value="<?php echo $userRole; ?>">
+                        <?php echo $userRole; ?>
+                      </option>
                     </select>
                   </div>
-                  <?php } else { 
-                  $sql = "SHOW COLUMNS FROM `users` WHERE Field = 'role'";
-                  $result = mysqli_query($mysqli, $sql);  
-                  $row2 = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                  $enumList = explode(",", str_replace("'", "", substr($row2['Type'], 5, (strlen($row2['Type'])-6))));
-                  ?>
+                  <?php } else {
+    $sql = "SHOW COLUMNS FROM `users` WHERE Field = 'role'";
+    $result = mysqli_query($mysqli, $sql);
+    $row2 = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $enumList = explode(",", str_replace("'", "", substr($row2['Type'], 5, (strlen($row2['Type'])-6)))); ?>
                   <div class="dropdown field-body" id="dropdown-menu" role="menu">
                     <select class="dropdown-content field" name="rolesField" id="rolesField">
                       <?php foreach ($enumList as $roles) {
-                    if($userRole == $roles) {
-                    ?>
-                      <option selected="selected" class="dropdown-item" value="<?php echo $roles; ?>">
-                        <?php echo $roles; ?></option>
-                      <?php } else{ ?>
-                      <option class="dropdown-item" value="<?php echo $roles; ?>"><?php echo $roles; ?></option>
-                      <?php }} ?>
+        if ($userRole == $roles) {
+            ?>
+                      <option selected="selected" class="dropdown-item"
+                        value="<?php echo $roles; ?>">
+                        <?php echo $roles; ?>
+                      </option>
+                      <?php
+        } else { ?>
+                      <option class="dropdown-item"
+                        value="<?php echo $roles; ?>"><?php echo $roles; ?>
+                      </option>
+                      <?php }
+    } ?>
                     </select>
                   </div>
-                  <?php } ?>
+                  <?php
+} ?>
                 </div>
                 <hr>
                 <span class="invalid-feedback"><?php echo $form_err; ?></span>
@@ -260,14 +262,18 @@
               <div class="field">
                 <label class="label">Personal Name</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly value="<?php echo $row['Name']; ?>" class="input is-static">
+                  <input type="text" readonly
+                    value="<?php echo $row['Name']; ?>"
+                    class="input is-static">
                 </div>
               </div>
               <hr>
               <div class="field">
                 <label class="label">Role</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly value="<?php echo $row['role']; ?>" class="input is-static">
+                  <input type="text" readonly
+                    value="<?php echo $row['role']; ?>"
+                    class="input is-static">
                 </div>
               </div>
             </div>
@@ -282,7 +288,8 @@
           </p>
         </header>
         <div class="card-content">
-          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+          <form method="post"
+            action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="field is-horizontal">
               <div class="field-label is-normal">
                 <label class="label">New password</label>
@@ -316,7 +323,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                  <button type="submit" id="submit2" class="button is-primary">
+                    <button type="submit" id="submit2" class="button is-primary">
                       Submit
                     </button>
                   </div>
