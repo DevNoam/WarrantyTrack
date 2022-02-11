@@ -11,11 +11,14 @@ require_once('API/sqlog.php');
 
 $case = $_GET['caseID'];
 // Notice the subtraction from $current_id
-$query = "SELECT * FROM cases WHERE Casenumber = $case;";
+$query = "SELECT * FROM cases WHERE Casenumber = $case; ";
+$queryRole = "SELECT `role` FROM `users` WHERE `username` = '$_SESSION[username]';";
 
 $result = $mysqli->query($query);
+$resultRole = $mysqli->query($queryRole);
 if ($result->num_rows > 0) {
 $row = $result->fetch_assoc();
+$Role = $resultRole->fetch_assoc();
 }else
 {
     header("Location: $domain");
@@ -138,7 +141,7 @@ $row = $result->fetch_assoc();
                             <textarea class="textarea" id="FixDescription" name="FixDescription"
                                 placeholder=""></textarea>
                                 <div class="block">&nbsp;</div>
-                            <?php if($_SESSION['username'] == "admin")
+                            <?php if($Role['role'] == "Admin")
                             { ?>
                             <div id="deleteCasediv">
                                 <p class="has-text-left has-text-white" title="Available for pre-closed cases only"> Delete case?</p>
