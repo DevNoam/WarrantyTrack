@@ -49,7 +49,7 @@ function getData(dataR) {
           "ticks": {
             "beginAtZero": true,
             "display": true,
-            "mirror": true,
+
             "stepSize": 1
           },
           "gridLines": {

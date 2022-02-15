@@ -5,6 +5,7 @@ Deprecating panel, migrating to a new one
 ////////////
 
 <?php
+
 session_start();
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
     if ($_SESSION['domain'] == null) {

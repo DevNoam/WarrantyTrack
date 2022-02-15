@@ -1,5 +1,6 @@
 <?php
-  session_start();
+
+session_start();
   require_once('API/sqlog.php');
   require_once("API/getStats.php");
   if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {

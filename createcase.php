@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
     header("Location: $domain");
@@ -31,7 +32,7 @@ $row = $result->fetch_assoc();
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand ">
-            <a class="navbar-item" href="index.php">
+            <a class="navbar-item" href="panel.php">
                 <h1 class="title">WarrantyTrack -</h1>
                 <h2 class="subtitle">&nbsp;New case</h2>
             </a>
@@ -165,7 +166,7 @@ $row = $result->fetch_assoc();
                             </div>
                         </div>
 
-                        <div class="column" id="CaseDescription">
+                        <div class="column" id="CaseDescriptionF">
                             <div class="container">
                                 <p class="has-text-left has-text-white">* Case description:</p>
                                 <textarea class="textarea" id="CaseDescription" name="CaseDescription"
@@ -185,7 +186,7 @@ $row = $result->fetch_assoc();
     <script type="text/javascript">
         document.getElementById("customerInfo").style.display = "block";
         document.getElementById("OrderInfo").style.display = "none";
-        document.getElementById("CaseDescription").style.display = "none";
+        document.getElementById("CaseDescriptionF").style.display = "none";
 
 
         //PUT DATA ON FORM FIELDS:
@@ -204,7 +205,7 @@ $row = $result->fetch_assoc();
             a.onclick = function() {
                 document.getElementById("customerInfo").style.display = "block";
                 document.getElementById("OrderInfo").style.display = "none";
-                document.getElementById("CaseDescription").style.display = "none";
+                document.getElementById("CaseDescriptionF").style.display = "none";
                 b.classList = "";
                 a.classList = "is-active";
                 c.classList = "";
@@ -214,7 +215,7 @@ $row = $result->fetch_assoc();
             b.onclick = function() {
                 document.getElementById("customerInfo").style.display = "none";
                 document.getElementById("OrderInfo").style.display = "block";
-                document.getElementById("CaseDescription").style.display = "none";
+                document.getElementById("CaseDescriptionF").style.display = "none";
                 a.classList = "";
                 b.classList = "is-active";
                 c.classList = "";
@@ -225,7 +226,7 @@ $row = $result->fetch_assoc();
             c.onclick = function() {
                 document.getElementById("customerInfo").style.display = "none";
                 document.getElementById("OrderInfo").style.display = "none";
-                document.getElementById("CaseDescription").style.display = "block";
+                document.getElementById("CaseDescriptionF").style.display = "block";
                 a.classList = "";
                 c.classList = "is-active";
                 b.classList = "";
@@ -248,6 +249,7 @@ $row = $result->fetch_assoc();
             document.getElementById('CaseDescription').value = '';
             document.getElementById('ProductSerial').value = '';
             document.getElementById('Status').value = 'OPEN';
+            document.getElementById('CaseDescription').value = '';
         }
 
         //
