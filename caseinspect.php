@@ -9,7 +9,7 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
 }
 require_once('API/sqlog.php');
 
-$case = $_GET['caseID'];
+$case = htmlspecialchars($_GET['caseID']);
 // Notice the subtraction from $current_id
 $query = "SELECT * FROM cases WHERE Casenumber = $case; ";
 $queryRole = "SELECT `role` FROM `users` WHERE `username` = '$_SESSION[username]';";

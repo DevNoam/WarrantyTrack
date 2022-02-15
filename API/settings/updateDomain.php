@@ -1,7 +1,7 @@
 <?php
     include("../sqlog.php");
     // Get the domain ID
-    $newDomain = $_POST['domainField'];
+    $newDomain = htmlspecialchars($_POST['domainField']);
 
     // Update the domain
     $sql = "UPDATE settings SET Domain = '$newDomain' WHERE 1";

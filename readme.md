@@ -1,7 +1,7 @@
 # WarrantyTrack
 
 PHP solution for buisness owners to track their customers inquiries.
-
+At the shop I'm working at, we have a bad customers inquiries software, I decided to make a better one 😛
 
 
 ## Installation:
@@ -27,4 +27,4 @@ Login:
   - Manage users
   -  Auto installer
 - Redesign UI
-  - Mobile support
+  -  ~~Mobile support~~

@@ -78,6 +78,16 @@
             </ul>
           </div>
         </div>
+        <div class="level-right">
+        <div class="level-item">
+          <div class="buttons is-right">
+            <a href="createcase.php"class="button is-primary">
+              <span class="icon"><i class="mdi mdi-plus"></i></span>
+              <span>New case</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
       </div>
     </section>
@@ -332,21 +342,6 @@
     }
     //get open cases into and print into the graph
     getData( <?php echo getGraph($fetchNewcases, $mysqli); ?> );
-
-    //make a listener for the id inputSearch so users will able to seach cases.
-    document.getElementById("inputSearch").addEventListener("keyup", function(event) {
-      //detect if user pressed enter key
-      //get the value of the input field inputSearch
-      if (event.keyCode === 13) {
-        var inputValue = document.getElementById("inputSearch").value;
-        //if user pressed enter key, prevent default behaviour
-        event.preventDefault();
-        //make a request to the server
-        //change url to the input value
-        window.location.href =
-          'caseinspect.php?caseID=' + inputValue;
-      }
-    });
 
     //Animate the numbers field on top
     closedCasesAnim( <?php echo $closedCases ?> );

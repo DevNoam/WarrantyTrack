@@ -20,8 +20,8 @@
       $newusername = $personalName = $role = null;
 
       if (!empty($_POST['password']) && !empty($_POST['password_confirmation'])) {
-          if ($_POST['password'] == $_POST['password_confirmation']) {
-              $password = $_POST["password"];
+        $password = htmlspecialchars($_POST["password"]);
+          if ($password == $_POST['password_confirmation']) {
               if (empty($password_err) && $password != null) {
                   $sql = "UPDATE users SET password = '$password' WHERE username = '$username'";
                   //check if query was successful

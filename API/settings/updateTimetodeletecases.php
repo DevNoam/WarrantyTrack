@@ -1,6 +1,6 @@
 <?php 
     include("../sqlog.php");
-    $timeTodeletecaseN = $_POST['timeToDeleteCasesField'];
+    $timeTodeletecaseN = htmlspecialchars($_POST['timeToDeleteCasesField']);
     if($timeTodeletecaseN == $_SESSION['deleteCases']){
         return;    
     }else{

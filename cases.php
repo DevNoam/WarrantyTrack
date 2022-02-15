@@ -226,7 +226,7 @@ $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
             </table>
           </div>
-          <div class="notification">
+          <!--<div class="notification">
             <div class="level">
               <div class="level-left">
                 <div class="level-item">
@@ -243,7 +243,7 @@ $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -343,18 +343,6 @@ $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
                       $date = date('d/m/Y', strtotime($date)); ?>
                       <small class="has-text-grey is-abbr-like" title="Oct 25, 2020"><?php echo htmlspecialchars($date); ?></small>
                     </td>
-                    <!-- <td class="is-actions-cell">
-                      <div class="buttons is-right">
-                        <a class="button is-rounded is-small is-primary"
-                          href="caseinspect.php?caseID=<?php echo htmlspecialchars($case['CaseNumber']); ?>">
-                          <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Open case >>
-                        </a>
-                        <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                      </div>
-                    </td> -->
-                    
                     <td class="is-actions-cell">
                   <div class="buttons is-right">
                     <a href="caseinspect.php?caseID=<?php echo htmlspecialchars($case['CaseNumber']); ?>">
@@ -375,7 +363,7 @@ $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
               </tbody>
             </table>
           </div>
-          <div class="notification">
+          <!--<div class="notification">
             <div class="level">
               <div class="level-left">
                 <div class="level-item">
@@ -392,7 +380,7 @@ $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>

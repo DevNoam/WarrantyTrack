@@ -54,7 +54,7 @@ if ($Status == 'CLOSED' && $isCaseClosed == false) {
 
 //Send sms if case has been resolved.
 
-header("Location: $domain/panel.php");
+header("Location: ../panel.php");
 $mysqli->close();
   exit();
 ?>

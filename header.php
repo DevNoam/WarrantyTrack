@@ -157,3 +157,23 @@
       </ul>
     </div>
 </aside>
+
+
+<script>
+      //make a listener for the id inputSearch so users will able to seach cases.
+      document.getElementById("inputSearch").addEventListener("keyup", function(event) {
+      //detect if user pressed enter key
+      //get the value of the input field inputSearch
+      if (event.keyCode === 13) {
+        var inputValue = document.getElementById("inputSearch").value;
+        //if user pressed enter key, prevent default behaviour
+        event.preventDefault();
+        //make a request to the server
+        //change url to the input value
+        //proceed only if the input value is not empty
+        if (inputValue !== "") {
+          window.location.href = 'search.php?data=' + inputValue;
+        }
+      }
+    });
+</script>

@@ -7,7 +7,7 @@ session_start();
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $username = $_SESSION['username'];
     echo "Welcome $username";
-    header("Location: $domain/panel.php");
+    header("Location: panel.php");
     exit;
 }
 
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["username"] = $username;
                             
                             // Redirect user to welcome page
-                            header("Location: $domain/panel.php");
+                            header("Location: panel.php");
                         } else {
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
     <?php if (isset($_GET['message'])) { ?>
-    &nbsp;&nbsp;&nbsp;<span class="alert alert-success"><?php echo $_GET['message']; ?></span>
+    &nbsp;&nbsp;&nbsp;<span class="alert alert-success"><?php echo htmlspecialchars($_GET['message']); ?></span>
     <?php } ?>
 </body>
 
