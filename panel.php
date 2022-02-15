@@ -1,9 +1,9 @@
 <?php
+  session_start();
   require_once('API/sqlog.php');
   require_once("API/getStats.php");
-  session_start();
   if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-      header("Location: $domain");
+      header("Location: index.php");
       exit;
   }
   
@@ -11,7 +11,7 @@
   $username = $_SESSION['username'];
   
   //SQL Data pulling.
-  $sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
+  $sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
   $result = mysqli_query($mysqli, $sqlData);
   $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -23,18 +23,23 @@
   foreach ($cases as $case) {
       if ($case['Status'] != "CLOSED") {
           $openCases++;
-      } elseif ($case['Status'] == 'CLOSED') {
+      }
+          else if ($case['Status'] == "CLOSED" && $timeTodeletecase != "NEVER" && $case['CaseClosedAt'] < date('Y-m-d', strtotime("-$timeTodeletecase days"))) {
+            $sql = "DELETE FROM `cases` WHERE `CaseNumber` = '$case[CaseNumber]'";
+            if ($mysqli->query($sql) === true) {
+                //echo "Case has been deleted.";
+            } else {
+                echo "Error: " . $sql . "<br>" . $mysqli->error;
+            }
+        }
+       else {
           $closedCases++;
-      } elseif ($case['Status'] == "CLOSED" && $timeTodeletecase != "NEVER" && $case['CaseClosedAt'] < date('Y-m-d', strtotime("-$timeTodeletecase days"))) {
-          $sql = "DELETE FROM cases WHERE Casenumber = $case[CaseNumber]";
-          if ($mysqli->query($sql) === true) {
-              //echo "Case has been deleted.";
-          } else {
-              echo "Error: " . $sql . "<br>" . $mysqli->error;
-          }
       }
   }
   $fetchNewcases = 10; //Fetch the new cases created in the last X days.
+  if(isset($_COOKIE['fetchNewcases'])) {
+    $fetchNewcases = $_COOKIE['fetchNewcases'];
+  }
 ?>
 
 
@@ -147,16 +152,16 @@
                 <div class="level-item">
                   <div class="is-widget-label">
                     <h3 class="subtitle is-spaced">
-                      Performance
+                      Avreage time per case
                     </h3>
                     <h1 class="title">
-                      256%
+                      {NULL} Days
                     </h1>
                   </div>
                 </div>
                 <div class="level-item has-widget-icon">
-                  <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
-                        class="mdi mdi-finance mdi-48px"></i></span>
+                  <div class="is-widget-icon"><span class="icon has-text-warning-dark is-large"><i
+                        class="mdi mdi-clock-outline mdi-48px"></i></span>
                   </div>
                 </div>
               </div>
@@ -205,7 +210,16 @@
           <div class="b-table has-pagination">
             <div class="table-wrapper has-mobile-cards">
               <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
-                <thead>
+                
+        <script>
+        //if the screen is mobile
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            document.write("<thead>");
+        }else
+        {
+            document.write("<tbody>");
+        }
+        </script>      
                   <tr>
                     <th></th>
                     <th>Name</th>
@@ -216,8 +230,16 @@
                     <th>Created</th>
                     <th></th>
                   </tr>
-                </thead>
-                <tbody>
+                  <script>
+        //if the screen is mobile
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            document.write("</thead>");
+            document.write("<tbody>");
+        }else
+        {
+            //document.write("</tbody>");
+        }
+        </script>
                   <?php foreach ($cases as $case) {
     if ($case['Status'] == 'CLOSED') {
         continue;
@@ -298,7 +320,7 @@
   <!-- Scripts below are for demo only -->
   <script type="text/javascript" src="js/main.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-  <script type="text/javascript" src="js/newchart.min.js"></script>
+  <script type="text/javascript" src="js/newchart.js"></script>
 
   <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
@@ -322,7 +344,7 @@
         //make a request to the server
         //change url to the input value
         window.location.href =
-          '<?php echo $domain ?>caseinspect.php?caseID=' + inputValue;
+          'caseinspect.php?caseID=' + inputValue;
       }
     });
 
@@ -331,7 +353,6 @@
     openCasesAnim( <?php echo $openCases ?> );
 
     function openCasesAnim(casesVar) {
-      console.log('1');
       document.getElementById("openCasesnum").classList.add("is-active");
       var openCasesnum = document.getElementById("openCasesnum");
       var cases = casesVar;
@@ -362,13 +383,14 @@
     function closedCasesAnim(casesVar) {
       document.getElementById("closedCasesnum").classList.add("is-active");
       var openCasesnum = document.getElementById("closedCasesnum");
-      var speed = 0040;
       var cases = casesVar;
       //increment speed by cases
       var openCasesnumInterval = setInterval(function() {
         var currentNum = parseInt(openCasesnum.innerHTML);
-        var addvalue = 1;
-        if (cases >= 100 && cases <= 999) {
+        var addvalue = 2;
+        if (cases >= 50 && cases <= 99) {
+          addvalue = 5;
+        } else if (cases >= 100 && cases <= 999) {
           addvalue = 13;
         } else if (cases >= 1000 && cases <= 9999) {
           addvalue = 133;
@@ -385,7 +407,35 @@
         }
       }, 0100);
     }
+
+
+
+
+const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+// do the work...
+document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+    const table = th.closest('tbody');
+    Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => table.appendChild(tr) );
+})));
+
   </script>
+  <style>
+    table, th, td {
+    border: 1px solid black;
+}
+th {
+    cursor:pointer;
+    user-select: none;
+
+}
+  </style>
 </body>
 
 </html>

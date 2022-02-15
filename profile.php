@@ -3,7 +3,7 @@
   require_once('API/sqlog.php');
   session_start();
   if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-      header("Location: $domain");
+      header("Location: index.php");
       exit;
   }
   $username = $_SESSION['username'];
@@ -29,7 +29,7 @@
                       //logout user
                       session_destroy();
                       //move to login page
-                      header("Location: $domain/?message=Password has been updated, please login again.");
+                      header("Location: index.php?message=Password has been updated, please login again.");
                   } else {
                       echo "Error: " . $sql . "<br>" . $mysqli->error;
                       $password_err = "SQL ERROR..";
@@ -51,14 +51,14 @@
                       if ($mysqli->query($sql) === true) {
                           if ($username == $_SESSION['username']) {
                               $_SESSION['username'] = $newUsername;
-                              header("Refresh:0");
+                              header("Location: profile.php?successAlert=1");
                           }
                           $form_err = "Updated.";
                       } else {
                           $form_err =  "There is already a user with this username!.";
                       }
                   } else {
-                      header("Refresh:0");
+                    header("Location: profile.php?successAlert=1");
                   }
               } else {
                   $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
@@ -72,8 +72,8 @@
                   $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
               }
               //reload
-              header("Refresh:0");
-          }
+              header("Location: profile.php?successAlert=1");
+            }
       }
   }
 ?>
@@ -211,15 +211,10 @@
                       <?php foreach ($enumList as $roles) {
         if ($userRole == $roles) {
             ?>
-                      <option selected="selected" class="dropdown-item"
-                        value="<?php echo $roles; ?>">
-                        <?php echo $roles; ?>
-                      </option>
+                      <option selected="selected" class="dropdown-item"> <?php echo $roles; ?> </option>
                       <?php
         } else { ?>
-                      <option class="dropdown-item"
-                        value="<?php echo $roles; ?>"><?php echo $roles; ?>
-                      </option>
+                      <option class="dropdown-item"?> <?php echo $roles; ?> </option>
                       <?php }
     } ?>
                     </select>
@@ -234,7 +229,7 @@
                   <div class="field-body">
                     <div class="field">
                       <div class="control">
-                        <button type="submit" id="submit" class="button is-primary">
+                        <button type="submit" name="submitR" id="submitR" class="button is-primary">
                           Submit
                         </button>
                       </div>
@@ -343,6 +338,18 @@
 
   <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+  <?php if(isset($_GET['successAlert'])) {
+    echo "<script> alertify.success('Profile updated.'); </script>"; 
+    }
+    ?>
+    <script>
+      //clear url parameters
+        window.history.pushState('', '', window.location.pathname);
+    </script>
 
 </body>
 

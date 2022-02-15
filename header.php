@@ -25,7 +25,7 @@
             <span class="icon"><i class="mdi mdi-account"></i></span>
             <span>My Profile</span>
           </a>
-          <a class="navbar-item">
+          <a href="settings.php" class="navbar-item">
             <span class="icon"><i class="mdi mdi-settings"></i></span>
             <span>Settings</span>
           </a>
@@ -36,12 +36,10 @@
           </a>
         </div>
       </div>
-      <!-- 
-          <a title="Log out" class="navbar-item is-desktop-icon-only">
-            <span class="icon"><i class="mdi mdi-logout"></i></span>
-            <span>Log out</span>
-          </a>
-        -->
+          <p title="Log out" class="navbar-item is-desktop-icon-only is-hidden-touch">
+            <span class="IcOn"><i class="mdi"></i></span>
+            <span>;)</span>
+          </p>
     </div>
   </div>
 </nav>
@@ -51,89 +49,111 @@
 
 
 <aside class="aside is-placed-left is-expanded">
-  <div class="aside-tools">
-    <div class="aside-tools-label">
-      <a href="panel.php">
-        <span class="has-text-white"><b>WarrantyTrack</b></span>
-      </a>
+    <div class="aside-tools">
+      <div class="aside-tools-label">
+        <a href="panel.php">
+          <span class="has-text-white"><b>WarrantyTrack</b></span>
+        </a>
+      </div>
     </div>
-  </div>
-  <div class="menu is-menu-main">
-    <p class="menu-label">General</p>
-    <ul class="menu-list">
-      <li>
-        <a href="panel.php"
-          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "newpanel") {
-    echo "is-active router-link-active";
-} ?> has-icon">
-          <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
-          <span class="menu-item-label">Dashboard</span>
-        </a>
-      </li>
-    </ul>
-    <p class="menu-label">Management</p>
-    <ul class="menu-list">
-      <li>
-        <a href="cases.php"
-          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "cases") {
-    echo "is-active router-link-active";
-} ?> has-icon">
-          <span class="icon has-update-mark"><i class="mdi mdi-table"></i></span>
-          <span class="menu-item-label">Cases</span>
-        </a>
-      </li>
-      <li>
-        <a href="reports.php"
-          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "reports") {
-    echo "is-active router-link-active";
-} ?> has-icon">
-          <span class="icon"><i class="mdi mdi-chart-arc"></i></span>
-          <span class="menu-item-label">Reports</span>
-        </a>
-      </li>
-
-    </ul>
-    <p class="menu-label">SETTINGS</p>
-    <ul class="menu-list">
-      <li>
-        <a href="profile.php"
-          class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "profile") {
-    echo "is-active router-link-active";
-} ?> has-icon">
-          <span class="icon"><i class="mdi mdi-account-circle"></i></span>
-          <span class="menu-item-label">Profile</span>
-        </a>
-      </li>
-      <li>
-        <a class="has-icon has-dropdown-icon">
-          <span class="icon"><i class="mdi mdi-settings"></i></span>
-          <span class="menu-item-label">Settings</span>
-          <div class="dropdown-icon">
-            <span class="icon"><i class="mdi mdi-plus"></i></span>
-          </div>
+    <div class="menu is-menu-main">
+      <p class="menu-label">General</p>
+      <ul class="menu-list">
+        <li>
+          <a href="panel.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "panel") {
+      echo "is-active router-link-active";
+  } ?> has-icon">
+            <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
+            <span class="menu-item-label">Dashboard</span>
+          </a>
+        </li>
+      </ul>
+      <p class="menu-label">Management</p>
+      <ul class="menu-list">
+        <li>
+          <a href="cases.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "cases") {
+      echo "is-active router-link-active";
+  } ?> has-icon">
+            <span class="icon has-update-mark"><i class="mdi mdi-table"></i></span>
+            <span class="menu-item-label">Cases</span>
+          </a>
+        </li>
+        <li>
+          <a href="reports.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "reports") {
+      echo "is-active router-link-active";
+  } ?> has-icon">
+            <span class="icon"><i class="mdi mdi-chart-arc"></i></span>
+            <span class="menu-item-label">Reports</span>
+          </a>
+        </li>
+  
+      </ul>
+      <p class="menu-label">SETTINGS</p>
+      <ul class="menu-list">
+        <li>
+          <a href="profile.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "profile") {
+      echo "is-active router-link-active";
+  } ?> has-icon">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span class="menu-item-label">Profile</span>
+          </a>
+        </li>
+  
+        <?php
+          //check if user is under a dropdown page
+          if (basename($_SERVER['PHP_SELF'], '.php') == "settings" || basename($_SERVER['PHP_SELF'], '.php') == "users") {
+              {
+              echo '<li class="is-active router-link-active">';
+              echo '<a class="has-icon is-active has-dropdown-icon">';
+            }
+          } else {
+              echo '<li>';
+              echo '<a class="has-icon has-dropdown-icon">';
+          }
+        ?>
+        <span class="icon"><i class="mdi mdi-settings"></i></span>
+        <span class="menu-item-label">Settings</span>
+        <div class="dropdown-icon">
+          <?php
+          //check if user is under a dropdown page
+          if (basename($_SERVER['PHP_SELF'], '.php') == "settings" || basename($_SERVER['PHP_SELF'], '.php') == "users") {
+              {
+              echo '<span class="icon"><i class="mdi mdi-minus"></i></span>';
+            }
+          } else {
+              echo '<span class="icon"><i class="mdi mdi-plus"></i></span>';
+          }
+        ?>
+        </div>
         </a>
         <ul>
           <li>
-            <a href="#" class="has-icon">
+            <a href="users.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "users") {
+            echo "is-active";
+        } ?> has-icon">
               <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
               <span class="menu-item-label">Users</span>
             </a>
           </li>
           <li>
-            <a href="#" class="has-icon">
-              <span class="icon"><i class="mdi mdi-code-greater-than"></i></span>
-              <span class="menu-item-label">System</span>
+      
+            <a href="settings.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "settings") {
+            echo "is-active";
+        } ?> has-icon">
+              <span class="icon "><i class="mdi mdi-code-greater-than"></i></span>
+              <span class="menu-item-label">Settings</span>
             </a>
           </li>
+      
         </ul>
-      </li>
-
-      <li>
-        <a href="http://noamsapir.me" class="has-icon">
-          <span class="icon"><i class="mdi mdi-help-circle"></i></span>
-          <span class="menu-item-label">About</span>
-        </a>
-      </li>
-    </ul>
-  </div>
+        </li>
+      
+        <li>
+          <a href="http://noamsapir.me" class="has-icon">
+            <span class="icon"><i class="mdi mdi-help-circle"></i></span>
+            <span class="menu-item-label">About</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 </aside>
