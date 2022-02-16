@@ -1,8 +1,5 @@
 <!--  
-
   THIS PAGE EDITS EXTERNAL USERS PROFILE, ONLY ADMINS CAN EDIT EXTERNAL PROFILES.
-
-
  -->
 
 
@@ -165,7 +162,7 @@
               <div class="buttons is-right" id="deleteUser">
                 <a class="button is-danger" >
                   <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                  <span>Delete user {BUG!}</span>
+                  <span>Delete user</span>
                 </a>
               </div>
             </div>

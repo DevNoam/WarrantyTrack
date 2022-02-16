@@ -69,8 +69,15 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
             Users management
           </h1></div>
         </div>
-        <div class="level-right" style="display: none;">
-          <div class="level-item"></div>
+        <div class="level-right" style="display: block;">
+          <div class="level-item">
+          <div class="buttons is-right">
+              <a href="createUser.php" class="button is-primary">
+                <span class="icon"><i class="mdi mdi-plus"></i></span>
+                <span>New user</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
