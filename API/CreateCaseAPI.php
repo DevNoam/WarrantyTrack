@@ -28,11 +28,12 @@ $sql = "INSERT INTO `cases` (`Casenumber`, `clientName`, `phoneNumber`, `Address
 
 if ($mysqli->query($sql) === true) {
     //echo "New record created successfully";
-    header("Location: ../caseinspect.php?caseID=$mysqli->insert_id");
 } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
+    exit();
 }
-  $mysqli->close();
-  exit();
+    header("Location: ../caseinspect.php?caseID=$mysqli->insert_id");
+    $mysqli->close();
+    exit();
 ?>
 

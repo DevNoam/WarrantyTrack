@@ -62,7 +62,7 @@ if ($result->num_rows > 0) {
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-medium is-rounded is-danger" href="panel.php">
+                        <a class="button is-medium is-rounded is-danger" onclick="javascript:history.back()" data-tooltip="my link tooltip content">
                             <strong>X</strong>
                         </a>
                     </div>

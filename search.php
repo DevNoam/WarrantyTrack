@@ -61,7 +61,7 @@ session_start();
       <div class="level-right">
         <div class="level-item">
           <div class="buttons is-right">
-            <a href="createcase.php/"class="button is-primary">
+            <a href="createcase.php"class="button is-primary">
               <span class="icon"><i class="mdi mdi-plus"></i></span>
               <span>New case</span>
             </a>

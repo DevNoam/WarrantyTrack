@@ -54,7 +54,7 @@ if ($Status == 'CLOSED' && $isCaseClosed == false) {
 
 //Send sms if case has been resolved.
 
-header("Location: ../panel.php");
+header("location:javascript://history.go(-1)");
 $mysqli->close();
   exit();
 ?>

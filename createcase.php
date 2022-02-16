@@ -50,7 +50,7 @@ $row = $result->fetch_assoc();
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-medium is-rounded is-danger" href="panel.php">
+                        <a class="button is-medium is-rounded is-danger" onclick="javascript:history.back()">
                             <strong>X</strong>
                         </a>
                     </div>

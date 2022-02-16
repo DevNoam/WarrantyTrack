@@ -33,8 +33,21 @@
   }else if (isset($_POST['username'])) {
       $Ausername = $_POST['username'];
     } 
+
   if($canEdit == true && isset($Ausername))
   {
+    if(isset($_POST['deleteUser']) && $_POST['deleteUser'] == true)
+    {
+      $sqlData = "DELETE FROM `users` WHERE `users`.`username` = '$_POST[username]'";
+      //push the query to the database
+      $result = mysqli_query($mysqli, $sqlData);
+      if (!$result) {
+          echo 'Error deleting user';
+      }
+      echo "1";
+      exit;
+    }
+    
   $sqlData = "SELECT *, NULL as `password` FROM `users` WHERE `username` = '$Ausername'";
   $result = mysqli_query($mysqli, $sqlData);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -87,17 +100,6 @@
                   $form_err =  "Error: " . $sql . "<br>" . $mysqli->error;
               }
       }
-  }
-  if(isset($_POST['deleteuser']) && $_POST['deleteUser'] == true)
-  {
-    $sqlData = "DELETE FROM `users` WHERE `username` = $_POST[username]";
-    //push the query to the database
-    $result = mysqli_query($mysqli, $sqlData);
-    if (!$result) {
-        echo 'Error deleting user';
-    }
-    echo "1";
-    exit;
   }
 ?>
 
@@ -158,9 +160,8 @@
             </div>
           </div>
           <div class="level-right">
-            <?php if ($userRole == 'Admin' && isset($Ausername)) { ?>
+            <?php if ($userRole == 'Admin' && isset($row['username']) && strtolower($Ausername) == strtolower($row['username'])) { ?>
             <div class="level-item">
-
               <div class="buttons is-right" id="deleteUser">
                 <a class="button is-danger" >
                   <span class="icon"><i class="mdi mdi-trash-can"></i></span>
