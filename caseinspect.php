@@ -20,7 +20,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $Role = $resultRole->fetch_assoc();
 } else {
-    header("Location: $domain");
+    header("Location: search.php?data=$case");
 }
 ?>
 
