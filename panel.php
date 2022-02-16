@@ -37,6 +37,11 @@ session_start();
           $closedCases++;
       }
   }
+//get avreage days it takes to close a case
+  $sql = "SELECT `AverageTimePerCase` FROM `settings`";
+  $result = mysqli_query($mysqli, $sql);
+  $avgTime = mysqli_fetch_assoc($result);
+  $avgTime = $avgTime['AverageTimePerCase'];
   $fetchNewcases = 10; //Fetch the new cases created in the last X days.
   if(isset($_COOKIE['fetchNewcases'])) {
     $fetchNewcases = $_COOKIE['fetchNewcases'];
@@ -111,7 +116,7 @@ session_start();
     <section class="section is-main-section">
       <div class="tile is-ancestor">
         <div class="tile is-parent">
-          <div class="card tile is-child">
+          <div class="card tile is-child" title="The number of unresolved/ open cases">
             <div class="card-content">
               <div class="level is-mobile">
                 <div class="level-item">
@@ -134,7 +139,7 @@ session_start();
           </div>
         </div>
         <div class="tile is-parent">
-          <div class="card tile is-child">
+          <div class="card tile is-child" title="The number of closed cases">
             <div class="card-content">
               <div class="level is-mobile">
                 <div class="level-item">
@@ -157,16 +162,16 @@ session_start();
           </div>
         </div>
         <div class="tile is-parent">
-          <div class="card tile is-child">
+          <div class="card tile is-child" title="The average time it takes to close a case">
             <div class="card-content">
               <div class="level is-mobile">
                 <div class="level-item">
                   <div class="is-widget-label">
                     <h3 class="subtitle is-spaced">
-                      Avreage time per case
+                      Average time per case
                     </h3>
-                    <h1 class="title">
-                      {NULL} Days
+                    <h1 id="AvgCasesnum" class="title">
+                      0
                     </h1>
                   </div>
                 </div>
@@ -306,28 +311,6 @@ session_start();
     <?php include('footer.php'); ?>
   </div>
 
-
-
-
-  <div id="sample-modal" class="modal">
-    <div class="modal-background jb-modal-close"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Confirm action</p>
-        <button class="delete jb-modal-close" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body">
-        <p>This will permanently delete <b>Some Object</b></p>
-        <p>This is sample modal</p>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button jb-modal-close">Cancel</button>
-        <button class="button is-danger jb-modal-close">Delete</button>
-      </footer>
-    </div>
-    <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
-  </div>
-
   <!-- Scripts below are for demo only -->
   <script type="text/javascript" src="js/main.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
@@ -347,6 +330,7 @@ session_start();
     //Animate the numbers field on top
     closedCasesAnim( <?php echo $closedCases ?> );
     openCasesAnim( <?php echo $openCases ?> );
+    avgCasesAnim(<?php echo ceil($avgTime) ?>);
 
     function openCasesAnim(casesVar) {
       document.getElementById("openCasesnum").classList.add("is-active");
@@ -375,7 +359,6 @@ session_start();
         }
       }, 0100);
     }
-
     function closedCasesAnim(casesVar) {
       document.getElementById("closedCasesnum").classList.add("is-active");
       var openCasesnum = document.getElementById("closedCasesnum");
@@ -403,8 +386,33 @@ session_start();
         }
       }, 0100);
     }
-
-
+    function avgCasesAnim(casesVar) {
+      document.getElementById("AvgCasesnum").classList.add("is-active");
+      var openCasesnum = document.getElementById("AvgCasesnum");
+      var cases = casesVar;
+      //increment speed by cases
+      var openCasesnumInterval = setInterval(function() {
+        var currentNum = parseInt(openCasesnum.innerHTML);
+        var addvalue = 2;
+        if (cases >= 50 && cases <= 99) {
+          addvalue = 5;
+        } else if (cases >= 100 && cases <= 999) {
+          addvalue = 13;
+        } else if (cases >= 1000 && cases <= 9999) {
+          addvalue = 133;
+        } else if (cases >= 10000 && cases <= 99999) {
+          addvalue = 937;
+        } else if (cases > 100000) {
+          addvalue = 100000;
+        }
+        if (currentNum < cases) {
+          openCasesnum.innerHTML = currentNum + addvalue;
+        } else if (currentNum > cases) {
+          openCasesnum.innerHTML = cases;
+          clearInterval(openCasesnumInterval);
+        }
+      }, 0100);
+    }
 
 
 const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;

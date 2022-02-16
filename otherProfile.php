@@ -164,7 +164,7 @@
               <div class="buttons is-right" id="deleteUser">
                 <a class="button is-danger" >
                   <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                  <span>Delete user</span>
+                  <span>Delete user {BUG!}</span>
                 </a>
               </div>
             </div>
