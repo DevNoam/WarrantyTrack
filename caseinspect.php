@@ -62,7 +62,7 @@ if ($result->num_rows > 0) {
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-medium is-rounded is-danger" onclick="javascript:history.back()" data-tooltip="my link tooltip content">
+                        <a class="button is-medium is-rounded is-danger" href="cases.php" data-tooltip="my link tooltip content">
                             <strong>X</strong>
                         </a>
                     </div>
@@ -140,7 +140,7 @@ if ($result->num_rows > 0) {
 
                             <p class="has-text-left has-text-white">Fix description:</p>
                             <textarea class="textarea" id="FixDescription" name="FixDescription"
-                                placeholder=""></textarea>
+                                placeholder=""><?php echo $row['Fixed Description'] ?></textarea>
                             <div class="block">&nbsp;</div>
                             <?php if ($Role['role'] == "Admin") { ?>
                             <div id="deleteCasediv">
@@ -238,8 +238,7 @@ if ($result->num_rows > 0) {
 
     <!--JAVASCRIP-->
     <script type="text/javascript">
-        var username =
-            "<?php echo $_SESSION['username']; ?>";
+        var username = "<?php echo $_SESSION['username']; ?>";
 
         const StatusField = document.getElementById("Status");
         const FixStatusField = document.getElementById("FixStatus");
@@ -247,16 +246,13 @@ if ($result->num_rows > 0) {
 
         const statusInfo = "<?php echo $row['Status'] ?>";
         StatusField.value = statusInfo;
-        FixStatusField.value =
-        "<?php echo $row['Fixed'] ?>";
-        FixDescriptionField.value =
-            "<?php echo $row['Fixed Description'] ?>";
+        FixStatusField.value = "<?php echo $row['Fixed'] ?>";
 
         window.onload = (event) => {
             if (StatusField.value != "CLOSED") {
                 document.getElementById("deleteCase").style.pointerEvents = "none";
                 FixStatusField.style.pointerEvents = "none";
-                FixDescriptionField.readOnly = true;
+                FixDescriptionField.readOnly = false;
 
             } else if (StatusField.value == "CLOSED") {
                 StatusField.style.pointerEvents = 'none';
@@ -280,7 +276,7 @@ if ($result->num_rows > 0) {
                 for (var i = 0, fLen = f.length; i < fLen; i++) {
                     f.elements[i].readOnly = false; //As @oldergod noted, the "O" must be upper case
                 }
-                FixDescriptionField.readOnly = true;
+                FixDescriptionField.readOnly = false;
                 StatusField.style.pointerEvents = 'all';
                 FixStatusField.style.pointerEvents = 'all';
                 document.getElementById("CaseID").readOnly = true;
@@ -295,7 +291,7 @@ if ($result->num_rows > 0) {
             } else {
                 FixStatusField.style.pointerEvents = "none";
                 FixStatusField.required = false;
-                FixDescriptionField.readOnly = true;
+                FixDescriptionField.readOnly = false;
             }
         });
 

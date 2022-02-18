@@ -2,19 +2,19 @@
 require_once("sqlog.php");
 
 $id = $_POST['CaseID'];
-$Status = $_POST['Status'];
-$FixStatus = $_POST['FixStatus'];
-$FixDescription = $_POST['FixDescription'];
-$clientName = $_POST['clientName'];
-$phoneNumber = $_POST['phoneNumber'];
-$Supplier = $_POST['Supplier'];
+$Status = htmlspecialchars($_POST['Status']);
+$FixStatus = htmlspecialchars($_POST['FixStatus']);
+$FixDescription = html_entity_decode($_POST['FixDescription']);
+$clientName = htmlspecialchars($_POST['clientName']);
+$phoneNumber = htmlspecialchars($_POST['phoneNumber']);
+$Supplier = htmlspecialchars($_POST['Supplier']);
 $deleteCase = $_POST['deleteCase'];
 
 
-if ($FixStatus == null || $FixStatus == '') {
+/*if ($FixStatus == null || $FixStatus == '') {
     $FixStatus = null;
     $FixDescription = null;
-}
+}*/
 
 $isCaseClosed = false;
 $result = $mysqli->query("SELECT `Status`, `CaseClosedAt` FROM `cases` WHERE Casenumber = $id");
@@ -54,8 +54,8 @@ if ($Status == 'CLOSED' && $isCaseClosed == false) {
 
 //Send sms if case has been resolved.
 
-header("location:javascript://history.go(-1)");
 $mysqli->close();
+header("Location: ../cases.php");
   exit();
 ?>
 

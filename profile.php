@@ -188,11 +188,11 @@
                 </div>
 
                 <div class="field is-horizontal" <?php if ($userRole != "Admin") { ?>
-                  title="Can be changed by adminstrator only." <?php } ?>>
+                  title="Can be changed by adminstrator only." <?php } else { ?> title="Can't change your role since you own the highest role" <?php } ?>>
                   <div class="field-label is-normal">
                     <label class="label">Role</label>
                   </div>
-                  <?php if ($userRole != "Admin") { ?>
+                  <?php if ($userRole == "Admin") { ?>
                   <div class="dropdown field-body" id="dropdown-menu">
                     <select class="dropdown-content field" name="rolesField" id="rolesField">
                       <option selected="selected" class="dropdown-item"
@@ -201,26 +201,7 @@
                       </option>
                     </select>
                   </div>
-                  <?php } else {
-    $sql = "SHOW COLUMNS FROM `users` WHERE Field = 'role'";
-    $result = mysqli_query($mysqli, $sql);
-    $row2 = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $enumList = explode(",", str_replace("'", "", substr($row2['Type'], 5, (strlen($row2['Type'])-6)))); ?>
-                  <div class="dropdown field-body" id="dropdown-menu" role="menu">
-                    <select class="dropdown-content field" name="rolesField" id="rolesField">
-                      <?php foreach ($enumList as $roles) {
-        if ($userRole == $roles) {
-            ?>
-                      <option selected="selected" class="dropdown-item"> <?php echo $roles; ?> </option>
-                      <?php
-        } else { ?>
-                      <option class="dropdown-item"?> <?php echo $roles; ?> </option>
-                      <?php }
-    } ?>
-                    </select>
-                  </div>
-                  <?php
-} ?>
+                  <?php } ?>
                 </div>
                 <hr>
                 <span class="invalid-feedback"><?php echo $form_err; ?></span>

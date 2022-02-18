@@ -226,7 +226,19 @@ session_start();
           <div class="b-table has-pagination">
             <div class="table-wrapper has-mobile-cards">
               <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
-                
+               
+              <?php
+              if ($openCases == 0 || $openCases == null) { ?>
+              <section class="section">
+                <div class="content has-text-grey has-text-centered">
+                  <p>
+                    <span class="icon is-large"><i class="mdi mdi-emoticon-sad mdi-48px"></i></span>
+                  </p>
+                  <p>Nothing's here…</p>
+                </div>
+              </section>
+              </tr>
+              <?php } else { ?>
         <script>
         //if the screen is mobile
         if (window.matchMedia("(max-width: 768px)").matches) {
@@ -300,6 +312,7 @@ session_start();
                   <?php
 } ?>
                 </tbody>
+                <?php } ?>
               </table>
             </div>
           </div>
