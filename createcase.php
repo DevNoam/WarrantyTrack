@@ -59,9 +59,6 @@ $row = $result->fetch_assoc();
         </div>
     </nav>
 
-    <div class="container">
-        <button class="button has-background-info is-info" type="button">Print</button>
-    </div>
 
     <form action="API/CreateCaseAPI.php" method="POST" name="newform">
         <div class="section has-text-centered hero has-background-grey is-fullheight">

@@ -71,12 +71,14 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
         </div>
         <div class="level-right" style="display: block;">
           <div class="level-item">
+            <?php if($userRole == 'Admin') { ?>
           <div class="buttons is-right">
               <a href="createUser.php" class="button is-primary">
                 <span class="icon"><i class="mdi mdi-plus"></i></span>
                 <span>New user</span>
               </a>
             </div>
+            <?php } ?>
           </div>
         </div>
       </div>

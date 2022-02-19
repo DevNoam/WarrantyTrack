@@ -1,4 +1,9 @@
 <?php
+    session_start();
+    if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
+        header("Location: $domain");
+        exit;
+    }
     include("../sqlog.php");
     // Get the domain ID
     $newDomain = htmlspecialchars($_POST['domainField']);

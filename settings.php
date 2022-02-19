@@ -12,6 +12,10 @@ session_start();
     $result = mysqli_query($mysqli, $sqlData);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $userRole = $row['role'];
+    //get settings data
+    $sqlData = "SELECT * FROM `settings`";
+    $result = mysqli_query($mysqli, $sqlData);
+    $settings = mysqli_fetch_array($result, MYSQLI_ASSOC);
 ?>
 
 
@@ -119,7 +123,7 @@ session_start();
           <div class="card tile is-child">
             <header class="card-header">
               <p class="card-header-title">
-                <span class="icon"><i class="mdi mdi-account-circle default"></i></span>
+                <span class="icon"><i class="mdi mdi-link default"></i></span>
                 Edit website Domain
               </p>
             </header>
@@ -173,7 +177,7 @@ session_start();
           <div class="card tile is-child">
             <header class="card-header">
               <p class="card-header-title">
-                <span class="icon"><i class="mdi mdi-account-circle default"></i></span>
+                <span class="icon"><i class="mdi mdi-delete default"></i></span>
                 Time to delete old cases
               </p>
             </header>
@@ -213,7 +217,101 @@ session_start();
             </div>
           </div>
         </div>
+
+        
       </div>
+      <div class="tile is-parent">
+          <div class="card tile is-child">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon"><i class="mdi mdi-store default"></i></span>
+                Store info
+              </p>
+            </header>
+            <div class="card-content">
+            <form method="POST" id="storeSettings" action="API/settings/updateStore.php">
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Store Name:</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input type="text" autocomplete="on" name="storeName" value="<?php echo $settings['StoreName'] ?>" class="input" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Store Address:</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input type="text" autocomplete="on" name="storeAddress" value="<?php echo $settings['Address'] ?>" class="input" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Store Phone:</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input type="phone" autocomplete="on" name="storePhone" value="<?php echo $settings['Phone'] ?>" class="input" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Store Email:</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input type="Email" autocomplete="on" name="storeEmail" value="<?php echo $settings['Email'] ?>" class="input" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Store logo:</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input type="url" autocomplete="on" name="storeLogo" value="<?php echo $settings['Logo'] ?>" class="input" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr>
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal"></div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <button type="submit" id="submit" class="button is-primary">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       <?php } ?>
     </section>
 
@@ -241,6 +339,11 @@ session_start();
         var notification = alertify.notify('<i class="mdi mdi-progress-check"></i> Success', 'success', 3,
           function () {});
       });
+      $('#storeSettings').ajaxForm(function () {
+        //refresh the select element with new options
+        var notification = alertify.notify('<i class="mdi mdi-progress-check"></i> Success', 'success', 3,
+          function () {});
+      });
       $('#panelFetch').ajaxForm(function () {
         //refresh the select element with new options
         var notification = alertify.notify('<i class="mdi mdi-progress-check"></i> Success', 'success', 3,
@@ -253,7 +356,7 @@ session_start();
     $('#submitDomain').click(function (e) {
       e.preventDefault();
       //if domainField value is empty
-      alertify.confirm('Domain update', "Are you sure you want to update the domain to: " + $('input[name=domainField]').val(),
+      alertify.confirm('Domain update', "Are you sure you want to update the domain to: <b>" + $('input[name=domainField]').val() +  "</b></br> This might break the system if entered incorrectly!",
        function(){ 
          updateDomain();
          alertify.success('Updated') 

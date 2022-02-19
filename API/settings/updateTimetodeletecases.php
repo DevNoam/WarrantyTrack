@@ -1,4 +1,9 @@
-<?php 
+<?php
+    session_start();
+    if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
+        header("Location: $domain");
+        exit;
+    }
     include("../sqlog.php");
     $timeTodeletecaseN = htmlspecialchars($_POST['timeToDeleteCasesField']);
     if($timeTodeletecaseN == $_SESSION['deleteCases']){

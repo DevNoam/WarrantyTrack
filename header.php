@@ -79,7 +79,7 @@
           </a>
         </li>
         <li>
-          <a href="reports.php" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "reports") {
+          <a href="#" class="<?php if (basename($_SERVER['PHP_SELF'], '.php') == "reports") {
       echo "is-active router-link-active";
   } ?> has-icon">
             <span class="icon"><i class="mdi mdi-chart-arc"></i></span>

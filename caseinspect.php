@@ -4,7 +4,7 @@ session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-    header("Location: $domain");
+    header("Location: index.php");
     exit;
 }
 require_once('API/sqlog.php');
@@ -71,7 +71,7 @@ if ($result->num_rows > 0) {
         </div>
     </nav>
 
-    <button class="button has-background-info is-info" onclick="printDiv('print-content')" type="button">Print</button>
+    <button class="button has-background-info is-info" onclick="printPage('API/Print/printForm.php?CaseID=<?php echo htmlspecialchars($case) ?>')" id="printButton" type="button">Print</button>
 
     <form action="API/UpdateCaseAPI.php" method="POST" name="newform">
         <div class="section has-text-centered hero has-background-grey is-fullheight" id="print-content">
@@ -235,7 +235,8 @@ if ($result->num_rows > 0) {
     </footer>
 
 
-
+<script src="https://printjs-4de6.kxcdn.com/print.min.css"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <!--JAVASCRIP-->
     <script type="text/javascript">
         var username = "<?php echo $_SESSION['username']; ?>";
@@ -298,14 +299,44 @@ if ($result->num_rows > 0) {
 
 
         //PRINT PAGE:
-        function printDiv(divName) {
-            var printContents = document.getElementById(divName).innerHTML;
-            w = window.open();
-            w.document.write(printContents);
-            w.print();
-            w.close();
-        }
+        //make listener to printButton using jqeury
+        $("#printButt2on").click(function() {
+            //print the page
+            $.post({
+                type: "GET",
+                url: "API/Print/printForm.php",
+                data: {CaseID: '<?php echo $case ?>'},
+            }).done(function(data) {
+                printWindow = window.open('');
+                printWindow.document.write(data);
+                printWindow.print();
+            });        
+        });
     </script>
+    <script type="text/javascript">
+function closePrint () {
+  document.body.removeChild(this.__container__);
+}
+
+function setPrint () {
+  this.contentWindow.__container__ = this;
+  this.contentWindow.onbeforeunload = closePrint;
+  this.contentWindow.onafterprint = closePrint;
+  this.contentWindow.focus(); // Required for IE
+  this.contentWindow.print();
+}
+
+function printPage (sURL) {
+  var oHiddFrame = document.createElement("iframe");
+  oHiddFrame.onload = setPrint;
+  oHiddFrame.style.visibility = "hidden";
+  oHiddFrame.style.position = "fixed";
+  oHiddFrame.style.right = "0";
+  oHiddFrame.style.bottom = "0";
+  oHiddFrame.src = sURL;
+  document.body.appendChild(oHiddFrame);
+}
+</script>
 </body>
 
 <style>
@@ -320,5 +351,15 @@ if ($result->num_rows > 0) {
         font-size: 20px;
     }
 </style>
-
+<style type="text/css" media="print">
+    @media print {
+   body {
+   display:table;
+   table-layout:fixed;
+   padding-top:2.5cm;
+   padding-bottom:2.5cm;
+   height:auto;
+    }
+}
+    </style>
 </html>

@@ -192,16 +192,13 @@
                   <div class="field-label is-normal">
                     <label class="label">Role</label>
                   </div>
-                  <?php if ($userRole == "Admin") { ?>
                   <div class="dropdown field-body" id="dropdown-menu">
                     <select class="dropdown-content field" name="rolesField" id="rolesField">
-                      <option selected="selected" class="dropdown-item"
-                        value="<?php echo $userRole; ?>">
+                      <option selected="selected" class="dropdown-item">
                         <?php echo $userRole; ?>
                       </option>
                     </select>
                   </div>
-                  <?php } ?>
                 </div>
                 <hr>
                 <span class="invalid-feedback"><?php echo $form_err; ?></span>
