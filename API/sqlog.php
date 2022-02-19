@@ -1,5 +1,5 @@
 <?php
-    $mysqli = new mysqli("localhost", "root", "", "warrantytrack");
+    $mysqli = new mysqli(/* url */"localhost", /* user */ "root", /* password */"", /* DB */"warrantytrack");
     $domain = getURL($mysqli); //Main website domain. Can be inclouded sub folders if program hosted inside. localhost/subfolder
     if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         $timeTodeletecase = getDeleteCases($mysqli);
