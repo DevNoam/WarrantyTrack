@@ -1,7 +1,7 @@
 <?php
 
+session_start();
   require_once('API/sqlog.php');
-  session_start();
   if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
       header("Location: index.php");
       exit;

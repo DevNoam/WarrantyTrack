@@ -1,15 +1,15 @@
 <?php
-    $mysqli = new mysqli(/* url */"localhost", /* user */ "root", /* password */"", /* DB */"warrantytrack");
-    $domain = getURL($mysqli); //Main website domain. Can be inclouded sub folders if program hosted inside. localhost/subfolder
+    $mysqli = new mysqli("localhost", "root", "", "warrantytrack");
+    if ($mysqli === false) {
+        echo "DB ERROR";
+        die("ERROR: Could not connect. " . $mysqli->connect_error);
+        exit();
+    }
+    $domain = $_SERVER['PHP_SELF']; //Main website domain. Can be inclouded sub folders if program hosted inside. localhost/subfolder
     if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         $timeTodeletecase = getDeleteCases($mysqli);
     }
 
-    // Check connection
-    if ($mysqli === false) {
-        die("ERROR: Could not connect. " . $mysqli->connect_error);
-        exit();
-    }
     //fetch data from sql database into $domain
     function getURL($mysqli)
     {
@@ -25,6 +25,7 @@
         } else {
             $domain = $_COOKIE['domain'];
         }
+        echo "good";
         return $domain;
     }
 

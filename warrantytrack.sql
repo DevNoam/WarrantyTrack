@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: פברואר 19, 2022 בזמן 07:50 PM
+-- Generation Time: פברואר 19, 2022 בזמן 09:09 PM
 -- גרסת שרת: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `warrantytrack`
 --
+CREATE DATABASE IF NOT EXISTS `warrantytrack` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `warrantytrack`;
 
 -- --------------------------------------------------------
 
@@ -27,8 +29,9 @@ SET time_zone = "+00:00";
 -- מבנה טבלה עבור טבלה `cases`
 --
 
-CREATE TABLE `cases` (
-  `Casenumber` int(16) NOT NULL COMMENT 'The case number that has been created.',
+DROP TABLE IF EXISTS `cases`;
+CREATE TABLE IF NOT EXISTS `cases` (
+  `Casenumber` int(16) NOT NULL AUTO_INCREMENT COMMENT 'The case number that has been created.',
   `clientName` varchar(256) NOT NULL,
   `phoneNumber` varchar(11) NOT NULL,
   `Address` varchar(256) NOT NULL,
@@ -44,8 +47,11 @@ CREATE TABLE `cases` (
   `Fixed` enum('Fixed','Supplied new product','Unfixable','Unsolved','Closed by customer','Product is working') DEFAULT NULL COMMENT 'Choose from the following when the product has been returned or case has been closed.',
   `Fixed Description` text DEFAULT NULL COMMENT 'Tell what was the problem and if the case has been resolved.',
   `Createdby` varchar(256) NOT NULL DEFAULT 'General' COMMENT 'Which agent created the case',
-  `Supplier` varchar(256) DEFAULT 'UNKOWN' COMMENT 'Who is the supplier of the product. Warranty will be covered by the supplier.'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `Supplier` varchar(256) DEFAULT 'UNKOWN' COMMENT 'Who is the supplier of the product. Warranty will be covered by the supplier.',
+  PRIMARY KEY (`Casenumber`) USING BTREE,
+  UNIQUE KEY `Casenumber` (`Casenumber`) KEY_BLOCK_SIZE=8 USING BTREE,
+  UNIQUE KEY `Casenumber_2` (`Casenumber`)
+) ENGINE=InnoDB AUTO_INCREMENT=742 DEFAULT CHARSET=utf8mb4;
 
 --
 -- הוצאת מידע עבור טבלה `cases`
@@ -57,6 +63,7 @@ INSERT INTO `cases` (`Casenumber`, `clientName`, `phoneNumber`, `Address`, `Reci
 --
 -- Triggers `cases`
 --
+DROP TRIGGER IF EXISTS `Fetch average time per case`;
 DELIMITER $$
 CREATE TRIGGER `Fetch average time per case` BEFORE UPDATE ON `cases` FOR EACH ROW UPDATE `settings` T
 SET AverageTimePerCase = (
@@ -73,7 +80,8 @@ DELIMITER ;
 -- מבנה טבלה עבור טבלה `settings`
 --
 
-CREATE TABLE `settings` (
+DROP TABLE IF EXISTS `settings`;
+CREATE TABLE IF NOT EXISTS `settings` (
   `Domain` varchar(100) NOT NULL DEFAULT 'localhost',
   `deleteCases` set('NEVER','90','120','180','365') NOT NULL DEFAULT '90',
   `AverageTimePerCase` text DEFAULT NULL,
@@ -81,7 +89,8 @@ CREATE TABLE `settings` (
   `Address` text DEFAULT NULL,
   `Phone` varchar(16) DEFAULT NULL,
   `Email` text DEFAULT NULL,
-  `Logo` text DEFAULT NULL
+  `Logo` text DEFAULT NULL,
+  PRIMARY KEY (`Domain`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -97,13 +106,17 @@ INSERT INTO `settings` (`Domain`, `deleteCases`, `AverageTimePerCase`, `StoreNam
 -- מבנה טבלה עבור טבלה `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` set('Admin','Technician','Supplier','Employee') NOT NULL DEFAULT 'Employee',
-  `Name` varchar(64) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `Name` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4;
 
 --
 -- הוצאת מידע עבור טבלה `users`
@@ -111,48 +124,6 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `Name`) VALUES
 (1, 'Admin', '1234', 'Admin', 'Administrator');
-
---
--- Indexes for dumped tables
---
-
---
--- אינדקסים לטבלה `cases`
---
-ALTER TABLE `cases`
-  ADD PRIMARY KEY (`Casenumber`) USING BTREE,
-  ADD UNIQUE KEY `Casenumber` (`Casenumber`) KEY_BLOCK_SIZE=8 USING BTREE,
-  ADD UNIQUE KEY `Casenumber_2` (`Casenumber`);
-
---
--- אינדקסים לטבלה `settings`
---
-ALTER TABLE `settings`
-  ADD PRIMARY KEY (`Domain`);
-
---
--- אינדקסים לטבלה `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `cases`
---
-ALTER TABLE `cases`
-  MODIFY `Casenumber` int(16) NOT NULL AUTO_INCREMENT COMMENT 'The case number that has been created.', AUTO_INCREMENT=742;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
