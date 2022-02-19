@@ -70,7 +70,7 @@ session_start();
 <body>
   <div id="app">
 
-    <?php include("header.php"); ?>
+    <?php include("include/header.php"); ?>
 
 
 
@@ -321,7 +321,7 @@ session_start();
     </section>
 
 
-    <?php include('footer.php'); ?>
+    <?php include('include/footer.php'); ?>
   </div>
 
   <!-- Scripts below are for demo only -->

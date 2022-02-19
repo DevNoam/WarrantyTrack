@@ -155,7 +155,7 @@ foreach ($cases as $case) {
 
 
 
-    <?php include("footer.php"); ?>
+    <?php include("include/footer.php"); ?>
 
     <a href="createcase.php">
         <button class="sumbit button is-success is-rounded" type="button" value="+">+</button>

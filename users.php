@@ -43,7 +43,7 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
 <div id="app">
 
 
-  <?php include ("header.php"); ?>
+  <?php include ("include/header.php"); ?>
 
 
 
@@ -186,7 +186,7 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
       </div>
     </div>
   </section>
-  <?php include ('footer.php'); ?>
+  <?php include ('include/footer.php'); ?>
 
 
 <!-- Scripts below are for demo only -->

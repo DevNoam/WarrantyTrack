@@ -120,7 +120,7 @@
 
 <body>
   <div id="app">
-    <?php include 'header.php'; ?>
+    <?php include 'include/header.php'; ?>
 
 
     <section class="section is-title-bar">
@@ -353,7 +353,7 @@
     </section>
     <?php } ?>
 
-    <?php include('footer.php'); ?>
+    <?php include('include/footer.php'); ?>
   </div>
 
   <!-- Scripts below are for demo only -->

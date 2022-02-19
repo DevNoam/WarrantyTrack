@@ -48,7 +48,7 @@ foreach ($cases as $case) {
   <div id="app">
 
 
-    <?php include("header.php"); ?>
+    <?php include("include/header.php"); ?>
 
 
 
@@ -320,7 +320,7 @@ foreach ($cases as $case) {
       </div>
     </section>
 
-    <?php include('footer.php'); ?>
+    <?php include('include/footer.php'); ?>
 
 
     <div id="sample-modal" class="modal">

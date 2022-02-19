@@ -65,7 +65,7 @@
             <hr>
             <div class="container is-flex" id="header-Info" style="justify-content: center">
                 <div class="subtitle">
-                   <u><b><p>Case ID: <?php echo $row['Casenumber'] ?></p></b></u>
+                   <u><b><p>Customer inquiry: <?php echo $row['Casenumber'] ?></p></b></u>
                 </div>
             </div>
             <br>
