@@ -1,7 +1,8 @@
 <?php
+
 session_start();
 if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    header("Location: $domain");
     exit;
 }
 
@@ -24,14 +25,14 @@ $row = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WarrantyTrack - New case</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="bulma.js"></script>
+    <script src="js/bulma.js"></script>
 </head>
 
 <body>
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand ">
-            <a class="navbar-item" href="index.php">
+            <a class="navbar-item" href="panel.php">
                 <h1 class="title">WarrantyTrack -</h1>
                 <h2 class="subtitle">&nbsp;New case</h2>
             </a>
@@ -49,7 +50,7 @@ $row = $result->fetch_assoc();
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-medium is-rounded is-danger" href="panel.php">
+                        <a class="button is-medium is-rounded is-danger" onclick="javascript:history.back()">
                             <strong>X</strong>
                         </a>
                     </div>
@@ -58,9 +59,6 @@ $row = $result->fetch_assoc();
         </div>
     </nav>
 
-    <div class="container">
-        <button class="button has-background-info is-info" type="button">Print</button>
-    </div>
 
     <form action="API/CreateCaseAPI.php" method="POST" name="newform">
         <div class="section has-text-centered hero has-background-grey is-fullheight">
@@ -79,7 +77,8 @@ $row = $result->fetch_assoc();
                         <p class="has-text-left has-text-white"> Created by:</p>
                         <span class="select is-pulled-left">
                             <select id="Createdby" name="Createdby">
-                                <option selected><?php echo $username ?></option>
+                                <option selected><?php echo $username ?>
+                                </option>
                                 <option>GENERAL</option>
                             </select>
                         </span>
@@ -164,7 +163,7 @@ $row = $result->fetch_assoc();
                             </div>
                         </div>
 
-                        <div class="column" id="CaseDescription">
+                        <div class="column" id="CaseDescriptionF">
                             <div class="container">
                                 <p class="has-text-left has-text-white">* Case description:</p>
                                 <textarea class="textarea" id="CaseDescription" name="CaseDescription"
@@ -184,35 +183,36 @@ $row = $result->fetch_assoc();
     <script type="text/javascript">
         document.getElementById("customerInfo").style.display = "block";
         document.getElementById("OrderInfo").style.display = "none";
-        document.getElementById("CaseDescription").style.display = "none";
+        document.getElementById("CaseDescriptionF").style.display = "none";
 
 
         //PUT DATA ON FORM FIELDS:
         document.getElementById('CreatedAt').valueAsDate = new Date();
 
 
-        window.onload = function () {
+        window.onload = function() {
             clearForm();
-            document.getElementById("Casenumber").value = "<?php echo $row['Auto_increment']; ?>";
+            document.getElementById("Casenumber").value =
+                "<?php echo $row['Auto_increment']; ?>";
 
             var a = document.getElementById("customerinfoButton");
             var b = document.getElementById("orderdetailsButton");
             var c = document.getElementById("casedescriptionButton");
 
-            a.onclick = function () {
+            a.onclick = function() {
                 document.getElementById("customerInfo").style.display = "block";
                 document.getElementById("OrderInfo").style.display = "none";
-                document.getElementById("CaseDescription").style.display = "none";
+                document.getElementById("CaseDescriptionF").style.display = "none";
                 b.classList = "";
                 a.classList = "is-active";
                 c.classList = "";
 
                 return false;
             }
-            b.onclick = function () {
+            b.onclick = function() {
                 document.getElementById("customerInfo").style.display = "none";
                 document.getElementById("OrderInfo").style.display = "block";
-                document.getElementById("CaseDescription").style.display = "none";
+                document.getElementById("CaseDescriptionF").style.display = "none";
                 a.classList = "";
                 b.classList = "is-active";
                 c.classList = "";
@@ -220,10 +220,10 @@ $row = $result->fetch_assoc();
 
                 return false;
             }
-            c.onclick = function () {
+            c.onclick = function() {
                 document.getElementById("customerInfo").style.display = "none";
                 document.getElementById("OrderInfo").style.display = "none";
-                document.getElementById("CaseDescription").style.display = "block";
+                document.getElementById("CaseDescriptionF").style.display = "block";
                 a.classList = "";
                 c.classList = "is-active";
                 b.classList = "";
@@ -232,20 +232,21 @@ $row = $result->fetch_assoc();
             }
         }
 
-        function clearForm(){
-            document.getElementById('phoneNumber').value ='';
-            document.getElementById('clientName').value ='';
-            document.getElementById('Address').value ='';
-            document.getElementById('ReciptNumber').value ='';
-            document.getElementById('OrderDate').value ='';
-            document.getElementById('ProductSKU').value ='';
-            document.getElementById('ProductName').value ='';
-            document.getElementById('ProductSerial').value ='';
-            document.getElementById('Supplier').value ='';
-            document.getElementById('ProductSerial').value ='';
-            document.getElementById('CaseDescription').value ='';
-            document.getElementById('ProductSerial').value ='';
-            document.getElementById('Status').value ='OPEN';
+        function clearForm() {
+            document.getElementById('phoneNumber').value = '';
+            document.getElementById('clientName').value = '';
+            document.getElementById('Address').value = '';
+            document.getElementById('ReciptNumber').value = '';
+            document.getElementById('OrderDate').value = '';
+            document.getElementById('ProductSKU').value = '';
+            document.getElementById('ProductName').value = '';
+            document.getElementById('ProductSerial').value = '';
+            document.getElementById('Supplier').value = '';
+            document.getElementById('ProductSerial').value = '';
+            document.getElementById('CaseDescription').value = '';
+            document.getElementById('ProductSerial').value = '';
+            document.getElementById('Status').value = 'OPEN';
+            document.getElementById('CaseDescription').value = '';
         }
 
         //

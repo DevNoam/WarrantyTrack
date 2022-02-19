@@ -1,24 +1,26 @@
-<?php 
+<?php
 
 session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true){
-    header("location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
+    header("Location: index.php");
     exit;
 }
 require_once('API/sqlog.php');
 
-$case = $_GET['caseID'];
+$case = htmlspecialchars($_GET['caseID']);
 // Notice the subtraction from $current_id
-$query = "SELECT * FROM cases WHERE Casenumber = $case;";
+$query = "SELECT * FROM cases WHERE Casenumber = $case; ";
+$queryRole = "SELECT `role` FROM `users` WHERE `username` = '$_SESSION[username]';";
 
 $result = $mysqli->query($query);
+$resultRole = $mysqli->query($queryRole);
 if ($result->num_rows > 0) {
-$row = $result->fetch_assoc();
-}else
-{
-    header("Location: http://api.noamsapir.me/Experiments/WarrantyTrack/");
+    $row = $result->fetch_assoc();
+    $Role = $resultRole->fetch_assoc();
+} else {
+    header("Location: search.php?data=$case");
 }
 ?>
 
@@ -31,9 +33,10 @@ $row = $result->fetch_assoc();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>WarrantyTrack - Case inspect: <?php echo $case ?></title>
+    <title>WarrantyTrack - Case inspect: <?php echo $case ?>
+    </title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="bulma.js"></script>
+    <script src="js/bulma.js"></script>
 </head>
 
 <body>
@@ -42,7 +45,8 @@ $row = $result->fetch_assoc();
         <div class="navbar-brand ">
             <a class="navbar-item" href="index.php">
                 <h1 class="title">WarrantyTrack -</h1>
-                <h2 class="subtitle">&nbsp;Case inspect: <?php echo $case ?></h2>
+                <h2 class="subtitle">&nbsp;Case inspect: <?php echo $case ?>
+                </h2>
             </a>
 
 
@@ -58,7 +62,7 @@ $row = $result->fetch_assoc();
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-medium is-rounded is-danger" href="panel.php">
+                        <a class="button is-medium is-rounded is-danger" href="cases.php" data-tooltip="my link tooltip content">
                             <strong>X</strong>
                         </a>
                     </div>
@@ -67,8 +71,7 @@ $row = $result->fetch_assoc();
         </div>
     </nav>
 
-    <button class="button has-background-info is-info" onclick="printDiv('print-content')"
-        type="button">Print</button>
+    <button class="button has-background-info is-info" onclick="printPage('API/Print/printForm.php?CaseID=<?php echo htmlspecialchars($case) ?>')" id="printButton" type="button">Print</button>
 
     <form action="API/UpdateCaseAPI.php" method="POST" name="newform">
         <div class="section has-text-centered hero has-background-grey is-fullheight" id="print-content">
@@ -77,29 +80,30 @@ $row = $result->fetch_assoc();
                     <div class="container" style="width: 500px;">
 
                         <p class="has-text-left has-text-white"> Case ID:</p>
-                        <input class="input" id="CaseID" name="CaseID" readonly type="text" value="<?php echo $case ?>">
+                        <input class="input" id="CaseID" name="CaseID" readonly type="text"
+                            value="<?php echo $case ?>">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white"> Date creation:</p>
-                        <input class="input" id="CreatedAt" value="<?php echo $row['CreatedAt'] ?>" name="CreatedAt"
-                            disabled type="text">
+                        <input class="input" id="CreatedAt"
+                            value="<?php echo $row['CreatedAt'] ?>"
+                            name="CreatedAt" disabled type="text">
 
                         <div class="block"></div>
 
-                        <?php 
-                            if($row['CaseClosedAt'] != null)
-                            {
-                                echo ("<p class='has-text-left has-text-white'>Case closed at:</p>");
-                                echo ("<input class='input' id='CreatedAt' value='$row[CaseClosedAt]' name='CreatedAt'
+                        <?php
+                            if ($row['CaseClosedAt'] != null) {
+                                echo("<p class='has-text-left has-text-white'>Case closed at:</p>");
+                                echo("<input class='input' id='CreatedAt' value='$row[CaseClosedAt]' name='CreatedAt'
                                 disabled type='text'>");
-                                echo ("<div class='block'></div>");
-
+                                echo("<div class='block'></div>");
                             }
                         ?>
 
                         <p class="has-text-left has-text-white"> Created by:</p>
                         <span class="select is-pulled-left">
                             <select id="Createdby" disabled name="Createdby">
-                                <option selected><?php echo $row['Createdby'] ?></option>
+                                <option selected><?php echo $row['Createdby'] ?>
+                                </option>
                             </select>
                         </span>
 
@@ -136,10 +140,12 @@ $row = $result->fetch_assoc();
 
                             <p class="has-text-left has-text-white">Fix description:</p>
                             <textarea class="textarea" id="FixDescription" name="FixDescription"
-                                placeholder=""></textarea>
+                                placeholder=""><?php echo $row['Fixed Description'] ?></textarea>
                             <div class="block">&nbsp;</div>
+                            <?php if ($Role['role'] == "Admin") { ?>
                             <div id="deleteCasediv">
-                                <p class="has-text-left has-text-white" title="Available for pre-closed cases only"> Delete case?</p>
+                                <p class="has-text-left has-text-white" title="Available for pre-closed cases only">
+                                    Delete case?</p>
                                 <span class="select is-pulled-left" title="Available for pre-closed cases only">
                                     <select id="deleteCase" name="deleteCase">
                                         <option selected> </option>
@@ -148,30 +154,38 @@ $row = $result->fetch_assoc();
                                     </select>
                                 </span>
                             </div>
+                            <?php } else {
+                        } ?>
                         </div>
+
                     </div>
                 </div>
 
                 <div class="column" id="customerInfo">
                     <div class="container">
                         <p class="has-text-left has-text-white">* Customer full Name:</p>
-                        <input class="input" id="clientName" value="<?php echo $row['clientName'] ?>" name="clientName"
-                            type="text" placeholder="John john">
+                        <input class="input" id="clientName"
+                            value="<?php echo $row['clientName'] ?>"
+                            name="clientName" type="text" placeholder="John john">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white">* Customer phone:</p>
-                        <input class="input" id="phoneNumber" value="<?php echo $row['phoneNumber'] ?>"
+                        <input class="input" id="phoneNumber"
+                            value="<?php echo $row['phoneNumber'] ?>"
                             name="phoneNumber" type="tel" pattern="[0-9]{10}" placeholder="0500000000">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white">* Customer Address:</p>
-                        <input class="input" id="Address" disabled value="<?php echo $row['Address'] ?>" name="Address"
-                            type="text" placeholder="Menachem Begin 1 Tel Aviv Israel">
+                        <input class="input" id="Address" disabled
+                            value="<?php echo $row['Address'] ?>"
+                            name="Address" type="text" placeholder="Menachem Begin 1 Tel Aviv Israel">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white">* Receipt number:</p>
-                        <input class="input" id="ReciptNumber" disabled value="<?php echo $row['ReciptNumber'] ?>"
+                        <input class="input" id="ReciptNumber" disabled
+                            value="<?php echo $row['ReciptNumber'] ?>"
                             name="ReciptNumber" type="text">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white">* Order date:</p>
-                        <input class="input" id="OrderDate" disabled value="<?php echo $row['OrderDate'] ?>"
+                        <input class="input" id="OrderDate" disabled
+                            value="<?php echo $row['OrderDate'] ?>"
                             name="OrderDate" type="date">
                         <div class="block"></div>
                     </div>
@@ -180,20 +194,24 @@ $row = $result->fetch_assoc();
                 <div class="column" id="OrderInfo">
                     <div class="container">
                         <p class="has-text-left has-text-white">* Product SKU:</p>
-                        <input class="input" id="ProductSKU" disabled value="<?php echo $row['ProductSKU'] ?>"
+                        <input class="input" id="ProductSKU" disabled
+                            value="<?php echo $row['ProductSKU'] ?>"
                             name="ProductSKU" type="text" placeholder="1005470">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white">* Product Name:</p>
-                        <input class="input" id="ProductName" disabled value="<?php echo $row['ProductName'] ?>"
+                        <input class="input" id="ProductName" disabled
+                            value="<?php echo $row['ProductName'] ?>"
                             name="ProductName" type="text" placeholder="Xbox one">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white"> Serial:</p>
-                        <input class="input" id="ProductSerial" disabled value="<?php echo $row['ProductSerial'] ?>"
+                        <input class="input" id="ProductSerial" disabled
+                            value="<?php echo $row['ProductSerial'] ?>"
                             name="ProductSerial" type="text" placeholder="Serial number, if any">
                         <div class="block"></div>
                         <p class="has-text-left has-text-white"> Supplier:</p>
-                        <input class="input" id="Supplier" value="<?php echo $row['Supplier'] ?>" name="Supplier"
-                            type="text" placeholder="Product Supplier">
+                        <input class="input" id="Supplier"
+                            value="<?php echo $row['Supplier'] ?>"
+                            name="Supplier" type="text" placeholder="Product Supplier">
                         <div class="block"></div>
 
                         <p class="has-text-left has-text-white">* Case description:</p>
@@ -217,14 +235,12 @@ $row = $result->fetch_assoc();
     </footer>
 
 
-
+<script src="https://printjs-4de6.kxcdn.com/print.min.css"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <!--JAVASCRIP-->
     <script type="text/javascript">
         var username = "<?php echo $_SESSION['username']; ?>";
-        if(username != "admin" && document.getElementById("Createdby").value == 'admin')
-        {
-            document.getElementById('deleteCasediv').remove();
-        }
+
         const StatusField = document.getElementById("Status");
         const FixStatusField = document.getElementById("FixStatus");
         const FixDescriptionField = document.getElementById("FixDescription");
@@ -232,13 +248,12 @@ $row = $result->fetch_assoc();
         const statusInfo = "<?php echo $row['Status'] ?>";
         StatusField.value = statusInfo;
         FixStatusField.value = "<?php echo $row['Fixed'] ?>";
-        FixDescriptionField.value = "<?php echo $row['Fixed Description'] ?>";
 
         window.onload = (event) => {
             if (StatusField.value != "CLOSED") {
                 document.getElementById("deleteCase").style.pointerEvents = "none";
                 FixStatusField.style.pointerEvents = "none";
-                FixDescriptionField.readOnly = true;
+                FixDescriptionField.readOnly = false;
 
             } else if (StatusField.value == "CLOSED") {
                 StatusField.style.pointerEvents = 'none';
@@ -249,20 +264,20 @@ $row = $result->fetch_assoc();
                 }
                 document.getElementById("deleteCase").style.pointerEvents = "all";
             }
-            if(StatusField.value == "Waiting for customer" || StatusField.value == "Returning from supplier")
+            if (StatusField.value == "Waiting for customer" || StatusField.value == "Returning from supplier")
                 FixStatusField.style.pointerEvents = "all";
 
         }
 
         document.getElementById("deleteCase").addEventListener('change', (event) => {
             if (event.target.value == "YES") {
-                
-            } else if(event.target.value == "NO") {
+
+            } else if (event.target.value == "NO") {
                 var f = document.forms['newform'];
                 for (var i = 0, fLen = f.length; i < fLen; i++) {
                     f.elements[i].readOnly = false; //As @oldergod noted, the "O" must be upper case
                 }
-                FixDescriptionField.readOnly = true;
+                FixDescriptionField.readOnly = false;
                 StatusField.style.pointerEvents = 'all';
                 FixStatusField.style.pointerEvents = 'all';
                 document.getElementById("CaseID").readOnly = true;
@@ -277,21 +292,51 @@ $row = $result->fetch_assoc();
             } else {
                 FixStatusField.style.pointerEvents = "none";
                 FixStatusField.required = false;
-                FixDescriptionField.readOnly = true;
+                FixDescriptionField.readOnly = false;
             }
         });
 
 
 
-//PRINT PAGE:
-function printDiv(divName) {
-            var printContents = document.getElementById(divName).innerHTML;
-            w = window.open();
-            w.document.write(printContents);
-            w.print();
-            w.close();
-        }
+        //PRINT PAGE:
+        //make listener to printButton using jqeury
+        $("#printButt2on").click(function() {
+            //print the page
+            $.post({
+                type: "GET",
+                url: "API/Print/printForm.php",
+                data: {CaseID: '<?php echo $case ?>'},
+            }).done(function(data) {
+                printWindow = window.open('');
+                printWindow.document.write(data);
+                printWindow.print();
+            });        
+        });
     </script>
+    <script type="text/javascript">
+function closePrint () {
+  document.body.removeChild(this.__container__);
+}
+
+function setPrint () {
+  this.contentWindow.__container__ = this;
+  this.contentWindow.onbeforeunload = closePrint;
+  this.contentWindow.onafterprint = closePrint;
+  this.contentWindow.focus(); // Required for IE
+  this.contentWindow.print();
+}
+
+function printPage (sURL) {
+  var oHiddFrame = document.createElement("iframe");
+  oHiddFrame.onload = setPrint;
+  oHiddFrame.style.visibility = "hidden";
+  oHiddFrame.style.position = "fixed";
+  oHiddFrame.style.right = "0";
+  oHiddFrame.style.bottom = "0";
+  oHiddFrame.src = sURL;
+  document.body.appendChild(oHiddFrame);
+}
+</script>
 </body>
 
 <style>
@@ -306,5 +351,15 @@ function printDiv(divName) {
         font-size: 20px;
     }
 </style>
-
+<style type="text/css" media="print">
+    @media print {
+   body {
+   display:table;
+   table-layout:fixed;
+   padding-top:2.5cm;
+   padding-bottom:2.5cm;
+   height:auto;
+    }
+}
+    </style>
 </html>
