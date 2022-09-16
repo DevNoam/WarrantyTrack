@@ -10,17 +10,33 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
 }
 
 $username = $_SESSION['username'];
-
-//SQL Data pulling.
-$sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
+//All the agents with cases
+$users = array("All");
+if(isset($_GET['agentFilter']))
+{
+  $userSelected = $_GET['agentFilter'];
+  if(!in_array($userSelected, $users))
+    array_push($users, $userSelected);
+}else 
+  $userSelected = "All";
+$sqlData = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName;';
 $result = mysqli_query($mysqli, $sqlData);
 $cases = mysqli_fetch_all($result, MYSQLI_ASSOC);
 $openCases = $closedCases = null;
 foreach ($cases as $case) {
     if ($case['Status'] != "CLOSED") {
-        $openCases++;
+      $openCases++;
+      if(!in_array($case['Createdby'],$users))
+      {
+        array_push($users, $case['Createdby']);
+      }
+
     } else {
         $closedCases++;
+        if(!in_array($case['Createdby'],$users))
+        {
+          array_push($users, $case['Createdby']);
+        }
     }
 }
 
@@ -84,8 +100,24 @@ foreach ($cases as $case) {
               </h1>
             </div>
           </div>
-          <div class="level-right" style="display: none;">
-            <div class="level-item"></div>
+          <div class="level-right" style="display:flex;">
+            <div class="level-item">
+              <!-- Cases filter by role -->
+              <div class="dropdown field-body" id="dropdown-menu" role="menu" title="Filter cases by agents">
+              <select class="dropdown-content field" name="filterByUser" id="filterByUser">
+              <?php foreach ($users as $user) { ?>
+                <?php if ($user == $userSelected) { ?>
+                <option selected class="dropdown-item"><?php echo $user ?></option>
+                
+              } <?php continue; } else ?>
+              <option class="dropdown-item"><?php echo $user ?></option>
+               <?php } ?>
+              </select>  
+              </div>
+
+
+
+            </div>
           </div>
         </div>
       </div>
@@ -150,6 +182,7 @@ foreach ($cases as $case) {
                   <th>Status</th>
                   <th>Supplier</th>
                   <th>Created</th>
+                  <th>Agent</th>
                   <th></th>
                 </tr>
                 <script>
@@ -163,6 +196,10 @@ foreach ($cases as $case) {
                 </script>
                 <?php
     foreach ($cases as $case) {
+        if($userSelected == "All")
+          {null;}  
+        else if($case['Createdby'] != $userSelected)
+          continue;
         if ($case['Status'] == 'CLOSED') {
             continue;
         } ?>
@@ -175,28 +212,32 @@ foreach ($cases as $case) {
 
                     </div>
                   </td>
-                  <td data-label="Name"><?php echo htmlspecialchars($case['clientName']); ?>
+                  <td data-label="Name"><div style='width: 150px;'><?php echo mb_strimwidth(htmlspecialchars($case['clientName']), 0, 15, "...") ?> </div>
                   </td>
-                  <td data-label="ProductName"><?php echo htmlspecialchars($case['ProductName']); ?>
+                  <td data-label="ProductName"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['ProductName']), 0, 18, "...") ?> </div>
                   </td>
-                  <td data-label="ReceiptNumber"><?php echo htmlspecialchars($case['ReciptNumber']); ?>
+                  <td data-label="ReceiptNumber"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['ReciptNumber']), 0, 20, "...") ?> </div>
                   </td>
-                  <td data-label="Status"><?php echo htmlspecialchars($case['Status']); ?>
+                  <td data-label="Status"><div style='width: 150px;'> <?php echo htmlspecialchars($case['Status']); ?> </div>
                   </td>
-                  <td data-label="Supplier"><?php echo htmlspecialchars($case['Supplier']); ?>
+                  <td data-label="Supplier"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['Supplier']), 0, 18, "...") ?> </div>
                   </td>
-                  <td data-label="Created">
+                  <td data-label="Created"> <div style='width: 150px;'>
                     <?php $date = $case['CreatedAt'];
         //format date to dd/mm/yyyy
         $date = date('d/m/Y', strtotime($date)); ?>
                     <small class="has-text-grey is-abbr-like" title="Oct 25, 2020"><?php echo htmlspecialchars($date); ?></small>
+                  </div>
                   </td>
-                  <td class="is-actions-cell">
+                  <td data-label="Agent"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['Createdby']), 0, 18, "...") ?> </div>
+                  </td>
+                  <td class="is-actions-cell"> <div style='width: 150px;'>
                     <div class="buttons is-right">
                       <a class="button is-rounded is-small is-primary"
                         href="caseinspect.php?caseID=<?php echo htmlspecialchars($case['CaseNumber']); ?>">
                         <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Open case >>
                       </a>
+                    </div>
                     </div>
                   </td>
                 </tr>
@@ -237,7 +278,7 @@ foreach ($cases as $case) {
               </section>
               </tr>
               <?php } else { ?>
-              <table class="table is-fullwidth is-striped is-hoverable is-fullwidth" id="closedCasesTable">
+                <table id="closedCasesTable" class="table is-fullwidth is-striped is-hoverable is-fullwidth" >
                 <script>
                   //if the screen is mobile
                   if (window.matchMedia("(max-width: 768px)").matches) {
@@ -254,6 +295,7 @@ foreach ($cases as $case) {
                   <th>Status</th>
                   <th>Supplier</th>
                   <th>Created</th>
+                  <th>Agent</th>
                   <th></th>
                 </tr>
                 <script>
@@ -267,10 +309,15 @@ foreach ($cases as $case) {
                 </script>
 
                 <?php
+                
                   foreach ($cases as $case) {
-                      if ($case['Status'] != 'CLOSED') {
-                          continue;
-                      } ?>
+                    if($userSelected == "All")
+                      {null;}  
+                    else if($case['Createdby'] != $userSelected)
+                      continue;
+                    if ($case['Status'] != 'CLOSED') {
+                      continue;
+                    } ?>
                 <tr>
                   <td class="is-image-cell">
                     <div class="image">
@@ -280,32 +327,36 @@ foreach ($cases as $case) {
 
                     </div>
                   </td>
-                  <td data-label="Name"><?php echo htmlspecialchars($case['clientName']); ?>
+                  <td data-label="Name"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['clientName']), 0, 15, "...") ?> </div>
                   </td>
-                  <td data-label="ProductName"><?php echo htmlspecialchars($case['ProductName']); ?>
+                  <td data-label="ProductName"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['ProductName']), 0, 18, "...") ?> </div>
                   </td>
-                  <td data-label="ReceiptNumber"><?php echo htmlspecialchars($case['ReciptNumber']); ?>
+                  <td data-label="ReceiptNumber"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['ReciptNumber']), 0, 20, "...") ?> </div>
                   </td>
-                  <td data-label="Status"><?php echo htmlspecialchars($case['Status']); ?>
+                  <td data-label="Status"><div style='width: 150px;'> <?php echo htmlspecialchars($case['Status']) ?> </div>
                   </td>
-                  <td data-label="Supplier"><?php echo htmlspecialchars($case['Supplier']); ?>
+                  <td data-label="Supplier"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['Supplier']), 0, 18, "...") ?> </div>
                   </td>
-                  <td data-label="Created">
+                  <td data-label="Created"> <div style='width: 150px;'>
                     <?php $date = $case['CreatedAt'];
                       //format date to dd/mm/yyyy
                       $date = date('d/m/Y', strtotime($date)); ?>
                     <small class="has-text-grey is-abbr-like" title="Oct 25, 2020"><?php echo htmlspecialchars($date); ?></small>
-                  </td>
-                  <td class="is-actions-cell">
-                    <div class="buttons is-right">
-                      <a
-                        href="caseinspect.php?caseID=<?php echo htmlspecialchars($case['CaseNumber']); ?>">
-                        <button class="button is-small is-primary" type="button">
-                          <span class="icon"><i class="mdi mdi-eye"></i></span>
-                        </button>
-                      </a>
                     </div>
                   </td>
+                  <td data-label="Agent"><div style='width: 150px;'> <?php echo mb_strimwidth(htmlspecialchars($case['Createdby']), 0, 18, "...") ?>
+                  </div>  
+                  </td>
+                  <td class="is-actions-cell"> <div style='width: 150px;'>
+                    <div class="buttons is-right">
+                      <a class="button is-rounded is-small is-primary"
+                        href="caseinspect.php?caseID=<?php echo htmlspecialchars($case['CaseNumber']); ?>">
+                        <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Open case >>
+                      </a>
+                    </div>
+                    </div>
+                  </td>
+                  
 
                 </tr>
                 <?php
@@ -349,6 +400,7 @@ foreach ($cases as $case) {
   <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
 
+  <!-- Table scripts -->
   <script>
     //minify table if user pressed the button
     var openTable = document.getElementById("openCasesTable");
@@ -409,7 +461,15 @@ foreach ($cases as $case) {
 
     })));
   </script>
-
+  
+  <!-- Filter users script -->
+  <script>
+  document.getElementById('filterByUser').addEventListener('change', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('agentFilter', this.value);
+    window.location.search = urlParams;
+  });
+  </script>
 
 
   <style>
