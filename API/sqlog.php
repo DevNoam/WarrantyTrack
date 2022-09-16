@@ -1,5 +1,6 @@
 <?php
     $mysqli = new mysqli("localhost", "root", "", "warrantytrack");
+        //               Host Username Password DB_name
     if ($mysqli === false) {
         echo "DB ERROR";
         die("ERROR: Could not connect. " . $mysqli->connect_error);

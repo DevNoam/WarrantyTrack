@@ -131,6 +131,7 @@ session_start();
                     <th>Supplier</th>
                     <th>Created</th>
                     <th>Case ID</th>
+                    <th>Agent</th>
                     <th></th>
                   </tr>
                   <script>
@@ -175,6 +176,8 @@ session_start();
                       <small class="has-text-grey is-abbr-like" title="Oct 25, 2020"><?php echo htmlspecialchars($date); ?></small>
                     </td>
                     <td data-label="Case ID"><?php echo htmlspecialchars($case['Casenumber']); ?>
+                    </td>
+                    <td data-label="Case ID"><?php echo htmlspecialchars($case['Createdby']); ?>
                     </td>
                     <td class="is-actions-cell">
                       <div class="buttons is-right">

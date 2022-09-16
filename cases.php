@@ -96,7 +96,7 @@ foreach ($cases as $case) {
           <div class="level-left">
             <div class="level-item">
               <h1 class="title">
-                All cases
+                All cases - <?php echo $openCases + $closedCases ?> 
               </h1>
             </div>
           </div>
@@ -144,7 +144,7 @@ foreach ($cases as $case) {
         <header class="card-header">
           <p class="card-header-title">
             <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-            Open cases
+            Open cases - <?php echo $openCases ?> 
           </p>
           <a id="openCasesButton" class="card-header-icon">
             <span class="icon mdi mdi-minus"></span>
@@ -257,7 +257,7 @@ foreach ($cases as $case) {
         <header class="card-header">
           <p class="card-header-title">
             <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-            Closed cases
+            Closed cases - <?php echo $closedCases ?> 
           </p>
           <a class="card-header-icon" id="closedCasesButton">
             <span class="icon mdi mdi-minus"></span>
