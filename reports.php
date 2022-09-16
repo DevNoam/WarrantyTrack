@@ -76,7 +76,7 @@ if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
     <div class="card has-table">
       <header class="card-header">
         <p class="card-header-title">
-          <span class="icon"><i class="mdi mdi-chart-bar"></i></span>
+          <span class="icon"><i class="mdi mdi-chart-arc"></i></span>
           Statistics reports
         </p>
         <a href="#" class="card-header-icon" id="usersTableButton">
