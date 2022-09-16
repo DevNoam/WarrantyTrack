@@ -149,7 +149,7 @@
         </li>
       
         <li>
-          <a href="http://noamsapir.me" class="has-icon">
+          <a href="https://github.com/sapirnoam/WarrantyTrack" class="has-icon">
             <span class="icon"><i class="mdi mdi-help-circle"></i></span>
             <span class="menu-item-label">About</span>
           </a>
