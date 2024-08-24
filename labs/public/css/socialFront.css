@@ -1,0 +1,50 @@
+.socialFront .content {
+    padding-top: 100px;
+    padding-bottom: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    text-align: center;
+}
+.socialFront ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    padding-bottom: 40px;
+}
+.socialFront li {
+    border-radius: 100%;
+    border: 2px transparent;
+    color: white;
+    margin: 8px;
+    display: inline-block;
+    list-style: none;
+    width: 65px;
+    height: 65px;
+}
+.socialFront li:hover {
+    color: white;
+    text-decoration: none;
+    -webkit-transition: 500ms;
+    -moz-transition: 500ms;
+    transition: 500ms;
+    text-decoration: none;
+    background-color: rgba(163, 163, 163, 0.39);
+}
+.socialFront a {
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+}
+.socialFront .description {
+    display: none;
+}
+
+.socialFront .Category
+{
+  text-align: center;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  font-size: 1.4em;
+  color: #bbbbbb;
+  display: none;
+
+}

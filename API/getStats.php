@@ -12,7 +12,7 @@
             $data[] = $row['DATE(`CreatedAt`)'];
         }
         
-
+        
         $datesNum = array();
         $finalValues = array();
         //add to datesNum array the last 10 days from today
