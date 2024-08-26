@@ -93,6 +93,10 @@ class Router
    */
   public function error($httpCode = 404)
   {
+    if(session::has("id") == false)
+    {
+        redirect("/authenticate");
+    }
     errorHandler($httpCode);
     return;
     exit;

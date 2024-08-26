@@ -16,8 +16,15 @@ class InquiryController
     {
         $this->db = Database::$db;
     }
+    /**
+     * Show case page
+     * 
+     * @return void
+     */
+    public function initCasePage()
+    {
 
-
+    }
     public function createCase($caseId, $Createdby, $clientName, $phoneNumber, $Address, $ReciptNumber, $OrderDate, $ProductSKU, $ProductName, $ProductSerial, $Supplier, $CaseDescription, $Status)
     {
         $CreatedAt = date("d-m-Y H:i:s");
@@ -35,42 +42,47 @@ class InquiryController
     }
 
 
-
     public function updateCase($caseId, $Status, $FixStatus, $FixDescription, $clientName, $phoneNumber, $Supplier, $deleteCase)
     {
         $isCaseClosed = false;
-        $result = $mysqli->query("SELECT `Status`, `CaseClosedAt` FROM `cases` WHERE Casenumber = $caseId");
-        $row = $result->fetch_assoc();
-        if ($row['Status'] == "CLOSED") {
+        $fetchInitDataQuery = "SELECT `Status`, `CaseClosedAt` FROM `cases` WHERE Casenumber = $caseId";
+        $stmt = $this->db->query($fetchInitDataQuery);
+        $oldData = $stmt->fetchAll();
+
+        if ($oldData->Status == "CLOSED") {
             $isCaseClosed = true;
         }
         
-        
         if ($deleteCase == "YES" && $isCaseClosed == true) {
-            $sql = "DELETE FROM cases WHERE Casenumber=$id";
-            if ($mysqli->query($sql) === true) {
+            $deleteQuery = "DELETE FROM cases WHERE Casenumber = $caseId";
+            $deleteResult = $this->db->query($deleteQuery);
+
+            if ($deleteResult === true) {
                 echo "Case has been deleted.";
                 redirect("/", 200);
                 exit();
             } else {
-                echo "Error: " . $sql . "<br>" . $mysqli->error;
+                echo "Error:" . "<br>" . $deleteResult->error;
             }
         } else {
-            $sql = "UPDATE `cases` SET `clientName` = '$clientName', `Status` = '$Status', `Fixed` = '$FixStatus', `Fixed Description` = '$FixDescription', `phoneNumber` = '$phoneNumber', `Supplier` = '$Supplier' WHERE `cases`.`Casenumber` = $caseId";
-        
-            if ($mysqli->query($sql) === true) {
+            $updateCaseQuery = "UPDATE `cases` SET `clientName` = '$clientName', `Status` = '$Status', `Fixed` = '$FixStatus', `Fixed Description` = '$FixDescription', `phoneNumber` = '$phoneNumber', `Supplier` = '$Supplier' WHERE `cases`.`Casenumber` = $caseId";
+            $updateResult = $this->db->query($updateCaseQuery);
+
+            if ($updateResult === true) {
                 echo "Case has been updated.";
             } else {
-                echo "Error: " . $sql . "<br>" . $mysqli->error;
+                echo "Error: " . "<br>" . $updateResult->error;
             }
         }
         
         if ($Status == 'CLOSED' && $isCaseClosed == false) {
-            $sql = "UPDATE cases SET CaseClosedAt = CURRENT_DATE WHERE Casenumber = $caseId";
-            if ($mysqli->query($sql) === true) {
+            $closeCaseQuery = "UPDATE cases SET CaseClosedAt = CURRENT_DATE WHERE Casenumber = $caseId";
+            $closeCaseResult = $this->db->query($closeCaseQuery);
+            
+            if ($closeCaseResult === true) {
                 echo "Case has been closed.";
             } else {
-                echo "Error: " . $sql . "<br>" . $mysqli->error;
+                echo "Error: " . "<br>" . $closeCaseResult->error;
             }
         }
         

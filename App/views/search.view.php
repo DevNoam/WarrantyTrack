@@ -15,11 +15,7 @@
 <body>
 <div id="app">
 
-
 <?php loadPartial("header"); ?>
-
-
-
   <section class="section is-title-bar">
     <div class="level">
       <div class="level-left">
@@ -172,13 +168,7 @@
         </div>
       </div>
     </div>
-
-
-
-  
     <?php loadPartial("footer"); ?>
-
-
 </div>
 
 <!-- Scripts below are for demo only -->
@@ -188,8 +178,6 @@
 <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
 
 <script>
-
-
 
   //minify table if user pressed the button
   var openTable = document.getElementById("openCasesTable");

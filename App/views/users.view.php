@@ -17,12 +17,7 @@
 <div id="app">
 
 
-  <?php
-
-use Framework\middleware\Authorize;
-use Framework\Session;
-
- loadPartial('header'); ?>
+<?php loadPartial('header'); ?>
 
   <section class="section is-title-bar">
     <div class="level">
@@ -50,7 +45,8 @@ use Framework\Session;
           <div class="level-item">
             <?php if($userRole == 'Admin') { ?>
           <div class="buttons is-right">
-              <a href="createUser.php" class="button is-primary">
+            <!-- Will open new window inside the frame to create new user -->
+              <a href="#" class="button is-primary"> 
                 <span class="icon"><i class="mdi mdi-plus"></i></span>
                 <span>New user</span>
               </a>
@@ -75,18 +71,6 @@ use Framework\Session;
       <div class="card-content">
         <div class="b-table has-pagination">
           <div class="table-wrapper has-mobile-cards">
-
-            <?php 
-              if($userRole != 'Admin') { ?>
-  <section class="section">
-    <div class="content has-text-grey has-text-centered">
-      <p>
-        <span class="icon is-large"><i class="mdi mdi-lock mdi-48px"></i></span>
-      </p>
-      <p>No privileges..</p></div>
-    </section>
-  </tr>
-  <?php } else { ?>
     <table class="table is-fullwidth is-striped is-hoverable is-fullwidth" id="usersTable">
     <script>
         //if the screen is mobile
@@ -110,9 +94,6 @@ use Framework\Session;
         if (window.matchMedia("(max-width: 768px)").matches) {
             document.write("</thead>");
             document.write("<tbody>");
-        }else
-        {
-            //document.write("</tbody>");
         }
         </script>
 
@@ -136,26 +117,14 @@ use Framework\Session;
                     </td>
                     <td class="is-actions-cell">
                   <div class="buttons is-right">
-                      <?php
-                        if ($user->username == Session::get('username')) {
-                            ?>
-                        <a class="button is-rounded is-small is-primary"
-                          href="profile">
-                          <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; OPEN USER >>
-                        </a>
-                        <?php
-                        } else{?>
                         <a class="button is-rounded is-small is-primary"
                           href="profile?id=<?php echo htmlspecialchars($user->id); ?>">
                           <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; OPEN USER >>
                         </a>
-                    <?php } ?>
                   </div>
                 </td>
                   </tr>
-                  <?php
-                  }
-              } ?>
+                  <?php } ?>
               </tbody>
             </table>
           </div>
@@ -193,10 +162,6 @@ use Framework\Session;
       usersTable.classList.add("is-hidden");
     }
   });
-
-
-  //table.style.display = "none";
-
 
   const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 

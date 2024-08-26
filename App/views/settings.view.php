@@ -55,90 +55,96 @@ use Framework\Session;
       </div>
     </section>
     <section class="section is-main-section">
-      <div class="card">
-        <header class="card-header">
-          <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-lock default"></i></span>
-            Edit dashboard settings- DEPRECATED, MOVING TO THE <a href="/">PANEL</a>PANEL PAGE
-          </p>
-        </header>
-        <div class="card-content">
-          <form method="POST" id="panelFetch" action="API/settings/updateFetchNewCases.php">
-            <div class="field is-horizontal" title="This property is saved locally.">
-              <div class="field-label is-normal">
-                <label class="label">Days to show on dashboard graph</label>
-              </div>
-              <div class="dropdown field-body" id="dropdown-menu" role="menu">
-                <select class="dropdown-content field" name="fetchNewcasesN" id="fetchNewcasesN">
-                  <?php $enum = [7, 10, 15, 30, 60, 80, 120, 365]; ?>
-                  <?php foreach ($enum as $value) { ?>
-                  <?php if (isset($_COOKIE['fetchNewcases']) && $value == $_COOKIE['fetchNewcases']) { ?>
-                  <option selected="selected" class="dropdown-item"><?php echo $_COOKIE['fetchNewcases']; ?></option>
-                  <?php } else if(empty($_COOKIE['fetchNewcases']) && $value == 10) { ?>
-                  <option selected="selected" class="dropdown-item">10</option>
-                  <?php } else { ?>
-                  <option class="dropdown-item"><?php echo $value; ?></option>
-                  <?php }} ?>
-                </select>
-              </div>
-            </div>
-            <hr>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal"></div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <button type="submit" id="submit2" class="button is-primary">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
 
       <div class="tile is-ancestor">
-        <!-- WEBSITE DOMAIN -->
-        <div class="tile is-parent">
-          <div class="card tile is-child">
-            <header class="card-header">
-              <p class="card-header-title">
-                <span class="icon"><i class="mdi mdi-link default"></i></span>
-                Edit website Domain
-              </p>
-            </header>
-            <div class="card-content">
-              <form method="post" action="">
-
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal">
-                    <label class="label">Domain</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <input type="url" autocomplete="on" name="domainField" value="<?php echo $settingsData[0]->Domain; ?>" class="input">
-                      </div>
+      <div class="card tile is-child">
+          <header class="card-header">
+            <p class="card-header-title">
+              <span class="icon"><i class="mdi mdi-store default"></i></span>
+              Store info
+            </p>
+          </header>
+          <div class="card-content">
+          <form method="POST" id="storeSettings" action="API/settings/updateStore.php">
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Store Name:</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="text" autocomplete="on" name="storeName" value="<?php echo $settingsData[0]->StoreName ?>" class="input" required>
                     </div>
                   </div>
                 </div>
-                <hr>
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal"></div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <button type="submit" id="submitDomain" class="button is-primary">
-                          Submit
-                        </button>
-                      </div>
+              </div>
+  
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Store Address:</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="text" autocomplete="on" name="storeAddress" value="<?php echo $settingsData[0]->Address ?>" class="input" required>
                     </div>
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
+  
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Store Phone:</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="phone" autocomplete="on" name="storePhone" value="<?php echo $settingsData[0]->Phone ?>" class="input" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Store Email:</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="Email" autocomplete="on" name="storeEmail" value="<?php echo $settingsData[0]->Email ?>" class="input" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Store logo:</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="url" autocomplete="on" name="storeLogo" value="<?php echo $settingsData[0]->Logo ?>" class="input" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <hr>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal"></div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <button type="submit" id="submit" class="button is-primary">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
 
@@ -156,17 +162,10 @@ use Framework\Session;
             <form method="POST" id="timeToDelete" action="API/settings/updateTimetodeletecases.php">
                 <div class="field is-horizontal"
                   <div class="field-label is-normal">
-                    <label class="label">Delete every:</label>
+                    <label title="0 = To never delete" class="label">Delete every days:</label>
                   </div>
-                  <div class="dropdown field-body" id="dropdown-menu" role="menu">
-                    <select class="dropdown-content " name="timeToDeleteCasesField" id="timeToDeleteCasesField">
-                      <?php $enum = ['NEVER', 90, 120, 180, 365]; ?>
-                      <?php foreach ($enum as $value) { ?>
-                      <?php if ($value == $timeTodeletecase) { ?>
-                      <option selected="selected" class="dropdown-item"><?php echo $settingsData[0]->deleteCases; ?></option>
-                      <?php } else { ?>
-                      <option class="dropdown-item"><?php echo $value; ?></option>
-                      <?php }} ?>
+                  <div  class="dropdown field-body" id="dropdown-menu" role="menu">
+                    <input title="0 = Never delete" type="number" name="timeToDeleteCasesField" value="<?php echo $settingsData[0]->deleteCases ?>" min="0" max="99999" class="input" required>
                     </select>
                   </div>
                 </div>
@@ -187,101 +186,8 @@ use Framework\Session;
             </div>
           </div>
         </div>
-
-        
       </div>
-      <div class="tile is-parent">
-          <div class="card tile is-child">
-            <header class="card-header">
-              <p class="card-header-title">
-                <span class="icon"><i class="mdi mdi-store default"></i></span>
-                Store info
-              </p>
-            </header>
-            <div class="card-content">
-            <form method="POST" id="storeSettings" action="API/settings/updateStore.php">
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal">
-                    <label class="label">Store Name:</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <input type="text" autocomplete="on" name="storeName" value="<?php echo $settingsData[0]->StoreName ?>" class="input" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal">
-                    <label class="label">Store Address:</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <input type="text" autocomplete="on" name="storeAddress" value="<?php echo $settingsData[0]->Address ?>" class="input" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal">
-                    <label class="label">Store Phone:</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <input type="phone" autocomplete="on" name="storePhone" value="<?php echo $settingsData[0]->Phone ?>" class="input" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal">
-                    <label class="label">Store Email:</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <input type="Email" autocomplete="on" name="storeEmail" value="<?php echo $settingsData[0]->Email ?>" class="input" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal">
-                    <label class="label">Store logo:</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <input type="url" autocomplete="on" name="storeLogo" value="<?php echo $settingsData[0]->Logo ?>" class="input" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <hr>
-                <div class="field is-horizontal">
-                  <div class="field-label is-normal"></div>
-                  <div class="field-body">
-                    <div class="field">
-                      <div class="control">
-                        <button type="submit" id="submit" class="button is-primary">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
     </section>
 
 

@@ -19,8 +19,6 @@
 
   <?php loadPartial("header"); ?>
 
-
-
   <section class="section is-title-bar">
     <div class="level">
       <div class="level-left">

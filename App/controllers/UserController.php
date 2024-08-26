@@ -16,9 +16,6 @@ class UserController
     {
         $this->db = Database::$db;
     }
-    
-
-
     /**
      * Show authentication page
      * 
@@ -84,7 +81,6 @@ class UserController
             ]);
         }
     }
-
     /**
      * Log out
      * 
@@ -96,22 +92,19 @@ class UserController
         session_start();
         session_destroy();
         Session::clearAll();
-        redirect('/');
+        redirect('/authenticate');
         exit;
     }
-
-    public function showMakeUser()
-    {
-
-    }
-    public function editUser($userId)
-    {
-
-    }
+    
+    /**
+     * Show profile or others profile
+     * 
+     * @return void
+     */
     public function profile()
     {
         // Try to get the profile ID from the query parameters
-        $profileId = $_GET['id'] ?? null;
+        $profileId = $_GET['id'] ?? session::get('id');
         
         $userData = null;
         $isMe = true;
@@ -122,25 +115,14 @@ class UserController
         $row2 = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $roles = explode(",", str_replace("'", "", substr($row2['Type'], 5, (strlen($row2['Type'])-6))));
-        // If user is Admin and profileId is set
-        if (Session::get('role') === 'Admin' && $profileId !== null) {
-            // Prepare SQL query for admin to view any user's profile
-            $sql = "SELECT *, NULL AS `password` FROM users WHERE id = :id";
-            // Execute the query with the provided profile ID
-            $userData = $this->db->query($sql, ['id' => $profileId])->fetch();
+        $sql = "SELECT *, NULL AS `password` FROM users WHERE id = :id";
+        $userData = $this->db->query($sql, ['id' => $profileId])->fetch();
+
+        // Check if the profileId is ours to mark it as 'isMe'
+        if ($profileId != session::get('id')) {
             $isMe = false;
-
-
-
-            //Fetch available roles from Database
-
-
-        } else {
-            // Prepare SQL query for non-admin or self-profile view
-            $sql = "SELECT *, NULL AS `password` FROM users WHERE id = :id";
-            // Execute the query with the session user's ID
-            $userData = $this->db->query($sql, ['id' => Session::get('id')])->fetch();
         }
+
         // Load the profile view with the retrieved data
         loadView("profile", [
             'userData' => $userData,
@@ -150,22 +132,42 @@ class UserController
             'db' => $this->db
         ]);
     }
-    
 
 
     /**
-     * Fetch new cases
+     * Redirect to users page
      * 
-     * @param int $fetchNewcases
-     * @return bool
+     * @return void
      */
-    public function fetchNewCases($fetchNewcases = 7)
+    public function showUsers()
     {
-        //set cookie with experation date of never
-        setcookie('fetchNewcases', $fetchNewcases, time() + (86400 * 365 * 10), "/");
+        // $userRole = Authorize::getRole();
+        $userRole = "Admin";
+        $users = [];
+        if ($userRole == "Admin") {
+            $sqlData = "SELECT `id`, `username`, `role`, `Name` FROM `users` WHERE 1;";
+            $users = $this->db->query($sqlData)->fetchAll();
+        }
 
-        //Update on the database for the user table
+        loadView("users", ['users' => $users,'userRole' => $userRole, 'db' => $this->db]);
+    }
 
-        return true;
+
+    /**
+     * Function to run user creation process
+     */
+    public function makeUser()
+    {
+
+    }
+
+
+    /**
+     * Edit user function
+     * 
+    */
+    public function editUser($userId, $data)
+    {
+
     }
 }

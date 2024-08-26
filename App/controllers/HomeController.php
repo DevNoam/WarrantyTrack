@@ -16,44 +16,60 @@ class HomeController
     {
         $this->db = Database::$db;
     }
-
     public function panel()
     {
-        $query = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
+        // Fetch case data
+        $query = 'SELECT `Status`, `CreatedAt`, `Casenumber`, `ProductName`, `clientName`, `ReciptNumber`, `CaseClosedAt`, `Createdby`, `Supplier` 
+                  FROM cases 
+                  ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt ASC, Supplier, clientName';
         $stmt = $this->db->query($query);
         $cases = $stmt->fetchAll();
-
+    
+        // Count open and closed cases
         $openCases = 0;
         $closedCases = 0;
-      
         foreach ($cases as $case) {
-            if ($case->Status != "CLOSED") {
+            if ($case->Status == "CLOSED") {
+                $closedCases++;
+            } else {
                 $openCases++;
             }
-            //This whole delete method should be converted into PHP cron job.
-            // else if ($case['Status'] == "CLOSED" && $timeTodeletecase != "NEVER" && $case['CaseClosedAt'] < date('Y-m-d', strtotime("-$timeTodeletecase days"))) {
-            //     $sql = "DELETE FROM `cases` WHERE `CaseNumber` = '$case[CaseNumber]'";
-            //     if ($mysqli->query($sql) === true) {
-            //         //echo "Case has been deleted.";
-            //     } else {
-            //         echo "Error: " . $sql . "<br>" . $mysqli->error;
-            //     }
-            //   }
-             else {
-                $closedCases++;
+        }
+    
+        // Fetch the number of new cases based on a cookie or default value
+        $fetchNewcases = isset($_COOKIE['fetchNewcases']) ? (int)$_COOKIE['fetchNewcases'] : 10;
+    
+        // Get data for graph
+        $sql = "SELECT DATE(`CreatedAt`) AS createdDate 
+                FROM cases 
+                WHERE `CreatedAt` > NOW() - INTERVAL :fetchNewcases DAY 
+                ORDER BY `CreatedAt` ASC";
+        $stmt = $this->db->query($sql, ['fetchNewcases' => $fetchNewcases]);
+        $valuesForGraph = $stmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+    
+        // Initialize arrays for date range and final values
+        $datesNum = [];
+        $finalValues = array_fill(0, $fetchNewcases, 0);
+    
+        // Populate datesNum array with the last X days
+        for ($i = 0; $i < $fetchNewcases; $i++) {
+            $datesNum[$i] = date('Y-m-d', strtotime("-$i days"));
+        }
+    
+        // Count occurrences of each date in the data array
+        foreach ($valuesForGraph as $date) {
+            if (($key = array_search($date, $datesNum)) !== false) {
+                $finalValues[$key]++;
             }
         }
-        //get avreage days it takes to close a case
-        // $sql = "SELECT `AverageTimePerCase` FROM `settings`"; ???
-        // $avgTime = $avgTime['AverageTimePerCase'];
-        $fetchNewcases = 10; //Fetch the new cases created in the last X days.
-        if(isset($_COOKIE['fetchNewcases'])) {
-          $fetchNewcases = $_COOKIE['fetchNewcases'];
-        }
-
-
-        loadView('panel', ['database' => $this->db, 'cases' => $cases, 'openCases' => $openCases, 'closedCases' => $closedCases, 'fetchNewcases' => $fetchNewcases]);
+    
+        // Convert the finalValues array to JSON format
+        $graphValue = json_encode(array_reverse($finalValues));
+    
+        // Load the view with the data
+        loadView('panel', ['database' => $this->db, 'cases' => $cases, 'openCases' => $openCases, 'closedCases' => $closedCases, 'graphValue' => $graphValue]);
     }
+    
 
     public function cases()
     {
@@ -65,7 +81,7 @@ class HomeController
             array_push($users, $userSelected);
         }else 
           $userSelected = "All";
-        $query = 'SELECT `Status`,`CreatedAt`,`CaseNumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
+        $query = 'SELECT `Status`,`CreatedAt`,`Casenumber`,`ProductName`,`clientName`,`ReciptNumber`,`CaseClosedAt`,`Createdby`,`Supplier` FROM cases ORDER BY FIELD(Status, "OPEN", "Waiting for customer", "Waiting for supplier", "Returning from supplier", "Picked by supplier", "Shipped to supplier", "Being checked", "CLOSED"), CreatedAt asc, Supplier, clientName';
         $stmt = $this->db->query($query);
         $cases = $stmt->fetchAll();
 
@@ -137,13 +153,6 @@ class HomeController
     
         // Load the view with the results
         loadView('search', ['database' => $this->db, 'searchData' => $searchData, 'cases' => $cases, 'resultCheck' => $resultCheck]);
-    }
-    
-
-    public function logOut()
-    {
-        Session::clearAll();
-        redirect('/authenticate');
     }
 
     public function reports()

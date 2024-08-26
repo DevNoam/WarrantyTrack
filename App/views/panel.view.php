@@ -13,6 +13,8 @@
   <!-- Fonts -->
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 
 <body>
@@ -33,7 +35,7 @@
         <div class="level-right">
         <div class="level-item">
           <div class="buttons is-right">
-            <a href="createcase"class="button is-primary">
+            <a href="case"class="button is-primary">
               <span class="icon"><i class="mdi mdi-plus"></i></span>
               <span>New case</span>
             </a>
@@ -134,12 +136,21 @@
       <div class="card">
         <header class="card-header">
           <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-finance"></i></span>
-            New cases created in the last <?php echo $fetchNewcases ?>
+            <span class="icon"><i class="mdi mdi-finance"></i></span>New cases created in the last &nbsp; <select class="dropdown-content field" name="fetchNewcasesSelector" id="fetchNewcasesSelector">
+                  <?php $enum = [7, 10, 15, 30, 60, 80, 120, 365]; ?>
+                  <?php foreach ($enum as $value) { ?>
+                  <?php if (isset($_COOKIE['fetchNewcases']) && $value == $_COOKIE['fetchNewcases']) { ?>
+                  <option value=<?php echo $value; ?> selected="selected" class="dropdown-item"><?php echo $value; ?></option>
+                  <?php } else if(empty($_COOKIE['fetchNewcases']) && $value == 7) { ?>
+                  <option value=<?php echo $value; ?> selected="selected" class="dropdown-item"><?php echo $value; ?></option>
+                  <?php } else { ?>
+                  <option value=<?php echo $value; ?> class="dropdown-item"><?php echo $value; ?></option>
+                  <?php }} ?>
+                </select>
           </p>
-          <a href="#" class="card-header-icon">
+          <!-- <a href="#" class="card-header-icon"> 
             <span class="icon"><i class="mdi mdi-reload"></i></span>
-          </a>
+          </a> -->
         </header>
         <div class="card-content">
           <div class="chart-area">
@@ -213,7 +224,7 @@
             //document.write("</tbody>");
         }
         </script>
-                  <?php foreach ($cases as $case) {
+            <?php foreach ($cases as $case) {
     if ($case->Status == 'CLOSED') {
         continue;
     } ?>
@@ -238,8 +249,7 @@
                     </td>
                     <td data-label="Created">
                       <?php $date = $case->CreatedAt;
-    //format date to dd/mm/yyyy
-    $date = date('d/m/Y', strtotime($date)); ?>
+                        $date = date('d/m/Y', strtotime($date)); //format date to dd/mm/yyyy ?>
                       <small class="has-text-grey is-abbr-like" title="Oct 25, 2020"><?php echo htmlspecialchars($date); ?></small>
                     </td>
                     <td class="is-actions-cell">
@@ -254,8 +264,7 @@
                       </div>
                     </td>
                   </tr>
-                  <?php
-} ?>
+                  <?php } ?>
                 </tbody>
                 <?php } ?>
               </table>
@@ -267,14 +276,11 @@
 
 
     <?php loadPartial('footer'); ?>
-  </div>
+  </div>  
 
-  <!-- Scripts below are for demo only -->
   <script type="text/javascript" src="js/main.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
   <script type="text/javascript" src="js/newchart.js"></script>
-
-  <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
 
   <script>
@@ -282,13 +288,24 @@
     if (window.innerWidth < 768) {
       document.getElementById("big-line-chart").style.height = "250px";
     }
+    
     //get open cases into and print into the graph
-    getData( <?php echo getGraph($fetchNewcases, $mysqli); ?> );
-
+    
     //Animate the numbers field on top
-    closedCasesAnim( <?php echo $closedCases ?> );
-    openCasesAnim( <?php echo $openCases ?> );
-    avgCasesAnim(<?php echo ceil($avgTime) ?>);
+    getData( <?php echo $graphValue ?> );
+    closedCasesAnim( <?php echo $closedCases ?? 0 ?> );
+    openCasesAnim( <?php echo $openCases ?? 0 ?> );
+    // avgCasesAnim(<?php echo ceil($avgTime ?? 0) ?>);
+
+    // if fetchNewcasesSelector selector value has changed
+    $('#fetchNewcasesSelector').change(function() {
+      var fetchNewcasesSelector = document.getElementById("fetchNewcasesSelector");
+      document.cookie = "fetchNewcases=" + fetchNewcasesSelector.value;
+
+      window.location.reload();
+    });
+
+ 
 
     function openCasesAnim(casesVar) {
       document.getElementById("openCasesnum").classList.add("is-active");
@@ -319,11 +336,11 @@
     }
     function closedCasesAnim(casesVar) {
       document.getElementById("closedCasesnum").classList.add("is-active");
-      var openCasesnum = document.getElementById("closedCasesnum");
+      var Casesnum = document.getElementById("closedCasesnum");
       var cases = casesVar;
       //increment speed by cases
-      var openCasesnumInterval = setInterval(function() {
-        var currentNum = parseInt(openCasesnum.innerHTML);
+      var CasesnumInterval = setInterval(function() {
+        var currentNum = parseInt(Casesnum.innerHTML);
         var addvalue = 2;
         if (cases >= 50 && cases <= 99) {
           addvalue = 5;
@@ -337,20 +354,20 @@
           addvalue = 100000;
         }
         if (currentNum < cases) {
-          openCasesnum.innerHTML = currentNum + addvalue;
+          Casesnum.innerHTML = currentNum + addvalue;
         } else if (currentNum > cases) {
-          openCasesnum.innerHTML = cases;
-          clearInterval(openCasesnumInterval);
+          Casesnum.innerHTML = cases;
+          clearInterval(CasesnumInterval);
         }
       }, 0.100);
     }
     function avgCasesAnim(casesVar) {
       document.getElementById("AvgCasesnum").classList.add("is-active");
-      var openCasesnum = document.getElementById("AvgCasesnum");
+      var Casesnum = document.getElementById("AvgCasesnum");
       var cases = casesVar;
       //increment speed by cases
-      var openCasesnumInterval = setInterval(function() {
-        var currentNum = parseInt(openCasesnum.innerHTML);
+      var CasesnumInterval = setInterval(function() {
+        var currentNum = parseInt(Casesnum.innerHTML);
         var addvalue = 2;
         if (cases >= 50 && cases <= 99) {
           addvalue = 5;
@@ -364,10 +381,10 @@
           addvalue = 100000;
         }
         if (currentNum < cases) {
-          openCasesnum.innerHTML = currentNum + addvalue;
+          Casesnum.innerHTML = currentNum + addvalue;
         } else if (currentNum > cases) {
-          openCasesnum.innerHTML = cases;
-          clearInterval(openCasesnumInterval);
+          Casesnum.innerHTML = cases;
+          clearInterval(CasesnumInterval);
         }
       }, 0.100);
     }
