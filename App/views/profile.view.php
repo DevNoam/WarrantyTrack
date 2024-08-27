@@ -25,7 +25,7 @@
         <div class="level-left">
           <div class="level-item">
             <ul>
-              <li>Admin</li>
+              <li>Account</li>
               <li>Profile</li>
             </ul>
           </div>
@@ -243,16 +243,11 @@
     <?php loadPartial('footer'); ?>
   </div>
 
-  <!-- Scripts below are for demo only -->
-  <script type="text/javascript" src="js/main.min.js"></script>
-
-  <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
-  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
-  <script src="https://malsup.github.io/jquery.form.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> -->
+  <!-- <script src="https://malsup.github.io/jquery.form.js"></script> -->
   <?php if (isset($_GET['successAlert'])) {
         echo "<script> alertify.success('Profile updated.'); </script>";
     }

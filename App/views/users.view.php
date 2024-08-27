@@ -24,7 +24,6 @@
       <div class="level-left">
         <div class="level-item">
           <ul>
-            <li>Admin</li>
             <li>Settings</li>
             <li>Users</li>
           </ul>
@@ -46,7 +45,7 @@
             <?php if($userRole == 'Admin') { ?>
           <div class="buttons is-right">
             <!-- Will open new window inside the frame to create new user -->
-              <a href="#" class="button is-primary"> 
+              <a id="createUserModalButton" href="#" class="button is-primary"> 
                 <span class="icon"><i class="mdi mdi-plus"></i></span>
                 <span>New user</span>
               </a>
@@ -132,45 +131,53 @@
       </div>
     </div>
   </section>
+  <div id="modalContainer"></div>
+  <?php loadPartial('createUserModal'); ?>
+  
+  
   <?php loadPartial('footer'); ?>
+  
+<script>
+  //Open create user Modal
+  $(document).ready(function () {
+    // Open the modal when the button is clicked
+    $('#createUserModalButton').on('click', function () {
+      $('#accountModal').addClass('is-active');
+    });
+  });
+</script>
 
-
-<!-- Scripts below are for demo only -->
-<script type="text/javascript" src="js/main.min.js"></script>
-
-<!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
-<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
 
 <script>
-  //minify table if user pressed the button
-  var usersTable = document.getElementById("usersTable");
-//add listener to openCasesButton
-  var usersTableButton = document.getElementById("usersTableButton");
-  usersTableButton.addEventListener("click", function() {
-    //check if table is hidden
-    if (usersTable.classList.contains("is-hidden")) {
-      //if hidden, show it
-      //change button child to close icon
-      //change icon for the child
-      usersTableButton.firstElementChild.classList.remove("mdi-plus");
-      usersTableButton.firstElementChild.classList.add("mdi-minus");
-      usersTable.classList.remove("is-hidden");
-    } else {
-      //if visible, hide it
-      usersTableButton.firstElementChild.classList.add("mdi-plus");
-      usersTableButton.firstElementChild.classList.remove("mdi-minus");
-      usersTable.classList.add("is-hidden");
-    }
-  });
+    //minify table if user pressed the button
+    var usersTable = document.getElementById("usersTable");
+    //add listener to openCasesButton
+    var usersTableButton = document.getElementById("usersTableButton");
+    usersTableButton.addEventListener("click", function() {
+      //check if table is hidden
+      if (usersTable.classList.contains("is-hidden")) {
+        //if hidden, show it
+        //change button child to close icon
+        //change icon for the child
+        usersTableButton.firstElementChild.classList.remove("mdi-plus");
+        usersTableButton.firstElementChild.classList.add("mdi-minus");
+        usersTable.classList.remove("is-hidden");
+      } else {
+        //if visible, hide it
+        usersTableButton.firstElementChild.classList.add("mdi-plus");
+        usersTableButton.firstElementChild.classList.remove("mdi-minus");
+        usersTable.classList.add("is-hidden");
+      }
+    });
 
-  const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
-const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
     )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
 
-// do the work...
-document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+    // do the work...
+    document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
     var table = th.closest('tbody');
     Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
         .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))

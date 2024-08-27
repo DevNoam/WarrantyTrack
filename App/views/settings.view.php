@@ -23,21 +23,19 @@ use Framework\Session;
 
  loadPartial('header'); ?>
 
-    <section class="section is-title-bar">
-      <div class="level">
-        <div class="level-left">
-          <div class="level-item">
-            <ul>
-              <li>Admin</li>
-              <li>Settings</li>
-            </ul>
-          </div>
-        </div>
-        <div class="level-right">
-
+<section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <li>Settings</li>
+            <li>System</li>
+          </ul>
         </div>
       </div>
-    </section>
+
+    </div>
+  </section>
     <section class="hero is-hero-bar">
       <div class="hero-body">
         <div class="level">
@@ -195,13 +193,8 @@ use Framework\Session;
     <?php loadPartial('footer'); ?>
   </div>
 
-  <!-- Scripts below are for demo only -->
-  <script type="text/javascript" src="js/main.min.js"></script>
-
-  <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
-  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
-  <script src="https://malsup.github.io/jquery.form.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> -->
+  <!-- <script src="https://malsup.github.io/jquery.form.js"></script> -->
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />

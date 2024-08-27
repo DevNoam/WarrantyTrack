@@ -22,32 +22,10 @@
 
     <?php loadPartial("header"); ?>
 
-    <section class="section is-title-bar">
-      <div class="level">
-        <div class="level-left">
-          <div class="level-item">
-            <ul>
-              <li>Admin</li>
-              <li>Dashboard</li>
-            </ul>
-          </div>
-        </div>
-        <div class="level-right">
-        <div class="level-item">
-          <div class="buttons is-right">
-            <a href="case"class="button is-primary">
-              <span class="icon"><i class="mdi mdi-plus"></i></span>
-              <span>New case</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      </div>
-    </section>
-    <section class="hero is-hero-bar">
-      <div class="hero-body">
-        <div class="level">
+    <br>
+      <section class="hero is-hero-bar">
+        <div class="hero-body">
+          <div class="level">
           <div class="level-left">
             <div class="level-item">
               <h1 class="title">
@@ -55,8 +33,15 @@
               </h1>
             </div>
           </div>
-          <div class="level-right" style="display: none;">
-            <div class="level-item"></div>
+          <div class="level-right">
+            <div class="level-item">
+              <div class="buttons is-right">
+                <a href="case"class="button is-primary">
+                  <span class="icon"><i class="mdi mdi-plus"></i></span>
+                  <span>New case</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -278,10 +263,8 @@
     <?php loadPartial('footer'); ?>
   </div>  
 
-  <script type="text/javascript" src="js/main.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
   <script type="text/javascript" src="js/newchart.js"></script>
-  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
 
   <script>
     //Shrink chart if screen is mobile.

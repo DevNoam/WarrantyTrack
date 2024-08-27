@@ -1,3 +1,6 @@
+<!-- Load Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 <nav id="navbar-main" class="navbar is-fixed-top">
   <div class="navbar-brand">
     <a class="navbar-item is-hidden-desktop jb-aside-mobile-toggle">
@@ -98,36 +101,10 @@
         </li> -->
       </ul>
 
+
       <?php if (Framework\Session::get('role') == "Admin"): ?>
+      <p class="menu-label">Settings</p>
       <ul class="menu-list">
-        
-        <?php
-          //check if user is under a dropdown page
-          if (basename($_SERVER['PHP_SELF']) == "settings" || basename($_SERVER['PHP_SELF']) == "users") {
-            {
-              echo '<li class="is-active router-link-active">';
-              echo '<a class="has-icon is-active has-dropdown-icon">';
-            }
-          } else {
-            echo '<li>';
-            echo '<a class="has-icon has-dropdown-icon">';
-          }
-          ?>
-        <span class="icon"><i class="mdi mdi-settings"></i></span>
-        <span class="menu-item-label">Settings</span>
-        <div class="dropdown-icon">
-          <?php
-          //check if user is under a dropdown page
-          if (basename($_SERVER['PHP_SELF']) == "settings" || basename($_SERVER['PHP_SELF']) == "users") {
-            {
-              echo '<span class="icon"><i class="mdi mdi-minus"></i></span>';
-            }
-          } else {
-              echo '<span class="icon"><i class="mdi mdi-plus"></i></span>';
-            }
-        ?>
-        </div>
-        </a>
         <ul>
           <li>
             <a href="users" class="<?php if (basename($_SERVER['PHP_SELF']) == "users") {
@@ -143,13 +120,12 @@
               echo "is-active";
             } ?> has-icon">
               <span class="icon "><i class="mdi mdi-code-greater-than"></i></span>
-              <span class="menu-item-label">Settings</span>
+              <span class="menu-item-label">System</span>
             </a>
           </li>
           
         </ul>
-      </li>
-    </ul>
+      
     <?php endif; ?> 
     
     <p class="menu-label"></p>

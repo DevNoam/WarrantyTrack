@@ -24,8 +24,7 @@
       <div class="level-left">
         <div class="level-item">
           <ul>
-            <li>Admin</li>
-            <li>Settings</li>
+            <li>Management</li>
             <li>Reports</li>
           </ul>
         </div>
@@ -69,14 +68,6 @@
   </tr>
   </section>
   <?php loadPartial("footer"); ?>
-
-
-<!-- Scripts below are for demo only -->
-<script type="text/javascript" src="js/main.min.js"></script>
-
-<!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
-<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
-
 
 </body>
 </html>
