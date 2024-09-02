@@ -7,11 +7,6 @@
   <title>WarrantyTrack</title>
 
   <!-- Bulma is included -->
-  <link rel="stylesheet" href="css/main.min.css">
-
-  <!-- Fonts -->
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div id="app">
@@ -117,7 +112,7 @@
                     <td class="is-actions-cell">
                   <div class="buttons is-right">
                         <a class="button is-rounded is-small is-primary"
-                          href="profile?id=<?php echo htmlspecialchars($user->id); ?>">
+                          href="profile/<?php echo htmlspecialchars($user->id); ?>">
                           <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; OPEN USER >>
                         </a>
                   </div>

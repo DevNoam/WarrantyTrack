@@ -5,5 +5,5 @@
     </div>
   </footer>
 
-  <script type="text/javascript" src="js/main.min.js"></script>
+  <script type="text/javascript" src="/public/js/main.min.js"></script>
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">

@@ -122,53 +122,53 @@ class Router
      */ 
     public function route($uri)
     {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-        if ($requestMethod === 'POST' && isset($_POST['_method'])) {
-          // Override the request method with the value of _method
-          $requestMethod = strtoupper($_POST['_method']);
-        }
+      $requestMethod = $_SERVER['REQUEST_METHOD'];
+      if ($requestMethod === 'POST' && isset($_POST['_method'])) {
+        // Override the request method with the value of _method
+        $requestMethod = strtoupper($_POST['_method']);
+      }
 
-        // Remove double slashes if any
-        $uri = preg_replace('#/+#','/', $uri);
-        // Check if the URI matches a forward route
-        if (isset($this->forwardRoutes[$uri])) {
-            $uri = $this->forwardRoutes[$uri];
-            header('Location: ' . rtrim($uri, '/'), true, 301);
-            exit();
-        }
-        
-        // Remove trailing slash if it's not the root URI
-        if ($uri !== '/' && substr($uri, -1) === '/') {
-            header('Location: ' . rtrim($uri, '/'), true, 301);
-            exit();
-        }
+      // Remove double slashes if any
+      $uri = preg_replace('#/+#','/', $uri);
+      // Check if the URI matches a forward route
+      if (isset($this->forwardRoutes[$uri])) {
+          $uri = $this->forwardRoutes[$uri];
+          header('Location: ' . rtrim($uri, '/'), true, 301);
+          exit();
+      }
+      
+      // Remove trailing slash if it's not the root URI
+      if ($uri !== '/' && substr($uri, -1) === '/') {
+          header('Location: ' . rtrim($uri, '/'), true, 301);
+          exit();
+      }
         
         
         // Iterate through defined routes
         foreach ($this->routes as $route) {
-            $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route['uri']);
-            $pattern = "#^{$pattern}$#";
-            
-            // Check if the current URI matches a defined route
-            if (preg_match($pattern, $uri, $matches) && $route['method'] === $requestMethod) {
-                array_shift($matches); // Remove the full match
-                $params = $matches;
+          $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route['uri']);
+          $pattern = "#^{$pattern}$#";
+          
+          // Check if the current URI matches a defined route
+          if (preg_match($pattern, $uri, $matches) && $route['method'] === $requestMethod) {
+              array_shift($matches); // Remove the full match
+              $params = $matches;
 
-                // Check for authorization.
-                foreach ($route['middleware'] as $middleware) {
-                  (new Authorize())->handle($middleware);
-                }
+              // Check for authorization.
+              foreach ($route['middleware'] as $middleware) {
+                (new Authorize())->handle($middleware);
+              }
 
-                // require basePath($route['controller']);
-                $controller = 'App\\controllers\\' . $route['controller'];
-                $controllerMethod = $route['controllerMethod'];
-      
-                // Instatiate the controller and call the method
-                $controllerInstance = new $controller();
-                $controllerInstance->$controllerMethod($params);
-                return;
-            }
-        }
+              // require basePath($route['controller']);
+              $controller = 'App\\controllers\\' . $route['controller'];
+              $controllerMethod = $route['controllerMethod'];
+    
+              // Instatiate the controller and call the method
+              $controllerInstance = new $controller();
+              $controllerInstance->$controllerMethod($params);
+              return;
+          }
+      }
         
         // Handle 404 error if no route matches
         $this->error(404);

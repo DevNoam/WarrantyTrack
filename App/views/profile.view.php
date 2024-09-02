@@ -7,12 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WarrantyTrack</title>
 
-  <!-- Bulma is included -->
-  <link rel="stylesheet" href="css/main.min.css">
-
-  <!-- Fonts -->
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -43,13 +37,16 @@
             <div class="level-item">
               <h1 class="title">
                 <?php 
+                  if(!empty($userData->username)) 
+                  {
                     echo "Edit profile: $userData->username";
+                  }
                 ?>
               </h1>
             </div>
           </div>
           <div class="level-right">
-            <?php if (!$isMe) { ?>
+            <?php if (!$isMe && !empty($userData->username)) { ?>
             <div class="leve  l-item">
               <div class="buttons is-right" id="deleteUser">
                 <a class="button is-danger" >
@@ -243,42 +240,27 @@
     <?php loadPartial('footer'); ?>
   </div>
 
-  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> -->
-  <!-- <script src="https://malsup.github.io/jquery.form.js"></script> -->
-  <?php if (isset($_GET['successAlert'])) {
-        echo "<script> alertify.success('Profile updated.'); </script>";
-    }
-    ?>
-  <script>
-    //if user pressed the button delete user delete the user
-    $(document).ready(function(){
-   $('#deleteUser').click(function (e) {
-     e.preventDefault();
-     //if domainField value is empty
-     alertify.confirm('User deletetion', "Are you sure you want to delete the user: <?php echo $Ausername; ?>",
-     function(){ 
-      //make ajax call to this page
+  <script src="https://malsup.github.io/jquery.form.js"></script>
+<script>
+  //if user pressed the button delete user delete the user
+  $(document).ready(function(){
+    $('#deleteUser').click(function (e) {
+      
+      //Add confirmation...
+
       $.ajax({
-        url: 'otherProfile.php',
-        type: 'POST',
-        data: {
-          username: '<?php echo $Ausername; ?>',
-          deleteUser: true
+        url: "/API/deleteUser/" + <?php echo $userData->id; ?>,
+        type: "DELETE",
+        success: function (data) {
+          window.location.href = "/users";
         },
-        success: function(response){
-            //redirect to this page
-            window.location.href = "users.php";
-          }
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert(textStatus, errorThrown);
         }
-      );
-      },
-      function(){ alertify.error('Canceled')});
+      });
+
     });
   });
-
 
 </script>
 

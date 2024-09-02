@@ -1,5 +1,12 @@
 <!-- Load Jquery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/css/main.min.css">
+
+<!-- Fonts -->
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+
+
 
 <nav id="navbar-main" class="navbar is-fixed-top">
   <div class="navbar-brand">
@@ -24,7 +31,7 @@
           <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
         </a>
         <div class="navbar-dropdown">
-          <a href="profile" class="navbar-item">
+          <a href="/profile" class="navbar-item">
             <span class="icon"><i class="mdi mdi-account"></i></span>
             <span>My Profile</span>
           </a>
@@ -74,7 +81,7 @@
       <p class="menu-label">Management</p>
       <ul class="menu-list">
         <li>
-          <a href="cases" class="<?php if (basename($_SERVER['PHP_SELF']) == "cases") {
+          <a href="/cases" class="<?php if (basename($_SERVER['PHP_SELF']) == "cases") {
       echo "is-active router-link-active";
   } ?> has-icon">
             <span class="icon has-update-mark"><i class="mdi mdi-table"></i></span>
@@ -82,7 +89,7 @@
           </a>
         </li>
         <li>
-          <a href="reports" class="<?php if (basename($_SERVER['PHP_SELF']) == "reports") {
+          <a href="/reports" class="<?php if (basename($_SERVER['PHP_SELF']) == "reports") {
       echo "is-active router-link-active";
   } ?> has-icon">
             <span class="icon"><i class="mdi mdi-chart-arc"></i></span>
@@ -107,7 +114,7 @@
       <ul class="menu-list">
         <ul>
           <li>
-            <a href="users" class="<?php if (basename($_SERVER['PHP_SELF']) == "users") {
+            <a href="/users" class="<?php if (basename($_SERVER['PHP_SELF']) == "users") {
               echo "is-active";
             } ?> has-icon">
               <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
@@ -116,7 +123,7 @@
           </li>
           <li>
             
-            <a href="settings" class="<?php if (basename($_SERVER['PHP_SELF']) == "settings") {
+            <a href="/settings" class="<?php if (basename($_SERVER['PHP_SELF']) == "settings") {
               echo "is-active";
             } ?> has-icon">
               <span class="icon "><i class="mdi mdi-code-greater-than"></i></span>

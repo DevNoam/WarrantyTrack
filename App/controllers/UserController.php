@@ -1,6 +1,7 @@
 <?php
 namespace App\controllers;
 use Framework\Database;
+use Framework\Router;
 use Framework\Session;
 
 
@@ -26,6 +27,8 @@ class UserController
         loadView('authenticate');
         exit;
     }
+
+
     public function authMaker()
     {
         $username = $password = "";
@@ -82,7 +85,7 @@ class UserController
         }
     }
     /**
-     * Log out
+     * Log out the user
      * 
      * @return void
      */
@@ -97,19 +100,18 @@ class UserController
     }
     
     /**
-     * Show profile or others profile
+     * Show your profile or others profile
      * 
      * @return void
      */
-    public function profile()
+    public function profile($params = null)
     {
         // Try to get the profile ID from the query parameters
-        $profileId = $_GET['id'] ?? session::get('id');
+        $profileId = $params[0] ?? session::get('id');
         
         $userData = null;
         $isMe = true;
         $roles = null;
-    
         $sql = "SHOW COLUMNS FROM `users` WHERE Field = 'role'";
         $stmt = $this->db->query($sql);
         $row2 = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -135,7 +137,7 @@ class UserController
 
 
     /**
-     * Redirect to users page
+     * Show users page
      * 
      * @return void
      */
@@ -158,12 +160,67 @@ class UserController
      */
     public function makeUser()
     {
+        $response = [];
+        
+        //get from POST
+        $personalName = $_POST['personalName'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $role = $_POST['role'];
+        
+        $sql = "SELECT 'id' FROM users WHERE username = :username";
+        $result = $this->db->query($sql, ['username' => $username])->fetch();
+        
 
+        
+        
+        
+        if (!empty($result)) {
+            errorHandler('409');
+        }
+        
+        $sql = "INSERT INTO users (username, password, Name, role) 
+        VALUES (:username, :password, :Name, :role) ";
+        $result = $this->db->query($sql, [
+            'username' => $username,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'Name' => $personalName,
+            'role' => $role
+            ])->fetch();
+            
+        if ($result == null) {
+            errorHandler('200');
+        }
+        else
+        {
+            errorHandler('500');
+        }
     }
 
 
     /**
-     * Edit user function
+     * Delete user
+     * 
+     * @param int $userId
+     * 
+     * @return void
+     */
+    public function deleteUser($id)
+    {
+        $userId = $id[0];
+        $sql = "DELETE FROM users WHERE id = :id";
+        $result = $this->db->query($sql, ['id' => $userId])->fetch();
+        if ($result == null) {
+            errorHandler('200');
+        }
+        else
+        {
+            errorHandler('500');
+        }
+    }
+        
+        /**
+         * Edit user function
      * 
     */
     public function editUser($userId, $data)

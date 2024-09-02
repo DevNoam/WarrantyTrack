@@ -4,19 +4,17 @@
   <div class="modal-content box">
       <h3 class="title is-4">Create Account</h3>
       <form id="createAccountForm">
-        
-      
         <div class="field">
           <label class="label">Personal name</label>
           <div class="control">
-            <input class="input" type="text" id="personalName" name="personalName" placeholder="Enter name">
+            <input required class="input" type="text" id="personalName" name="personalName" placeholder="Enter name">
           </div>
         </div>
 
         <div class="field">
           <label class="label">User role</label>
           <div class="select is-link is-fullwidth">
-            <select class="" name="role" id="role">
+            <select required class="" name="role" id="role">
               <option value="Admin">Admin</option>
               <option value="Employee">Employee</option>
               <option value="Technician">Technician</option>
@@ -28,14 +26,14 @@
         <div class="field">
           <label class="label">Username</label>
           <div class="control">
-            <input class="input" type="text" id="username" name="username" placeholder="Enter username">
+            <input required class="input" type="text" id="username" name="username" placeholder="Enter username">
           </div>
         </div>
 
         <div class="field">
           <label class="label">Password</label>
           <div class="control">
-            <input class="input" type="password" id="password" name="password" placeholder="Enter password">
+            <input required class="input" type="password" id="password" name="password" placeholder="Enter password">
           </div>
         </div>
 
@@ -105,39 +103,37 @@
 
       const username = $('#username').val();
       const password = $('#password').val();
+      const personalName = $('#personalName').val();
+      const role = $('#role').val();
 
       $('#submit').addClass('is-loading').
       attr('disabled', 'disabled');
 
       // Send data to backend API
       $.ajax({
-        url: '/api/create-user', // Update this with your API endpoint
-        type: 'POST',
-        data: { username: username, password: password },
-        success: function (response) {
-          //destroy the form
-          $('#createAccountForm').trigger('reset');
-          $('#accountModal').removeClass('is-active');
-          //redirect to user profile
-          window.location.href = 'profile/' + response.id
-          ;
-        },
-        error: function (error) {
-          $('#submit').removeClass('is-loading').
-          //enable the button
-          removeAttr('disabled');
-          //if user exists
-          $('#error').removeClass('is-hidden');
-          if (error.status === 409) {
-            $('#error').text('Username already exists.');
-            return;
-          }else
-          {
-            $('#error').text('Internal server error.');
-            return;
+          url: '/API/createuser', // Update this with your API endpoint
+          type: 'POST',
+          data: { username: username, personalName: personalName, role: role, password: password },
+          success: function (response) {
+              // Destroy the form
+              $('#createAccountForm').trigger('reset');
+              $('#accountModal').removeClass('is-active');
+              location.reload();
+            },
+            error: function (jqXHR) {
+              // Re-enable the submit button and remove the loading state
+              $('#submit').removeClass('is-loading').removeAttr('disabled');
+              
+              // Show error message if user exists or another error occurred
+              $('#error').removeClass('is-hidden');
+              if(jqXHR.status === 409) {
+                $('#error').text("Username already exists");
+              }else 
+              if(jqXHR.status === 500) {
+                $('#error').text("Internal server error");
+              }
           }
-        }
       });
-    });
-  });
+      });
+      });
 </script>
