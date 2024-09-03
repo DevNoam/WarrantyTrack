@@ -71,7 +71,7 @@ use Framework\Session;
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input type="text" autocomplete="on" name="storeName" value="<?php echo $settingsData[0]->StoreName ?>" class="input" required>
+                      <input type="text" id="storeName" autocomplete="on" name="storeName" value="<?php echo $settingsData[0]->StoreName ?>" class="input" required>
                     </div>
                   </div>
                 </div>
@@ -84,7 +84,7 @@ use Framework\Session;
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input type="text" autocomplete="on" name="storeAddress" value="<?php echo $settingsData[0]->Address ?>" class="input" required>
+                      <input type="text" id="storeAddress" autocomplete="on" name="storeAddress" value="<?php echo $settingsData[0]->Address ?>" class="input" required>
                     </div>
                   </div>
                 </div>
@@ -97,7 +97,7 @@ use Framework\Session;
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input type="phone" autocomplete="on" name="storePhone" value="<?php echo $settingsData[0]->Phone ?>" class="input" required>
+                      <input type="phone" id="storePhone" autocomplete="on" name="storePhone" value="<?php echo $settingsData[0]->Phone ?>" class="input" required>
                     </div>
                   </div>
                 </div>
@@ -110,7 +110,7 @@ use Framework\Session;
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input type="Email" autocomplete="on" name="storeEmail" value="<?php echo $settingsData[0]->Email ?>" class="input" required>
+                      <input type="Email" id="storeEmail" autocomplete="on" name="storeEmail" value="<?php echo $settingsData[0]->Email ?>" class="input" required>
                     </div>
                   </div>
                 </div>
@@ -123,7 +123,7 @@ use Framework\Session;
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input type="url" autocomplete="on" name="storeLogo" value="<?php echo $settingsData[0]->Logo ?>" class="input" required>
+                      <input type="url" id="storeLogo" autocomplete="on" name="storeLogo" value="<?php echo $settingsData[0]->Logo ?>" class="input" required>
                     </div>
                   </div>
                 </div>
@@ -135,7 +135,7 @@ use Framework\Session;
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <button type="submit" id="submit" class="button is-primary">
+                      <button type="submit" id="storeSettingsSubmit" class="button is-primary">
                         Submit
                       </button>
                     </div>
@@ -157,13 +157,13 @@ use Framework\Session;
               </p>
             </header>
             <div class="card-content">
-            <form method="POST" id="timeToDelete" action="API/settings/updateTimetodeletecases.php">
+            <form method="POST" id="timeToDelete">
                 <div class="field is-horizontal"
                   <div class="field-label is-normal">
                     <label title="0 = To never delete" class="label">Delete every days:</label>
                   </div>
                   <div  class="dropdown field-body" id="dropdown-menu" role="menu">
-                    <input title="0 = Never delete" type="number" name="timeToDeleteCasesField" value="<?php echo $settingsData[0]->deleteCases ?>" min="0" max="99999" class="input" required>
+                    <input title="0 = Never delete" id="timeToDeleteCasesField" type="number" name="timeToDeleteCasesField" value="<?php echo $settingsData[0]->deleteCases ?>" min="0" max="99999" class="input" required>
                     </select>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ use Framework\Session;
                   <div class="field-body">
                     <div class="field">
                       <div class="control">
-                        <button type="submit" id="submit" class="button is-primary">
+                        <button type="submit" id="publishTimeToDelete" class="button is-primary">
                           Submit
                         </button>
                       </div>
@@ -201,63 +201,51 @@ use Framework\Session;
   <script>
     // wait for the DOM to be loaded 
     $(document).ready(function () {
-      // bind 'myForm' and provide a simple callback function 
-      $('#timeToDelete').ajaxForm(function () {
-        //refresh the select element with new options
-        var notification = alertify.notify('<i class="mdi mdi-progress-check"></i> Success', 'success', 3,
-          function () {});
-      });
-      $('#storeSettings').ajaxForm(function () {
-        //refresh the select element with new options
-        var notification = alertify.notify('<i class="mdi mdi-progress-check"></i> Success', 'success', 3,
-          function () {});
-      });
-      $('#panelFetch').ajaxForm(function () {
-        //refresh the select element with new options
-        var notification = alertify.notify('<i class="mdi mdi-progress-check"></i> Success', 'success', 3,
-          function () {});
-      });
+      
     });
 
 
-    //if user pressed the submit button
-    $('#submitDomain').click(function (e) {
+    // //if user pressed the submit button
+    $('#storeSettingsSubmit').click(function (e) {
       e.preventDefault();
-      //if domainField value is empty
-      alertify.confirm('Domain update', "Are you sure you want to update the domain to: <b>" + $('input[name=domainField]').val() +  "</b></br> This might break the system if entered incorrectly!",
-       function(){ 
-         updateDomain();
-         alertify.success('Updated') 
-         }, function(){ 
-           alertify.error('Cancelled')
-           });
-      });
 
-    function updateDomain() {
-      //get the form data
-      var formData = {
-        'domainField': $('input[name=domainField]').val(),
-      };
-      //process the form
       $.ajax({
-        type: 'POST',
-        url: 'API/settings/updateDomain.php',
-        data: formData,
-        dataType: 'json',
-        encode: true
-      }).done(function (data) {
-        //if process.php returned 1/true (send mail success)
-        if (data.response == 'success') {
-          //show success message
-          var notification = alertify.notify('<i class="mdi mdi-check"></i> Success', 'success', 3,
-            function () {});
-        } else {
-          //show error message
-          var notification = alertify.notify('<i class="mdi mdi-close"></i> Error', 'error', 3,
-            function () {});
+        type: "POST",
+        url: "/API/updateStore",
+        data: {
+          storeName: $('#storeName').val(),
+          storeAddress: $('#storeAddress').val(),
+          storePhone: $('#storePhone').val(),
+          storeEmail: $('#storeEmail').val(),
+          storeLogo: $('#storeLogo').val(),
+        },
+        success: function (data) {
+          alert("Updated");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert("Error: " + textStatus + " " + errorThrown);
         }
       });
-    }
+    });
+
+    $('#publishTimeToDelete').click(function (e) {
+      e.preventDefault();
+
+      $.ajax({
+        type: "POST",
+        url: "/API/timeToDeleteOldCases",
+        data: {
+          timeToDelete: $('#timeToDeleteCasesField').val()
+        },
+        success: function (data) {
+          alert("Updated");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert("Error: " + textStatus + " " + errorThrown);
+        }
+      });
+    });
+        
 
   </script>
 </body>

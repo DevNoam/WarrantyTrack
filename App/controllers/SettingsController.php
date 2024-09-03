@@ -33,16 +33,18 @@ class SettingsController
      * @param int $timeTodeletecase
      * @return bool
      */
-    public function updateTimetodeletecases()
+    public function updateTimetoDeleteCases()
     {
-        $timeTodeletecase = htmlspecialchars($_POST['timeTodeletecase']);
-        $query = "UPDATE settings SET `deleteCases` = '$timeTodeletecase' WHERE 1";
-        $result = $this->db->query($query);
-        if ($result) {
-            return '200';
+        $timeTodeletecase = $_POST['timeToDelete'];
+        $query = "UPDATE `settings` SET `deleteCases` = :timeTodeletecase WHERE 1";
+        $result = $this->db->query($query, ['timeTodeletecase' => $timeTodeletecase])->fetch();
+        print_r($result);
+        if (empty($result)) 
+        {
+            echo 200;
         }else
         {
-            return '500';
+            echo 500;
         }
     }
 
@@ -54,22 +56,28 @@ class SettingsController
      */
     public function updateStore()
     {
-        $storeProps = $_POST;
-        $storeName = $storeProps['storeName'];
-        $storeAddress = $storeProps['storeAddress'];
-        $storePhone = $storeProps['storePhone'];
-        $storeEmail = $storeProps['storeEmail'];
-        $storeLogo = $storeProps['storeLogo'];
+        $storeName = $_POST['storeName'];
+        $storeAddress = $_POST['storeAddress'];
+        $storePhone = $_POST['storePhone'];
+        $storeEmail = $_POST['storeEmail'];
+        $storeLogo = $_POST['storeLogo'];
     
         // Update
-        $query = "UPDATE settings SET `StoreName`='$storeName',`Address`='$storeAddress',`Phone`='$storePhone',`Email`='$storeEmail',`Logo`='$storeLogo' WHERE 1";
+        $query = "UPDATE `settings` 
+        SET `StoreName` = :storeName, 
+            `Address` = :storeAddress, 
+            `Phone` = :storePhone, 
+            `Email` = :storeEmail, 
+            `Logo` = :storeLogo 
+        WHERE 1";
+        $result = $this->db->query($query, ['storeName' => $storeName, 'storeAddress' => $storeAddress, 'storePhone' => $storePhone, 'storeEmail' => $storeEmail, 'storeLogo' => $storeLogo])->fetch();
         
-        $result = $this->db->query($query);
-        if ($result) {
-            return '200';
+        if (empty($result)) 
+        {
+            echo 200;
         }else
         {
-            return '500';
+            echo 500;
         }
     }
 }
