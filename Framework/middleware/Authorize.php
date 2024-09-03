@@ -37,7 +37,7 @@ class Authorize
             if (Session::get('role') == 'Admin') {
                 return true;
             } else {
-                errorHandler(403); // Redirect to NoPermissions page if user does not have admin role 
+                errorHandler(404); // Redirect to NoPermissions page if user does not have admin role 
                 exit;
             }
         }

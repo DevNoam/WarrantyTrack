@@ -60,11 +60,22 @@ class UserController
                     
                     print_r(password_hash($password, PASSWORD_DEFAULT));
                     if (password_verify($password, $user->password)) {
+                        //Destroy other sessions if any
+                        destroyOtherSessions($user->id);
                         Session::start();
                         Session::set('username', $user->username);
                         Session::set('name', $user->Name);
                         Session::set('id', $user->id);
                         Session::set('role', $user->role);
+
+                        //save the session to the user
+                        $sql = "UPDATE `users` SET session = :session_id WHERE id = :id";                  
+                        $params = [
+                            'id' => $user->id,
+                            'session_id' => session_id()
+                        ];
+                        $stmt = $this->db->query($sql, $params);
+                        
                         redirect('/');
                     } else {
                         Session::setFlashMessage('error', 'Invalid username or password.');
@@ -171,10 +182,6 @@ class UserController
         $sql = "SELECT 'id' FROM users WHERE username = :username";
         $result = $this->db->query($sql, ['username' => $username])->fetch();
         
-
-        
-        
-        
         if (!empty($result)) {
             errorHandler('409');
         }
@@ -197,6 +204,31 @@ class UserController
         }
     }
 
+    /**
+     * Change user password
+     * 
+     * @return int
+     */
+    public function changePassword()
+    {
+        $userId = $_POST['userId'];
+        $newPassword = $_POST['password'];
+
+        $sql = "UPDATE users SET password = :password WHERE id = :id";
+        $result = $this->db->query($sql, ['password' => password_hash($newPassword, PASSWORD_DEFAULT), 'id' => $userId])->fetch();
+        
+        //Disconnect the user if not me
+        if($userId != session::get('id'))
+            destroyOtherSessions($userId);
+        
+        if ($result == null) {
+            errorHandler(200);
+        }
+        else
+        {
+            errorHandler(500);
+        }
+    }
 
     /**
      * Delete user
@@ -219,11 +251,11 @@ class UserController
         }
     }
         
-        /**
-         * Edit user function
+    /**
+     * Edit user function
      * 
     */
-    public function editUser($userId, $data)
+    public function editUser($params)
     {
 
     }

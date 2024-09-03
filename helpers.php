@@ -24,6 +24,37 @@ function errorHandler($code)
   return;
   exit();
 }
+
+/**
+ * Destroy other session
+ * @param string $userId
+ * @return void
+ */
+function destroyOtherSessions($userId)
+{
+  //Save the current session to a variable
+  //Get session id from userId 
+  $db = new Framework\Database();
+  $sql = "SELECT session FROM `users` WHERE id = :id";
+  $result = $db->query($sql, ['id' => $userId])->fetch();
+  $targetSessionId = $result->session;
+
+  // Step 2: Store current session ID and close it
+  $currentSessionId = session_id();
+  session_write_close(); 
+  
+  // Step 3: Switch to the target session and destroy it
+  session_id($targetSessionId);
+  session_start();
+  session_unset();
+  session_destroy();
+  session_write_close(); 
+
+  
+  // Step 4: Restore the original session
+  session_id($currentSessionId);
+  session_start();
+}
 /**
  * Redirect to another page
  * @param string $path

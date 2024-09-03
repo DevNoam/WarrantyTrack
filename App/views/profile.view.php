@@ -189,8 +189,8 @@
           </p>
         </header>
         <div class="card-content">
-          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-          <input type="hidden" name="username" value="<?php echo $Ausername ?>" />
+          <form method="post">
+          <input type="hidden" name="userId" value="<?php echo $userData->id ?>" />
           <div class="field is-horizontal">
               <div class="field-label is-normal">
                 <label class="label">New password</label>
@@ -211,20 +211,20 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input type="password" autocomplete="new-password" name="password_confirmation" class="input"
+                    <input type="password" autocomplete="new-password" id="confirmPassword" name="password_confirmation" class="input"
                       required>
                   </div>
                 </div>
               </div>
             </div>
-            <span class="invalid-feedback"><?php echo "ErrorPlaceHolder"; ?></span>
+            <p class="invalid-feedback" id="passwordError"></p>
             <hr>
             <div class="field is-horizontal">
               <div class="field-label is-normal"></div>
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <button type="submit" id="submit2" class="button is-primary">
+                    <button type="submit" id="changePasswordSubmit" class="button is-primary">
                       Submit
                     </button>
                   </div>
@@ -240,14 +240,13 @@
     <?php loadPartial('footer'); ?>
   </div>
 
-  <script src="https://malsup.github.io/jquery.form.js"></script>
 <script>
   //if user pressed the button delete user delete the user
   $(document).ready(function(){
     $('#deleteUser').click(function (e) {
-      
-      //Add confirmation...
+      e.preventDefault();
 
+      //Add confirmation...
       $.ajax({
         url: "/API/deleteUser/" + <?php echo $userData->id; ?>,
         type: "DELETE",
@@ -259,6 +258,45 @@
         }
       });
 
+    });
+
+
+      //On form submit
+    $('#changePasswordSubmit').click(function(e){
+      e.preventDefault();
+      //Get form
+      var password = $('#password');
+      var confirmPassword = $('#confirmPassword');
+      $('#changePasswordSubmit').addClass('is-loading').attr('disabled', 'disabled');
+      if(password.val() != confirmPassword.val()){
+        password.addClass('is-danger');
+        confirmPassword.addClass('is-danger');
+        $('#passwordError').text('Passwords do not match');
+        $('#changePasswordSubmit').removeClass('is-loading').removeAttr('disabled');
+        return;
+      }
+      
+      //Ajax
+      $.ajax({
+        type: "POST",
+        url: "/API/changePassword",
+        data: { password: password.val(), userId: <?php echo $userData->id; ?> },
+        success: function(data) {
+          // On success, show success message
+          $('#passwordError').text('Password changed successfully');
+          password.removeClass('is-danger');
+          confirmPassword.removeClass('is-danger');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // On error, show error message
+            $('#passwordError').text('Error: ' + textStatus + ' ' + errorThrown);
+        }
+    }).always(function() {
+      // Re-enable the button after the AJAX call is complete
+      $('#changePasswordSubmit').removeClass('is-loading').removeAttr('disabled');
+        password.val('');
+        confirmPassword.val('');
+    });
     });
   });
 
