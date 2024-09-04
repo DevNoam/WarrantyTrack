@@ -35,7 +35,7 @@
         <div class="level">
           <div class="level-left">
             <div class="level-item">
-              <h1 class="title">
+              <h1 class="title" id="profileTitle">
                 <?php 
                   if(!empty($userData->username)) 
                   {
@@ -255,12 +255,10 @@
         data: { personalName: personalNameVar, username: usernameVar, role: roleVar, id: <?php echo $userData->id; ?> },
         success: function(data) {
           // On success, show success message
-          $('#userEditError').text('Profile updated successfully');
           $('#personalNameRead').val(personalNameVar);
           $('#roleRead').val(roleVar);
-
-
-
+          $('#profileTitle').text("Edit profile: " + usernameVar);
+          $('#userEditError').text('Profile updated successfully');
         },
         error: function(jqXHR, textStatus, errorThrown) {
           if(jqXHR.status == 409){

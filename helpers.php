@@ -39,6 +39,8 @@ function destroyOtherSessions($userId)
   $result = $db->query($sql, ['id' => $userId])->fetch();
   $targetSessionId = $result->session;
 
+  if(empty($targetSessionId))
+      return;
   // Step 2: Store current session ID and close it
   $currentSessionId = session_id();
   session_write_close(); 
