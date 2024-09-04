@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 26, 2024 at 07:50 PM
--- Server version: 8.0.30
+-- Generation Time: Sep 04, 2024 at 05:00 PM
+-- Server version: 8.0.32
 -- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -48,13 +48,6 @@ CREATE TABLE `cases` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `cases`
---
-
-INSERT INTO `cases` (`Casenumber`, `clientName`, `phoneNumber`, `Address`, `ReciptNumber`, `ProductSKU`, `ProductSerial`, `ProductName`, `CaseDescription`, `CreatedAt`, `CaseClosedAt`, `OrderDate`, `Status`, `Fixed`, `Fixed Description`, `Createdby`, `Supplier`) VALUES
-(742, 'Neamma cohen', '0500000000', 'Very cool address name 007', '23232323', '232323', 'WWP00357732', 'Jabra Elite 75t', 'Defected left earbud', '2022-02-16 20:19:55', '2026-02-04', '2022-02-01', 'Waiting for supplier', 'Supplied new product', '', 'Admin', 'UNKOWN');
-
---
 -- Triggers `cases`
 --
 DELIMITER $$
@@ -77,6 +70,7 @@ DELIMITER ;
 --
 
 CREATE TABLE `settings` (
+  `id` int NOT NULL,
   `deleteCases` int NOT NULL DEFAULT '0' COMMENT 'Time to delete old cases in days',
   `AverageTimePerCase` text,
   `StoreName` varchar(64) NOT NULL,
@@ -90,8 +84,8 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`deleteCases`, `AverageTimePerCase`, `StoreName`, `Address`, `Phone`, `Email`, `Logo`) VALUES
-(0, NULL, 'Example store', 'Example st 0', '09-00000000', 'support@example.com', 'https://example.com.au/wp-content/uploads/2020/03/EXAMPLE-LOGO-BLACK.png');
+INSERT INTO `settings` (`id`, `deleteCases`, `AverageTimePerCase`, `StoreName`, `Address`, `Phone`, `Email`, `Logo`) VALUES
+(1, 0, NULL, 'Example store', 'Example st 1', '09-00000000', 'support@example.com', 'https://example.com.au/wp-content/uploads/2020/03/EXAMPLE-LOGO-BLACK.png');
 
 -- --------------------------------------------------------
 
@@ -104,15 +98,16 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` set('Admin','Technician','Supplier','Employee') NOT NULL DEFAULT 'Employee',
-  `Name` varchar(64) DEFAULT NULL
+  `Name` varchar(64) DEFAULT NULL,
+  `session` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `Name`) VALUES
-(1, 'Admin', '$2y$10$93HPMI1HWdgFlB0qyW8UAeoXGl0NR8IoVohA8RAE6GUcyM5W5yol.', 'Admin', 'Administrator');
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `Name`, `session`) VALUES
+(1, 'Admin', '$2y$10$KaEcfN5lPFHmb4fwjLF80.7VmdzYSH3kh5scv7lPEm/2tI5fz4Ct6', 'Admin', 'Administrator', 'ld40g38n15jufsbslnjbrrbei1');
 
 --
 -- Indexes for dumped tables
@@ -125,6 +120,12 @@ ALTER TABLE `cases`
   ADD PRIMARY KEY (`Casenumber`) USING BTREE,
   ADD UNIQUE KEY `Casenumber` (`Casenumber`) USING BTREE,
   ADD UNIQUE KEY `Casenumber_2` (`Casenumber`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -142,37 +143,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cases`
 --
 ALTER TABLE `cases`
-  MODIFY `Casenumber` int NOT NULL AUTO_INCREMENT COMMENT 'The case number that has been created.', AUTO_INCREMENT=744;
+  MODIFY `Casenumber` int NOT NULL AUTO_INCREMENT COMMENT 'The case number that has been created.';
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
-
-DELIMITER $$
---
--- Events
---
-CREATE DEFINER=`root`@`localhost` EVENT `update_average_time_per_case_event` ON SCHEDULE EVERY 1 DAY STARTS '2000-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO -- Update the AverageTimePerCase in settings
-    UPDATE `settings` T
-    SET T.AverageTimePerCase = (
-        SELECT AVG(TIMESTAMPDIFF(DAY, DATE_FORMAT(CreatedAt, '%Y-%m-%d'), CaseClosedAt)) 
-        FROM `cases`
-        WHERE `Status` = 'CLOSED'
-    )$$
-
-CREATE DEFINER=`root`@`localhost` EVENT `delete_old_cases_event` ON SCHEDULE EVERY 1 DAY STARTS '2000-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO -- Delete cases that are CLOSED and older than the specified days
-    DELETE FROM `cases`
-    WHERE `Status` = 'CLOSED'
-    AND `CaseClosedAt` < DATE_SUB(CURDATE(), INTERVAL (
-        SELECT CAST(`deleteCases` AS UNSIGNED)
-        FROM `settings`
-        WHERE 1
-    ) DAY)
-    AND (SELECT `deleteCases` FROM `settings` WHERE 1) != 0$$
-
-DELIMITER ;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

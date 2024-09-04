@@ -171,8 +171,6 @@ class UserController
      */
     public function makeUser()
     {
-        $response = [];
-        
         //get from POST
         $personalName = $_POST['personalName'];
         $username = $_POST['username'];
@@ -237,9 +235,9 @@ class UserController
      * 
      * @return void
      */
-    public function deleteUser($id)
+    public function deleteUser()
     {
-        $userId = $id[0];
+        $userId = $_POST['id'];
         $sql = "DELETE FROM users WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $userId])->fetch();
         if ($result == null) {
@@ -255,8 +253,45 @@ class UserController
      * Edit user function
      * 
     */
-    public function editUser($params)
+    public function updateUser()
     {
-
+        $userId = $_POST['id'];
+        $personalName = $_POST['personalName'];
+        $username = $_POST['username'];
+        $role = $_POST['role'];
+        
+        //Check if user exists
+        $sql = "SELECT 'id' FROM users WHERE username = :username AND id != :id";
+        $result = $this->db->query($sql, ['username' => $username, 'id' => $userId])->fetch();
+        
+        if (!empty($result)) {
+            errorHandler(409);
+            return;
+        }
+        
+        $sql = "UPDATE users SET username = :username, Name = :Name, role = :role WHERE id = :id";
+        $result = $this->db->query($sql, [
+            'username' => $username,
+            'Name' => $personalName,
+            'role' => $role,
+            'id' => $userId
+            ])->fetch();
+            
+        if ($result == null) 
+        {
+            if($userId != session::get('id'))
+                destroyOtherSessions($userId);
+            else if($userId == session::get('id'))
+            {
+                Session::set('username', $username);
+                Session::set('name', $personalName);
+            }
+            errorHandler(200);
+        }
+        else
+        {
+            errorHandler(500);
+        }
+        
     }
 }

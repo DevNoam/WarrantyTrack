@@ -26,8 +26,8 @@ $router->post('/logout', 'UserController@logOut', ['user']);
 
 //API:
 $router->post('/API/createuser', 'UserController@makeUser', ['Admin']);
-$router->delete('/API/deleteUser/{id}', 'UserController@deleteUser', ['Admin']);
-$router->put('/API/updateUser', 'UserController@updateUser', ['Admin']);
+$router->post('/API/deleteUser', 'UserController@deleteUser', ['Admin']);
+$router->post('/API/updateUser', 'UserController@updateUser', ['Admin']);
 $router->post('/API/changePassword', 'UserController@changePassword', ['Admin']);
 $router->post('/API/timeToDeleteOldCases', 'SettingsController@updateTimetoDeleteCases', ['Admin']);
 $router->post('/API/updateStore', 'SettingsController@updateStore', ['Admin']);

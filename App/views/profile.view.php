@@ -104,7 +104,7 @@
                   <div class="field-body">
                     <div class="field">
                       <div class="control">
-                        <input type="input" autocomplete="on" name="usernameField"
+                        <input type="input" autocomplete="on" name="usernameField" id="usernameField"
                           value="<?php echo $userData->username ?>"
                           class="input" required>
                       </div>
@@ -117,25 +117,25 @@
                     <label class="label">Role</label>
                   </div>
                   <div class="dropdown field-body" id="dropdown-menu" role="menu">
-                    <select class="dropdown-content field" name="rolesField" id="rolesField">
+                    <select class="dropdown-content field" name="roleField" id="roleField">
                       <?php foreach ($rolesList as $roles):
                         if($roles == $userData->role): ?>
-                        <option selected="selected" class="dropdown-item"> <?php echo $roles; ?></option>
+                        <option selected="selected" value="<?php echo $roles; ?>" class="dropdown-item"> <?php echo $roles; ?></option>
                           <?php else: ?>
-                            <option <?php if($isMe) echo "disabled" ?> class="dropdown-item" ?> <?php echo $roles; ?></option>
+                            <option <?php if($isMe) echo "disabled" ?> value="<?php echo $roles; ?>" class="dropdown-item" ?> <?php echo $roles; ?></option>
                           <?php endif; ?>
                       <?php endforeach; ?>
                     </select>
                   </div>
                 </div>
                 <hr>
-                <span class="invalid-feedback"><?php echo "ErrorPlaceHolder"; ?></span>
+                <p class="invalid-feedback" id="userEditError"></p>
                 <div class="field is-horizontal">
                   <div class="field-label is-normal"></div>
                   <div class="field-body">
                     <div class="field">
                       <div class="control">
-                        <button type="submit" name="submitR" id="submitR" class="button is-primary">
+                        <button type="submit" name="submitUserEdit" id="submitUserEdit" class="button is-primary">
                           Submit
                         </button>
                       </div>
@@ -163,18 +163,14 @@
               <div class="field">
                 <label class="label">Personal Name</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly
-                    value="<?php echo $userData->Name; ?>"
-                    class="input is-static">
+                  <input type="text" id="personalNameRead" readonly value="<?php echo $userData->Name; ?>" class="input is-static">
                 </div>
               </div>
               <hr>
               <div class="field">
                 <label class="label">Role</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly
-                    value="<?php echo $userData->role; ?>"
-                    class="input is-static">
+                  <input type="text" readonly id="roleRead" value="<?php echo $userData->role; ?>" class="input is-static">
                 </div>
               </div>
             </div>
@@ -243,13 +239,51 @@
 <script>
   //if user pressed the button delete user delete the user
   $(document).ready(function(){
+
+    $('#submitUserEdit').click(function (e) {
+      e.preventDefault();
+      $('#submitUserEdit').addClass('is-loading').attr('disabled', 'disabled');
+
+      var personalNameVar = $('#personalNameField').val();
+      var usernameVar = $('#usernameField').val();
+      var roleVar = $('#roleField').find(":selected").val();
+
+      //Ajax
+      $.ajax({
+        url: "/API/updateUser",
+        type: "POST",
+        data: { personalName: personalNameVar, username: usernameVar, role: roleVar, id: <?php echo $userData->id; ?> },
+        success: function(data) {
+          // On success, show success message
+          $('#userEditError').text('Profile updated successfully');
+          $('#personalNameRead').val(personalNameVar);
+          $('#roleRead').val(roleVar);
+
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          if(jqXHR.status == 409){
+            $('#userEditError').text('User already exists');
+          }
+          $('#userEditError').text('Error: ' + textStatus + ' ' + errorThrown);
+        }
+    }).always(function() {
+      // Re-enable the button after the AJAX call is complete
+      $('#submitUserEdit').removeClass('is-loading').removeAttr('disabled');
+    });
+    });
+
+
+
     $('#deleteUser').click(function (e) {
       e.preventDefault();
 
       //Add confirmation...
       $.ajax({
-        url: "/API/deleteUser/" + <?php echo $userData->id; ?>,
-        type: "DELETE",
+        url: "/API/deleteUser",
+        type: "POST",
+        data: { id: <?php echo $userData->id; ?> },
         success: function (data) {
           window.location.href = "/users";
         },
