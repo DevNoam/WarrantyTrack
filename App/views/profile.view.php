@@ -275,22 +275,28 @@
 
 
     $('#deleteUser').click(function (e) {
-      e.preventDefault();
+    e.preventDefault();
 
-      //Add confirmation...
-      $.ajax({
-        url: "/API/deleteUser",
-        type: "POST",
-        data: { id: <?php echo $userData->id; ?> },
-        success: function (data) {
-          window.location.href = "/users";
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          alert(textStatus, errorThrown);
-        }
-      });
+    // Add confirmation dialog
+    var confirmation = confirm("Are you sure you want to delete this user?");
+    if (confirmation) {
+        $.ajax({
+            url: "/API/deleteUser",
+            type: "POST",
+            data: { id: <?php echo $userData->id; ?> },
+            success: function (data) {
+                window.location.href = "/users";
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Error: " + textStatus + " - " + errorThrown);
+            }
+        });
+    } else {
+        // User cancelled the deletion, you can optionally do something here
+        console.log("User deletion cancelled.");
+    }
+});
 
-    });
 
 
       //On form submit

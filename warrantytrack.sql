@@ -107,7 +107,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `Name`, `session`) VALUES
-(1, 'Admin', '$2y$10$KaEcfN5lPFHmb4fwjLF80.7VmdzYSH3kh5scv7lPEm/2tI5fz4Ct6', 'Admin', 'Administrator', 'ld40g38n15jufsbslnjbrrbei1');
+(1, 'Admin', '$2y$10$KaEcfN5lPFHmb4fwjLF80.7VmdzYSH3kh5scv7lPEm/2tI5fz4Ct6', 'Admin', 'Administrator', '');
 
 --
 -- Indexes for dumped tables

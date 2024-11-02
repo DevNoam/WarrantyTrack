@@ -14,13 +14,34 @@ class Database
     */
     public function __construct()
     {
+        function loadEnv($path) {
+            $env = [];
+            $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            
+            foreach ($lines as $line) {
+                if (strpos(trim($line), '#') === 0) {
+                    continue;
+                }
+                list($key, $value) = explode('=', $line, 2);
+                $env[trim($key)] = trim($value);
+            }
+        
+            return $env;
+        }
+        
+        $env = loadEnv(__DIR__ . '/../.env');
+
+
+
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
           ];
         // Connect to the database
         try {
-            $this->conn = new PDO("mysql:host=localhost;dbname=warrantytrack;charset=utf8mb4", "root", "", $options);
+            $this->conn = new PDO(
+                "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=utf8mb4", $env['DB_USER'], $env['DB_PASS'], $options
+            );
             self::$db = $this;
 
         } catch (\PDOException $e) {

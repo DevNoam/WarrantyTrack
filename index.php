@@ -1,8 +1,8 @@
 <?php
-  require __DIR__ . '/../vendor/autoload.php';
+  require __DIR__ . '/vendor/autoload.php';
 
   use Framework\Router;
-  require '../helpers.php';
+  require 'helpers.php';
   
   session_start();
   new Framework\Database();
