@@ -85,7 +85,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `deleteCases`, `AverageTimePerCase`, `StoreName`, `Address`, `Phone`, `Email`, `Logo`) VALUES
-(1, 0, NULL, 'Example store', 'Example st 1', '09-00000000', 'support@example.com', 'https://example.com.au/wp-content/uploads/2020/03/EXAMPLE-LOGO-BLACK.png');
+(1, 0, NULL, 'Example store', 'Example st 1', '09-00000000', 'support@example.com', 'https://github.githubassets.com/assets/GitHub-Logo-ee398b662d42.png');
 
 -- --------------------------------------------------------
 
