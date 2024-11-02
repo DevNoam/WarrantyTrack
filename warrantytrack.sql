@@ -45,7 +45,7 @@ CREATE TABLE `cases` (
   `FixedDescription` text COMMENT 'Tell what was the problem and if the case has been resolved.',
   `Createdby` varchar(256) NOT NULL DEFAULT 'General' COMMENT 'Which agent created the case',
   `Supplier` varchar(256) DEFAULT 'UNKOWN' COMMENT 'Who is the supplier of the product. Warranty will be covered by the supplier.'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Triggers `cases`
@@ -78,7 +78,7 @@ CREATE TABLE `settings` (
   `Phone` varchar(16) DEFAULT NULL,
   `Email` text,
   `Logo` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `settings`
@@ -99,15 +99,15 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` set('Admin','Technician','Supplier','Employee') NOT NULL DEFAULT 'Employee',
   `Name` varchar(64) DEFAULT NULL,
-  `session` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `session` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `Name`, `session`) VALUES
-(1, 'Admin', '$2y$10$KaEcfN5lPFHmb4fwjLF80.7VmdzYSH3kh5scv7lPEm/2tI5fz4Ct6', 'Admin', 'Administrator', '');
+(1, 'Admin', '$2y$10$KaEcfN5lPFHmb4fwjLF80.7VmdzYSH3kh5scv7lPEm/2tI5fz4Ct6', 'Admin', 'Administrator', 'ld40g38n15jufsbslnjbrrbei1');
 
 --
 -- Indexes for dumped tables

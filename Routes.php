@@ -4,11 +4,11 @@
     //GET
 $router->get('/', 'HomeController@panel', ['user']);
 $router->get('/cases', 'HomeController@cases', ['user']);
-$router->get('/case', 'inquiryController@initCasePage', ['user']);
-$router->get('/case/{id}', 'inquiryController@initCasePage', ['user']);
+$router->get('/case', 'InquiryController@initCasePage', ['user']);
+$router->get('/case/{id}', 'InquiryController@initCasePage', ['user']);
 $router->get('/reports', 'HomeController@reports' , ['user']);
 $router->get('/search', 'HomeController@searchCase', ['user']);
-$router->get('/printCase/{id}', 'inquiryController@printInquiry', ['user']);
+$router->get('/printCase/{id}', 'InquiryController@printInquiry', ['user']);
 $router->get('/profile', 'UserController@profile', ['user']);
 $router->get('/profile/{id}', 'UserController@profile', ['Admin']);
 $router->get('/settings', 'SettingsController@showSettings', ['Admin']); //Admins only /////1
