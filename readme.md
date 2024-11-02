@@ -4,6 +4,9 @@ WarrantyTrack is a PHP application for business owners who are looking to track 
 
 In this application you as the store owner (or your employees), can open inquiries for defective products brought by customers in order to track the status of the inquiry.
 
+![App Screenshot](https://noamsapir.me/img/games/WarrantyTrack/1.png) 
+![App Screenshot](https://noamsapir.me/img/games/WarrantyTrack/2.png) 
+
 This software is production ready under for deploying under local server enviorment.
 Feel free to contribute or modify this project.
 
@@ -23,7 +26,6 @@ First time authentication details are:
 ## Docker
 Soon?
 
-
 ## Demo
 You can test the project [here](http://warrantytrack.noamsapir.me/):
 Login:
@@ -31,6 +33,7 @@ Login:
   worldwideweb
   1234
 ```
+![App Screenshot](https://noamsapir.me/img/games/WarrantyTrack/3.png) 
 
 ## Roadmap (Looking for contributers):
 - Detailed reports page
