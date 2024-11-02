@@ -240,7 +240,7 @@
                     <td class="is-actions-cell">
                       <div class="buttons is-right">
                         <a class="button is-rounded is-small is-primary"
-                          href="caseinspect?caseID=<?php echo htmlspecialchars($case->CaseNumber); ?>">
+                          href="case/<?php echo $case->Casenumber; ?>">
                           <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Open case >>
                         </a>
                         <!--<button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">

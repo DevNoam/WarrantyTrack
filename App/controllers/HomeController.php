@@ -64,7 +64,7 @@ class HomeController
         }
     
         // Convert the finalValues array to JSON format
-        $graphValue = json_encode(array_reverse($finalValues));
+        $graphValue = json_encode($finalValues);
     
         // Load the view with the data
         loadView('panel', ['database' => $this->db, 'cases' => $cases, 'openCases' => $openCases, 'closedCases' => $closedCases, 'graphValue' => $graphValue]);

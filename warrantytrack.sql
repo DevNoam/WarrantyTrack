@@ -42,7 +42,7 @@ CREATE TABLE `cases` (
   `OrderDate` date NOT NULL COMMENT 'When the product has been bought',
   `Status` set('OPEN','Waiting for customer','Waiting for supplier','Returning from supplier','Picked by supplier','Shipped to supplier','Being checked','CLOSED') NOT NULL DEFAULT 'OPEN' COMMENT 'Status of the case, is the case open, resolved.',
   `Fixed` enum('Fixed','Supplied new product','Unfixable','Unsolved','Closed by customer','Product is working') DEFAULT NULL COMMENT 'Choose from the following when the product has been returned or case has been closed.',
-  `Fixed Description` text COMMENT 'Tell what was the problem and if the case has been resolved.',
+  `FixedDescription` text COMMENT 'Tell what was the problem and if the case has been resolved.',
   `Createdby` varchar(256) NOT NULL DEFAULT 'General' COMMENT 'Which agent created the case',
   `Supplier` varchar(256) DEFAULT 'UNKOWN' COMMENT 'Who is the supplier of the product. Warranty will be covered by the supplier.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

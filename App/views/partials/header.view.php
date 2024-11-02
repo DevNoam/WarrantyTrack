@@ -138,7 +138,7 @@
     <p class="menu-label"></p>
       <ul class="menu-list">
         <li>
-          <a href="https://github.com/noamsapir/WarrantyTrack" class="has-icon">
+          <a href="https://github.com/devnoam/WarrantyTrack" class="has-icon">
             <span class="icon"><i class="mdi mdi-help-circle"></i></span>
           <span class="menu-item-label">About</span>
         </a>

@@ -1,21 +1,3 @@
-<?php
-
-session_start();
-if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-    header("Location: $domain");
-    exit;
-}
-
-$username = $_SESSION['username'];
-require_once("API/sqlog.php");
-
-$sql = "SHOW TABLE STATUS LIKE 'cases'";
-$result=$mysqli->query($sql);
-$row = $result->fetch_assoc();
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="">
 
@@ -30,9 +12,10 @@ $row = $result->fetch_assoc();
 
 <body>
 
+
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand ">
-            <a class="navbar-item" href="panel.php">
+            <a class="navbar-item" href="/">
                 <h1 class="title">WarrantyTrack -</h1>
                 <h2 class="subtitle">&nbsp;New case</h2>
             </a>
@@ -59,86 +42,48 @@ $row = $result->fetch_assoc();
         </div>
     </nav>
 
-
-    <form action="API/CreateCaseAPI.php" method="POST" name="newform">
-        <div class="section has-text-centered hero has-background-grey is-fullheight">
+    <form action="/API/createCase" method="POST" name="newform">
+        <div class="section has-text-centered hero has-background-grey is-fullheight" id="print-content">
             <div class="columns is-desktop">
                 <div class="column is-flex-grow-0">
                     <div class="container" style="width: 500px;">
 
-                        <p class="has-text-left has-text-white"> Case ID:</p>
-                        <input class="input" id="Casenumber" name="Casenumber" readonly type="text">
-
-                        <div class="block"></div>
                         <p class="has-text-left has-text-white"> Date creation:</p>
-                        <input class="input" id="CreatedAt" name="CreatedAt" disabled type="date">
+                        <input class="input" id="CreatedAt" name="CreatedAt" disabled value="<?php echo DATE("d/m/Y") ?>">
 
-                        <div class="block"></div>
-                        <p class="has-text-left has-text-white"> Created by:</p>
+                        <p class="has-text-left has-text-white"> Agent name:</p>
                         <span class="select is-pulled-left">
                             <select id="Createdby" name="Createdby">
-                                <option selected><?php echo $username ?>
-                                </option>
+                                <option selected><?php echo Framework\Session::get('username'); ?> </option>
                                 <option>GENERAL</option>
                             </select>
                         </span>
-
-                        <div class="block">&nbsp;</div>
-                        <p class="has-text-left has-text-white"> Case status:</p>
-                        <span class="select is-pulled-left">
-                            <select id="Status" name="Status">
-                                <option selected>OPEN</option>
-                                <option>Waiting for supplier</option>
-                                <option>Picked by supplier</option>
-                                <option">Waiting for customer to pickup</option>
-                                    <option>Shipped to supplier</option>
-                                    <option>Being checked</option>
-                            </select>
-                        </span>
                     </div>
+                    <br>
+                    <div class="block"></div>
+                    <p class="has-text-left has-text-white">* Customer full Name:</p>
+                    <input class="input" id="clientName" name="clientName" type="text" required placeholder="John john">
+                    <div class="block"></div>
+                    <p class="has-text-left has-text-white">* Customer phone:</p>
+                    <input class="input" id="phoneNumber" name="phoneNumber" type="tel" pattern="[0-9]{10}" required placeholder="0500000000">
+                    <div class="block"></div>
+                    <p class="has-text-left has-text-white">* Customer Address:</p>
+                    <input class="input" id="Address" name="Address" type="text"placeholder="Menachem Begin 1 Tel Aviv Israel" required>
+                    <div class="block"></div>
+                    <p class="has-text-left has-text-white"> Case status:</p>
+                        <span class="select is-pulled-left">
+                        <select id="Status" name="Status">
+                                <?php foreach ($caseStatusFields as $status): ?>
+                                    <option value="<?php echo $status?>">
+                                        <?php echo $status; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select> 
+                        </span>
                 </div>
 
-
-                <div class="container pl-6" id="infoTransferable">
-                    <div class="tabs is-toggle is-toggle-rounded">
-                        <ul class="">
-                            <li id="customerinfoButton" class="is-active">
-                                <a>
-                                    <span>Customer info</span>
-                                </a>
-                            </li>
-                            <li id="orderdetailsButton" class="">
-                                <a>
-                                    <span>Order details</span>
-                                </a>
-                            </li>
-                            <li id="casedescriptionButton">
-                                <a>
-                                    <span>Case description</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <div class="column" id="customerInfo">
-                            <div class="container">
-                                <p class="has-text-left has-text-white">* Customer full Name:</p>
-                                <input class="input" id="clientName" name="clientName" type="text" required
-                                    placeholder="John john">
-                                <div class="block"></div>
-                                <p class="has-text-left has-text-white">* Customer phone:</p>
-                                <input class="input" id="phoneNumber" name="phoneNumber" type="tel" pattern="[0-9]{10}"
-                                    required placeholder="0500000000">
-                                <div class="block"></div>
-                                <p class="has-text-left has-text-white">* Customer Address:</p>
-                                <input class="input" id="Address" name="Address" type="text"
-                                    placeholder="Menachem Begin 1 Tel Aviv Israel" required>
-                            </div>
-                        </div>
-
-                        <div class="column" id="OrderInfo">
-                            <div class="container">
+                <div class="column" id="customerInfo">
+                <div class="container">
                                 <p class="has-text-left has-text-white">* Receipt number:</p>
                                 <input class="input" id="ReciptNumber" name="ReciptNumber" type="text" required>
                                 <div class="block"></div>
@@ -161,77 +106,26 @@ $row = $result->fetch_assoc();
                                 <input class="input" id="Supplier" name="Supplier" type="text"
                                     placeholder="Product Supplier">
                             </div>
-                        </div>
-
-                        <div class="column" id="CaseDescriptionF">
+                </div>
+                <div class="column" id="CaseDescriptionF">
                             <div class="container">
                                 <p class="has-text-left has-text-white">* Case description:</p>
                                 <textarea class="textarea" id="CaseDescription" name="CaseDescription"
                                     placeholder="Defected product...." required></textarea>
                             </div>
                         </div>
-                    </div>
 
-                </div>
-                <input class="sumbit button is-success is-rounded" type="submit" value="Create">
+
             </div>
+
+        </div>
+        <input class="sumbit button is-success is-rounded" type="submit" value="+">
+        </div>
         </div>
     </form>
 
-
     <!--JAVASCRIP-->
     <script type="text/javascript">
-        document.getElementById("customerInfo").style.display = "block";
-        document.getElementById("OrderInfo").style.display = "none";
-        document.getElementById("CaseDescriptionF").style.display = "none";
-
-
-        //PUT DATA ON FORM FIELDS:
-        document.getElementById('CreatedAt').valueAsDate = new Date();
-
-
-        window.onload = function() {
-            clearForm();
-            document.getElementById("Casenumber").value =
-                "<?php echo $row['Auto_increment']; ?>";
-
-            var a = document.getElementById("customerinfoButton");
-            var b = document.getElementById("orderdetailsButton");
-            var c = document.getElementById("casedescriptionButton");
-
-            a.onclick = function() {
-                document.getElementById("customerInfo").style.display = "block";
-                document.getElementById("OrderInfo").style.display = "none";
-                document.getElementById("CaseDescriptionF").style.display = "none";
-                b.classList = "";
-                a.classList = "is-active";
-                c.classList = "";
-
-                return false;
-            }
-            b.onclick = function() {
-                document.getElementById("customerInfo").style.display = "none";
-                document.getElementById("OrderInfo").style.display = "block";
-                document.getElementById("CaseDescriptionF").style.display = "none";
-                a.classList = "";
-                b.classList = "is-active";
-                c.classList = "";
-
-
-                return false;
-            }
-            c.onclick = function() {
-                document.getElementById("customerInfo").style.display = "none";
-                document.getElementById("OrderInfo").style.display = "none";
-                document.getElementById("CaseDescriptionF").style.display = "block";
-                a.classList = "";
-                c.classList = "is-active";
-                b.classList = "";
-
-                return false;
-            }
-        }
-
         function clearForm() {
             document.getElementById('phoneNumber').value = '';
             document.getElementById('clientName').value = '';

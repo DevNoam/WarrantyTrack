@@ -50,5 +50,23 @@ class Database
             throw new \Exception("Query failed to execute: {$e->getMessage()}");
         }
     }
+        /**
+    * Query the database
+    * 
+    * @param string $query
+    * 
+    * @return PDOStatement
+    * @throws PDOException
+    */
+    public function lastInsertId()
+    {
+        try {
+            $sth = $this->conn->lastInsertId();
+            return $sth;
+        } 
+        catch (\PDOException $e) {
+            throw new \Exception("Query failed to execute: {$e->getMessage()}");
+        }
+    }
 }   
 ?>

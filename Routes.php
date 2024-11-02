@@ -4,9 +4,11 @@
     //GET
 $router->get('/', 'HomeController@panel', ['user']);
 $router->get('/cases', 'HomeController@cases', ['user']);
+$router->get('/case', 'inquiryController@initCasePage', ['user']);
+$router->get('/case/{id}', 'inquiryController@initCasePage', ['user']);
 $router->get('/reports', 'HomeController@reports' , ['user']);
 $router->get('/search', 'HomeController@searchCase', ['user']);
-$router->get('/printCase{id}', 'inquiryController@printInquiry', ['User']);
+$router->get('/printCase/{id}', 'inquiryController@printInquiry', ['user']);
 $router->get('/profile', 'UserController@profile', ['user']);
 $router->get('/profile/{id}', 'UserController@profile', ['Admin']);
 $router->get('/settings', 'SettingsController@showSettings', ['Admin']); //Admins only /////1
@@ -32,6 +34,5 @@ $router->post('/API/changePassword', 'UserController@changePassword', ['Admin'])
 $router->post('/API/timeToDeleteOldCases', 'SettingsController@updateTimetoDeleteCases', ['Admin']);
 $router->post('/API/updateStore', 'SettingsController@updateStore', ['Admin']);
 
-
-$router->post('/API/createCase', 'UserController@1', ['User']);
-$router->put('/API/updateCase', 'UserController@1', ['User']);
+$router->post('/API/updateCase', 'InquiryController@updateCase', ['user']);
+$router->post('/API/createCase', 'InquiryController@createCase', ['user']);

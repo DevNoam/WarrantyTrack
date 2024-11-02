@@ -189,7 +189,7 @@
                   <td class="is-actions-cell"> <div style='width: 150px;'>
                     <div class="buttons is-right">
                       <a class="button is-rounded is-small is-primary"
-                        href="caseinspect.php?caseID=<?php echo htmlspecialchars($case->CaseNumber); ?>">
+                        href="case/<?php echo htmlspecialchars($case->Casenumber); ?>">
                         <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Open case >>
                       </a>
                     </div>
@@ -197,8 +197,8 @@
                   </td>
                 </tr>
                 <?php
-    }
-            } ?>
+                }
+                } ?>
 
                 </tbody>
 
@@ -304,8 +304,8 @@
                   </td>
                   <td class="is-actions-cell"> <div style='width: 150px;'>
                     <div class="buttons is-right">
-                      <a class="button is-rounded is-small is-primary"
-                        href="caseinspect.php?caseID=<?php echo htmlspecialchars($case->CaseNumber); ?>">
+                    <a class="button is-rounded is-small is-primary"
+                        href="case/<?php echo htmlspecialchars($case->Casenumber); ?>">
                         <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Open case >>
                       </a>
                     </div>

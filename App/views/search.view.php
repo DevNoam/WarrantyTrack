@@ -29,7 +29,7 @@
       <div class="level-right">
         <div class="level-item">
           <div class="buttons is-right">
-            <a href="createcase.php"class="button is-primary">
+            <a href="/case"class="button is-primary">
               <span class="icon"><i class="mdi mdi-plus"></i></span>
               <span>New case</span>
             </a>
@@ -113,11 +113,7 @@
         }
         </script>
               <?php 
-    foreach ($cases as $case) { 
-            if ($case['Casenumber'] == "$searchData") {
-                echo "<script>window.location.href = 'caseinspect.php?caseID=$searchData'; </script>";
-            }
-                ?>
+    foreach ($cases as $case) { ?>
                   <tr>
                     <td class="is-image-cell">
                       <div class="image">
@@ -150,7 +146,7 @@
                     <td class="is-actions-cell">
                       <div class="buttons is-right">
                         <a class="button is-rounded is-small is-primary"
-                          href="caseinspect.php?caseID=<?php echo htmlspecialchars($case['Casenumber']); ?>">
+                          href="case/<?php echo htmlspecialchars($case['Casenumber']); ?>">
                           <span class="icon"><i class="mdi mdi-eye"></i></span> &nbsp; Cases found >>
                         </a>
  
